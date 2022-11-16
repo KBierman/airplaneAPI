@@ -1,7 +1,7 @@
 package fish.burger.airplaneapi;
 
 public class FlightModel {
-    private int flightNumber;
+    private int fltNo;
     private String origin;
     private String destination;
     private String arrTime;
@@ -14,8 +14,8 @@ public class FlightModel {
     private String flightStatus; //status are delayed, on-time, cancelled, departed, in air, expected, diverted, recovery, landed, arrived
     private String statusDT; //when status was last updated
 
-    public FlightModel(int flightNumber, String origin, String destination, String arrTime, String depTime, String aircraftType, int seatsEmpty, int seatsFull, double fare, String flightDate, String flightStatus, String statusDT) {
-        this.flightNumber = flightNumber;
+    public FlightModel(int fltNo, String origin, String destination, String arrTime, String depTime, String aircraftType, int seatsEmpty, int seatsFull, double fare, String flightDate, String flightStatus, String statusDT) {
+        this.fltNo = fltNo;
         this.origin = origin;
         this.destination = destination;
         this.arrTime = arrTime;
@@ -33,11 +33,11 @@ public class FlightModel {
     }
 
     public int getFlightNumber() {
-        return flightNumber;
+        return fltNo;
     }
 
-    public void setFlightNumber(int flightNumber) {
-        this.flightNumber = flightNumber;
+    public void setFlightNumber(int fltNo) {
+        this.fltNo = fltNo;
     }
 
     public String getOrigin() {
