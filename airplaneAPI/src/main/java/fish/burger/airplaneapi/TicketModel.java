@@ -12,7 +12,7 @@ public class TicketModel {
     private String status;
     private String reservedBy;
     private String DateOfReservation;
-    private boolean ticketConfermed;
+    private boolean ticketConfirmed;
     private boolean refund;
     private String processedBy;
     private String CancellationDate;
@@ -21,7 +21,7 @@ public class TicketModel {
     public TicketModel() {
     }
 
-    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfermed, boolean refund, String processedBy, String cancellationDate) {
+    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfirmed, boolean refund, String processedBy, String cancellationDate) {
         this.ticketNo = ticketNo;
         this.fltNo = fltNo;
         this.dateOfJourney = dateOfJourney;
@@ -32,7 +32,7 @@ public class TicketModel {
         this.status = status;
         this.reservedBy = reservedBy;
         DateOfReservation = dateOfReservation;
-        this.ticketConfermed = ticketConfermed;
+        this.ticketConfirmed = ticketConfirmed;
         this.refund = refund;
         this.processedBy = processedBy;
         CancellationDate = cancellationDate;
@@ -118,12 +118,12 @@ public class TicketModel {
         DateOfReservation = dateOfReservation;
     }
 
-    public boolean isTicketConfermed() {
-        return ticketConfermed;
+    public boolean isTicketConfirmed() {
+        return ticketConfirmed;
     }
 
-    public void setTicketConfermed(boolean ticketConfermed) {
-        this.ticketConfermed = ticketConfermed;
+    public void setTicketConfirmed(boolean ticketConfirmed) {
+        this.ticketConfirmed = ticketConfirmed;
     }
 
     public boolean isRefund() {
