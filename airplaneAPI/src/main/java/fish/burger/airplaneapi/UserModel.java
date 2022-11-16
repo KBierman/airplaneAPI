@@ -1,21 +1,90 @@
 package fish.burger.airplaneapi;
 
 public class UserModel {
+    private String firstName;
+    private String lastName;
+    private String userPassword;
+    private String userEmail;
+    private String userPhoneNumber;
+    private Boolean isAdmin;
+    private int fareCollected;
+    private int timesFlown;
 
-    private String first_name;
-    private String last_name;
-    private int dayOfBirth;
-    private int monthOfBirth;
-    private int yearOfBirth;
-    private String gender;
-    private String country;
-    private String address;
-    private String city;
-    private String state;
-    private int postal_code;
-    private int phone_number;
-    private String email;
+    public UserModel(String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, Boolean isAdmin, int fareCollected, int timesFlown) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userPassword = userPassword;
+        this.userEmail = userEmail;
+        this.userPhoneNumber = userPhoneNumber;
+        this.isAdmin = isAdmin;
+        this.fareCollected = fareCollected;
+        this.timesFlown = timesFlown;
+    }
 
+    public UserModel() {
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserPhoneNumber() {
+        return userPhoneNumber;
+    }
+
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
+    }
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
+
+    public int getFareCollected() {
+        return fareCollected;
+    }
+
+    public void setFareCollected(int fareCollected) {
+        this.fareCollected = fareCollected;
+    }
+
+    public int getTimesFlown() {
+        return timesFlown;
+    }
+
+    public void setTimesFlown(int timesFlown) {
+        this.timesFlown = timesFlown;
+    }
 }
