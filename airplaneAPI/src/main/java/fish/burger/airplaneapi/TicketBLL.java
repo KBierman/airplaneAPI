@@ -31,7 +31,7 @@ public class TicketBLL {
     public void deleteTicket(int ticketNo) {
         for(int i = 0; i < tickets.size(); i++) {
             if (tickets.get(i).getTicketNo() == ticketNo) {
-                tickets.remove(ticketNo);
+                tickets.remove(tickets.get(i));
             }
         }
     }
