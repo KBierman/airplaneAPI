@@ -7,6 +7,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class UserRestController {
+    // UserBLL object
     private UserBLL userBLL = new UserBLL();
 
     // Create
