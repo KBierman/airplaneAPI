@@ -1,73 +1,48 @@
 package fish.burger.airplaneapi;
 
-import java.io.PrintStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import fish.burger.airplaneapi.model.FlightModel;
+import fish.burger.airplaneapi.repository.FlightInterface;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 
 public class FlightBLL {
+    @Autowired
+    private FlightInterface flI;
 
-    private List<FlightModel> fltList = new ArrayList<>();
-
-    public boolean createFlight(int fltNo, String origin, String destination, String arrTime, String depTime, String aircraftType, int seatsEmpty, int seatsFull, double fare, String flightDate, String flightStatus, String statusDT) {
-        for (FlightModel flt : fltList) {
-            if (flt.getFlightNumber() == fltNo) {
+    public boolean createFlight(FlightModel flightModel) {
+        List<FlightModel> flL = flI.findAll();
+        for (FlightModel flight : flL){
+            if (flight.getFlightNumber() == flightModel.getFlightNumber()){
                 return false;
             }
         }
-        fltList.add(new FlightModel(fltNo, origin, destination, arrTime, depTime, aircraftType, seatsEmpty, seatsFull, fare, flightDate, flightStatus, statusDT));
+        flI.save(flightModel);
         return true;
     }
 
-    public List<FlightModel> findAllCorrespondingFlights(String origin, String destination, String flightDate) {
-        try {
-            List<FlightModel> flights = new ArrayList<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            for (FlightModel flt : fltList) {
-                if (flt.getOrigin() == origin && flt.getDestination() == destination && sdf.parse(flightDate).equals(sdf.parse(flt.getFlightDate()))) {
-                    flights.add(flt);
-                }
-            }
-            return flights;
-        } catch (ParseException p) {
-            ;
-            p.printStackTrace();
-        }
-        return null;
+    public List<FlightModel> readAllCorrespondingFlights(String origin, String destination, String flightDate) {
+        return flI.findCorresponding(origin, destination,flightDate);
     }
 
     public FlightModel readFlightByFltNo(int fltNo) {
-        for (FlightModel flt : fltList) {
-            if (flt.getFlightNumber() == fltNo) {
-                return flt;
-            }
-        }
-        return null;
+        return flI.findFlightByNumber(fltNo);
     }
 
     public List<FlightModel> readAllFlights() {
-        return fltList;
+        return flI.findAll();
     }
 
     public boolean updateFlight(FlightModel flight) {
-        for (FlightModel flt : fltList) {
-            if (flt.getFlightNumber() == flight.getFlightNumber()) {
-                fltList.remove(flt);
-                fltList.add(flight);
-                return true;
-            }
+        FlightModel flightModel = flI.save(flight);
+        if (flightModel == null){
+            return false;
         }
         return false;
     }
 
-    public boolean deleteFlightByFltNo(int FltNo) {
-        for (FlightModel flt : fltList) {
-            if (flt.getFlightNumber() == FltNo) {
-                fltList.remove(flt);
-                return true;
-            }
-        }
-        return false;
+    public boolean deleteFlightByFltNo(int fltNo) {
+        flI.deleteById(String.valueOf(fltNo));
+        return flI.findFlightByNumber(fltNo) == null;
     }
 }

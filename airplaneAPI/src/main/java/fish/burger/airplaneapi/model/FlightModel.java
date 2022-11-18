@@ -1,4 +1,4 @@
-package fish.burger.airplaneapi;
+package fish.burger.airplaneapi.model;
 
 public class FlightModel {
     private int fltNo;
