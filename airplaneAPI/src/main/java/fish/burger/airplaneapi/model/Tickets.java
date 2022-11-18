@@ -1,7 +1,12 @@
-package fish.burger.airplaneapi;
+package fish.burger.airplaneapi.model;
 
-public class TicketModel {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document
+public class Tickets {
+
+    @Id
     private int ticketNo;
     private int fltNo;
     private String dateOfJourney;
@@ -18,10 +23,10 @@ public class TicketModel {
     private String CancellationDate;
 
 
-    public TicketModel() {
+    public Tickets() {
     }
 
-    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfirmed, boolean refund, String processedBy, String cancellationDate) {
+    public Tickets(int ticketNo, int fltNo, String dateOfJourney, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfirmed, boolean refund, String processedBy, String cancellationDate) {
         this.ticketNo = ticketNo;
         this.fltNo = fltNo;
         this.dateOfJourney = dateOfJourney;
