@@ -47,6 +47,14 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.3.23" />
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-core:5.7.4" />
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-crypto:5.7.4" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-data-mongodb:2.7.5" />
+          <element id="library" level="project" name="Maven: org.mongodb:mongodb-driver-sync:4.6.1" />
+          <element id="library" level="project" name="Maven: org.mongodb:bson:4.6.1" />
+          <element id="library" level="project" name="Maven: org.mongodb:mongodb-driver-core:4.6.1" />
+          <element id="library" level="project" name="Maven: org.mongodb:bson-record-codec:4.6.1" />
+          <element id="library" level="project" name="Maven: org.springframework.data:spring-data-mongodb:3.4.5" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.3.23" />
+          <element id="library" level="project" name="Maven: org.springframework.data:spring-data-commons:2.7.5" />
         </element>
       </element>
       <element id="directory" name="META-INF">
