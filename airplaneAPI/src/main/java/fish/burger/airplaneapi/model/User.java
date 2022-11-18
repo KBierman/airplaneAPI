@@ -1,6 +1,6 @@
-package fish.burger.airplaneapi;
+package fish.burger.airplaneapi.model;
 
-public class UserModel {
+public class User {
     private int userID;
     private String firstName;
     private String lastName;
@@ -11,7 +11,7 @@ public class UserModel {
     private int fareCollected;
     private int timesFlown;
 
-    public UserModel(int userID, String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, Boolean isAdmin, int fareCollected, int timesFlown) {
+    public User(int userID, String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, Boolean isAdmin, int fareCollected, int timesFlown) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,7 +23,7 @@ public class UserModel {
         this.timesFlown = timesFlown;
     }
 
-    public UserModel() {
+    public User() {
     }
 
     public int getUserID() {
