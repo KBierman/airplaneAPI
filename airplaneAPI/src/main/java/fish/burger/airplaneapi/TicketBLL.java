@@ -1,9 +1,10 @@
 package fish.burger.airplaneapi;
 
-import fish.burger.airplaneapi.model.Tickets;
+import fish.burger.airplaneapi.model.TicketModel;
 import fish.burger.airplaneapi.repository.TicketInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TicketBLL {
 
@@ -14,34 +15,33 @@ public class TicketBLL {
     }
 
     //Arraylist of TicketModel
-    ArrayList<Tickets> tickets = new ArrayList();
+    ArrayList<TicketModel> tickets = new ArrayList();
 
-    //creates a ticket in the arraylist
-    public void createTicket(Tickets ticket) {
-        tickets.add(ticket);
-    }
-
-    //reads all tickets in the arraylist
-    public ArrayList<Tickets> readTicket() {
-        return tickets;
-    }
-
-    //updates a ticket in the arraylist
-    public void updateTicket(Tickets ticket) {
-        for(int i = 0; i < tickets.size(); i++) {
-            if (tickets.get(i).getTicketNo() == ticket.getTicketNo()) {
-                tickets.remove(tickets.get(i));
-                tickets.add(ticket);
+    //creates a ticket in the mongoDB
+    public boolean createTicket(TicketModel ticketModel) {
+        //findTicketByName in TicketInterface.java
+        if(tkI.findTicketByName(ticketModel.getTicketNo())!= null) {
+            return false;
             }
-        }
+        tkI.save(ticketModel);
+        return true;
     }
 
-    //deletes a ticket in the arraylist
-    public void deleteTicket(int ticketNo) {
-        for(int i = 0; i < tickets.size(); i++) {
-            if (tickets.get(i).getTicketNo() == ticketNo) {
-                tickets.remove(tickets.get(i));
-            }
-        }
+    //reads all tickets from a single owner in mongoDB
+    public List<TicketModel> readTicketsFromUser(String userID) {
+        //findByUserID in TicketInterface.java
+        return tkI.findByUserID(userID);
+    }
+
+    //updates a ticket in mongoDB
+    public void updateTicket(TicketModel ticket) {
+        tkI.save(ticket);
+    }
+
+    //deletes a ticket in the mongoDB
+    public boolean deleteTicket(int ticketNo) {
+        //deleteByUserID in TicketInterface.java
+        tkI.deleteByUserID(ticketNo);
+        return tkI.findTicketByName(ticketNo) == null;
     }
 }

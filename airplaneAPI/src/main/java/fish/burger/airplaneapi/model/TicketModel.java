@@ -4,13 +4,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Tickets {
+public class TicketModel {
 
     @Id
     private int ticketNo;
     private int fltNo;
     private String dateOfJourney;
-    private int userID;
+    private String userID;
     private String firstName;
     private String lastName;
     private String email;
@@ -24,10 +24,10 @@ public class Tickets {
     private String CancellationDate;
 
 
-    public Tickets() {
+    public TicketModel() {
     }
 
-    public Tickets(int ticketNo, int fltNo, String dateOfJourney, int userID,  String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfirmed, boolean refund, String processedBy, String cancellationDate) {
+    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String userID, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfirmed, boolean refund, String processedBy, String cancellationDate) {
         this.ticketNo = ticketNo;
         this.fltNo = fltNo;
         this.dateOfJourney = dateOfJourney;
@@ -69,11 +69,11 @@ public class Tickets {
         this.dateOfJourney = dateOfJourney;
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 

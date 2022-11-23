@@ -1,18 +1,21 @@
 package fish.burger.airplaneapi.repository;
 
-import fish.burger.airplaneapi.model.Tickets;
+import fish.burger.airplaneapi.model.TicketModel;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface TicketInterface extends MongoRepository<Tickets, String> {
+public interface TicketInterface extends MongoRepository<TicketModel, String> {
 
     @Query("{ticketNo:'?0'}")
-    Tickets findItemByName(int ticketNo);
+    TicketModel findTicketByName(int ticketNo);
 
-    @Query(value="{category:'?0'}", fields="{'ticketNo' : 1, 'fltNo' : 1}")
-    List<Tickets> findAll(String category);
+    @Query("{'userID':?0}")
+    List<TicketModel> findByUserID(String userID);
+
+    @Query(value="{'_id': ?0}", delete = true)
+    void deleteByUserID(int ticketNo);
 
     public long count();
 }
