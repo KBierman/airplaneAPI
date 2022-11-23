@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class UserModel {
 
+    @Id
     private String userID;
     private String firstName;
     private String lastName;

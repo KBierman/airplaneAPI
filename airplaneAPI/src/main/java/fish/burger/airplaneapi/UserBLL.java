@@ -3,9 +3,7 @@ package fish.burger.airplaneapi;
 import fish.burger.airplaneapi.model.UserModel;
 import fish.burger.airplaneapi.repository.UserInterface;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class UserBLL {
     // Interface for interacting with the DB
@@ -19,12 +17,11 @@ public class UserBLL {
     // Create
     public void createUser(UserModel newUser) {
         if (findUserByID(newUser.getUserID()) != null) {
-            System.out.println("User already exists!");
+            System.out.println("'" + newUser.getUserID() + "' already exists!");
             return;
         }
-
         userITF.save(newUser);
-        System.out.println("User created successfully!");
+        System.out.println("'" + newUser.getUserID() + "' was created successfully!");
     }
 
     // Read
@@ -38,21 +35,21 @@ public class UserBLL {
 
     // Update
     public void updateUser(UserModel updatedUser) {
-        if (Objects.equals(findUserByID(updatedUser.getUserID()).getUserID(), updatedUser.getUserID())) {
+        if (findUserByID(updatedUser.getUserID()) != null) {
             userITF.save(updatedUser);
-            System.out.println("Updated user successfully!");
-        } else {
-            System.out.println("User doesn't exist!");
+            System.out.println("'" + updatedUser.getUserID() + "' was successfully updated!");
+            return;
         }
+        System.out.println("'" + updatedUser.getUserID() + "' doesn't exist!");
     }
 
     // Delete
     public void deleteUser(String userID) {
-        userITF.deleteById(userID);
-        if (findUserByID(userID) == null) {
-            System.out.println("User was deleted successfully!");
-        } else {
-            System.out.println("User couldn't be deleted!");
+        if (findUserByID(userID) != null) {
+            userITF.deleteById(userID);
+            System.out.println("'" + userID + "' was deleted successfully!");
+            return;
         }
+        System.out.println("'" + userID + "' doesn't exist!");
     }
 }

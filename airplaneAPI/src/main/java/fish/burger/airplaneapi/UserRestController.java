@@ -30,15 +30,15 @@ public class UserRestController {
     }
 
     // Update
-    @PutMapping("/user/{userID}")
-    public void updateUser(@PathVariable String userID, @RequestBody UserModel updatedUser) {
+    @PutMapping("/user")
+    public void updateUser(@RequestParam String userID, @RequestBody UserModel updatedUser) {
         updatedUser.setUserID(userID);
         userBLL.updateUser(updatedUser);
     }
 
     // Delete
-    @DeleteMapping("/user/{userID}")
-    public void delete(@PathVariable String userID) {
+    @DeleteMapping("/user")
+    public void delete(@RequestParam String userID) {
         userBLL.deleteUser(userID);
     }
 }
