@@ -8,16 +8,14 @@ import java.util.List;
 public class FlightBLL {
 
     static FlightInterface flI;
+
     public static void start(FlightInterface flightInterface) {
         flI = flightInterface;
     }
 
     public boolean createFlight(FlightModel flightModel) {
-        List<FlightModel> flL = flI.findAll();
-        for (FlightModel flight : flL){
-            if (flight.getFlightNumber() == flightModel.getFlightNumber()){
-                return false;
-            }
+        if (flI.findFlightByNumber(flightModel.getFlightNumber()) != null){
+            return false;
         }
         flI.save(flightModel);
         return true;
@@ -35,12 +33,8 @@ public class FlightBLL {
         return flI.findAll();
     }
 
-    public boolean updateFlight(FlightModel flight) {
-        FlightModel flightModel = flI.save(flight);
-        if (flightModel == null){
-            return false;
-        }
-        return false;
+    public void updateFlight(FlightModel flight) {
+        flI.save(flight);
     }
 
     public boolean deleteFlightByFltNo(int fltNo) {
