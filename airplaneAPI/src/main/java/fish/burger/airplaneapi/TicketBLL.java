@@ -1,10 +1,17 @@
 package fish.burger.airplaneapi;
 
 import fish.burger.airplaneapi.model.Tickets;
+import fish.burger.airplaneapi.repository.TicketInterface;
 
 import java.util.ArrayList;
 
 public class TicketBLL {
+
+    static TicketInterface tkI;
+
+    public static void start(TicketInterface ticketInterface) {
+        tkI = ticketInterface;
+    }
 
     //Arraylist of TicketModel
     ArrayList<Tickets> tickets = new ArrayList();

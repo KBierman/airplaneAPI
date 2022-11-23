@@ -10,6 +10,7 @@ public class Tickets {
     private int ticketNo;
     private int fltNo;
     private String dateOfJourney;
+    private int userID;
     private String firstName;
     private String lastName;
     private String email;
@@ -26,10 +27,11 @@ public class Tickets {
     public Tickets() {
     }
 
-    public Tickets(int ticketNo, int fltNo, String dateOfJourney, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfirmed, boolean refund, String processedBy, String cancellationDate) {
+    public Tickets(int ticketNo, int fltNo, String dateOfJourney, int userID,  String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfirmed, boolean refund, String processedBy, String cancellationDate) {
         this.ticketNo = ticketNo;
         this.fltNo = fltNo;
         this.dateOfJourney = dateOfJourney;
+        this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -65,6 +67,14 @@ public class Tickets {
 
     public void setDateOfJourney(String dateOfJourney) {
         this.dateOfJourney = dateOfJourney;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getFirstName() {
