@@ -1,6 +1,5 @@
 package fish.burger.airplaneapi.repository;
 
-import fish.burger.airplaneapi.FlightModel;
 import fish.burger.airplaneapi.model.Tickets;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

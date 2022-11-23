@@ -11,9 +11,6 @@ public interface FlightInterface extends MongoRepository<FlightModel, String> {
     @Query("{'flightNumber':'?0'}")
     FlightModel findFlightByNumber(int flightNumber);
 
-    @Query(value="{category:'?0'}", fields="{'flightNumber' : 1, 'seatsAvailable' : 1}")
-    List<FlightModel> findAll(String category);
-
     @Query("{'origin':?0, 'destination':?1, 'flightDate':?2}")
     List<FlightModel> findCorresponding(String origin, String destination, String flightDate);
 

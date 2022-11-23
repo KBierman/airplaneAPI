@@ -2,13 +2,15 @@ package fish.burger.airplaneapi;
 
 import fish.burger.airplaneapi.model.FlightModel;
 import fish.burger.airplaneapi.repository.FlightInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class FlightBLL {
-    @Autowired
-    private FlightInterface flI;
+
+    static FlightInterface flI;
+    public static void start(FlightInterface flightInterface) {
+        flI = flightInterface;
+    }
 
     public boolean createFlight(FlightModel flightModel) {
         List<FlightModel> flL = flI.findAll();
