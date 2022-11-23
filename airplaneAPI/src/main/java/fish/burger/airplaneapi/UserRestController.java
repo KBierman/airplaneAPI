@@ -25,20 +25,20 @@ public class UserRestController {
     }
 
     @GetMapping("/user/{userID}")
-    public UserModel findUserByID(@PathVariable int userID) {
-        return userBLL.findUser(userID);
+    public UserModel findUserByID(@PathVariable String userID) {
+        return userBLL.findUserByID(userID);
     }
 
     // Update
     @PutMapping("/user/{userID}")
-    public void updateUser(@PathVariable int userID, @RequestBody UserModel updatedUser) {
+    public void updateUser(@PathVariable String userID, @RequestBody UserModel updatedUser) {
         updatedUser.setUserID(userID);
         userBLL.updateUser(updatedUser);
     }
 
     // Delete
     @DeleteMapping("/user/{userID}")
-    public void delete(@PathVariable int userID) {
+    public void delete(@PathVariable String userID) {
         userBLL.deleteUser(userID);
     }
 }

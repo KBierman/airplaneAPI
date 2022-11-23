@@ -5,59 +5,54 @@ import fish.burger.airplaneapi.repository.UserInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserBLL {
-//     Arraylist of UserModel java objects, will store information for/from database temporarily
-    ArrayList<UserModel> userList = new ArrayList<>();
-    static UserInterface userInterface;
+    // Interface for interacting with the DB
+    static UserInterface userITF;
+
+    // Use this function in AirplaneApiApplication.java
+    public static void start(UserInterface userInterface) {
+        userITF = userInterface;
+    }
 
     // Create
-    public String createUser(UserModel newUser) {
-        // Adds UserModel object to userList
-//        userList.add(newUser);
-        List<UserModel> usersFromDB = userInterface.findAll();
-        for (UserModel user : usersFromDB){
-            if (user.getUserID() == newUser.getUserID()){
-                return "UserModel already exists!";
-            }
+    public void createUser(UserModel newUser) {
+        if (findUserByID(newUser.getUserID()) != null) {
+            System.out.println("User already exists!");
+            return;
         }
 
-        userInterface.save(newUser);
-        return "UserModel was successfully created!";
+        userITF.save(newUser);
+        System.out.println("User created successfully!");
     }
 
     // Read
-    public UserModel findUser(int userID) {
-        // Lambda function, compares input userID and all userIDs in arraylist, then returns it.
-        return findAll().stream().filter(um -> um.getUserID() == userID).findFirst().orElse(null);
+    public UserModel findUserByID(String userID) {
+        return userITF.findUserByID(userID);
     }
 
-    public ArrayList<UserModel> findAll() {
-        // Simply returns the current Arraylist
-        return userList;
+    public List<UserModel> findAll() {
+        return userITF.findAll();
     }
 
     // Update
     public void updateUser(UserModel updatedUser) {
-        for (UserModel um: userList) {
-            // Replaces all fields with new fields from 'updatedUser', might do more specific update functions, such as password only or first and last name
-            if (um.getUserID() == updatedUser.getUserID()) {
-                um.setFirstName(updatedUser.getFirstName());
-                um.setLastName(updatedUser.getLastName());
-                um.setUserPassword(updatedUser.getUserPassword());
-                um.setUserEmail(updatedUser.getUserEmail());
-                um.setUserPhoneNumber(updatedUser.getUserPhoneNumber());
-                um.setAdmin(updatedUser.getAdmin());
-                um.setFareCollected(updatedUser.getFareCollected());
-                um.setTimesFlown(updatedUser.getTimesFlown());
-                System.out.println("Updated ID: " + um.getUserID());
-            }
+        if (Objects.equals(findUserByID(updatedUser.getUserID()).getUserID(), updatedUser.getUserID())) {
+            userITF.save(updatedUser);
+            System.out.println("Updated user successfully!");
+        } else {
+            System.out.println("User doesn't exist!");
         }
     }
 
     // Delete
-    public void deleteUser(int userID) {
-        // Uses built in removeIf() function to check id and then remove user
-        userList.removeIf(um -> um.getUserID() == userID);
+    public void deleteUser(String userID) {
+        userITF.deleteById(userID);
+        if (findUserByID(userID) == null) {
+            System.out.println("User was deleted successfully!");
+        } else {
+            System.out.println("User couldn't be deleted!");
+        }
     }
 }

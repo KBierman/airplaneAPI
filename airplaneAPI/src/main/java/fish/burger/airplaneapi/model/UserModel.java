@@ -6,8 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class UserModel {
 
-    @Id
-    private int userID;
+    private String userID;
     private String firstName;
     private String lastName;
     private String userPassword;
@@ -17,7 +16,7 @@ public class UserModel {
     private int fareCollected;
     private int timesFlown;
 
-    public UserModel(int userID, String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, Boolean isAdmin, int fareCollected, int timesFlown) {
+    public UserModel(String userID, String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, Boolean isAdmin, int fareCollected, int timesFlown) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,11 +31,11 @@ public class UserModel {
     public UserModel() {
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 

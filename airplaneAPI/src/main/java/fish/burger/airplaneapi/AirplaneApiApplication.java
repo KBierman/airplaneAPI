@@ -2,6 +2,7 @@ package fish.burger.airplaneapi;
 
 import fish.burger.airplaneapi.repository.FlightInterface;
 import fish.burger.airplaneapi.repository.TicketInterface;
+import fish.burger.airplaneapi.repository.UserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +18,9 @@ public class AirplaneApiApplication implements CommandLineRunner {
     @Autowired
     TicketInterface tkI;
 
+    @Autowired
+    UserInterface userITF;
+
     public static void main(String[] args) {
         SpringApplication.run(AirplaneApiApplication.class, args);
     }
@@ -25,7 +29,7 @@ public class AirplaneApiApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         FlightBLL.start(flI);
         TicketBLL.start(tkI);
-
+        UserBLL.start(userITF);
     }
 
 }
