@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class User {
+public class UserModel {
 
     @Id
     private int userID;
@@ -17,7 +17,7 @@ public class User {
     private int fareCollected;
     private int timesFlown;
 
-    public User(int userID, String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, Boolean isAdmin, int fareCollected, int timesFlown) {
+    public UserModel(int userID, String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, Boolean isAdmin, int fareCollected, int timesFlown) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,7 +29,7 @@ public class User {
         this.timesFlown = timesFlown;
     }
 
-    public User() {
+    public UserModel() {
     }
 
     public int getUserID() {

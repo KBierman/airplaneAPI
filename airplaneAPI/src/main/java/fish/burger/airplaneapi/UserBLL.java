@@ -1,33 +1,45 @@
 package fish.burger.airplaneapi;
 
-import fish.burger.airplaneapi.model.User;
+import fish.burger.airplaneapi.model.UserModel;
+import fish.burger.airplaneapi.repository.UserInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserBLL {
-    // Arraylist of User java objects, will store information for/from database temporarily
-    ArrayList<User> userList = new ArrayList<>();
+//     Arraylist of UserModel java objects, will store information for/from database temporarily
+    ArrayList<UserModel> userList = new ArrayList<>();
+    static UserInterface userInterface;
 
     // Create
-    public void createUser(User newUser) {
-        // Adds User object to userList
-        userList.add(newUser);
+    public String createUser(UserModel newUser) {
+        // Adds UserModel object to userList
+//        userList.add(newUser);
+        List<UserModel> usersFromDB = userInterface.findAll();
+        for (UserModel user : usersFromDB){
+            if (user.getUserID() == newUser.getUserID()){
+                return "UserModel already exists!";
+            }
+        }
+
+        userInterface.save(newUser);
+        return "UserModel was successfully created!";
     }
 
     // Read
-    public User findUser(int userID) {
+    public UserModel findUser(int userID) {
         // Lambda function, compares input userID and all userIDs in arraylist, then returns it.
         return findAll().stream().filter(um -> um.getUserID() == userID).findFirst().orElse(null);
     }
 
-    public ArrayList<User> findAll() {
+    public ArrayList<UserModel> findAll() {
         // Simply returns the current Arraylist
         return userList;
     }
 
     // Update
-    public void updateUser(User updatedUser) {
-        for (User um: userList) {
+    public void updateUser(UserModel updatedUser) {
+        for (UserModel um: userList) {
             // Replaces all fields with new fields from 'updatedUser', might do more specific update functions, such as password only or first and last name
             if (um.getUserID() == updatedUser.getUserID()) {
                 um.setFirstName(updatedUser.getFirstName());
