@@ -4,9 +4,35 @@
     <meta charset="UTF-8">
     <title>Welcome Page</title>
   <script type="text/javascript">
-    var authHeaderValue = null;
-    var username = null;
-    var password = null;
+    // Variables
+    let authHeaderValue = null;
+    let username = null;
+    let password = null;
+
+    // Login functions
+    function login() {
+      // Grab variables
+      username = document.getElementById("txtUsername").value;
+      password = document.getElementById("txtPassword").value;
+      authHeaderValue = "Basic " + btoa(username + ":" + password); // btoa turns it into base64 encoding
+
+      // XMLHttpRequest to send base64 encoded user login information and then stores it in authHeaderValue
+      let xmlHttp = new XMLHttpRequest();
+      xmlHttp.open('GET', '');
+      xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+      xmlHttp.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+          document.getElementById("response_message").innerHTML = "Welcome, " + username;
+          isUserLoggedIn(false);
+          console.log("Login Successful!");
+        } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+          document.getElementById("response_message").innerHTML = "Invalid username/password!";
+          isUserLoggedIn(true);
+          console.log("Login Unsuccessful!")
+        }
+      }
+      xmlHttp.send();
+    }
 
     function readAllCorrespondingFlights() {
       var flightFrom = document.getElementById("txtFrom").value;
