@@ -34,11 +34,49 @@
         xmlHttp.send();
       }
 
+      function sign_up() {
+        // Grab variables
+        let username = document.getElementById("username_field").value;
+        let first_name = document.getElementById("firstname_field").value;
+        let last_name = document.getElementById("lastname_field").value;
+        let email = document.getElementById("email_field").value;
+        let phone_number = document.getElementById("phonenumber_field").value;
+        let password = document.getElementById("password_field").value;
+        let confirm_password = document.getElementById("confirmpass_field").value;
+
+        // Confirm password here (wip)
+
+        let user =
+        {
+          "username": username,
+          "firstName": first_name,
+          "lastName": last_name,
+          "userPassword": password,
+          "userEmail": email,
+          "userPhoneNumber": phone_number
+        }
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.open('POST', '/user');
+        xmlHttp.setRequestHeader("Content-Type", 'application/json');
+        xmlHttp.onreadystatechange = function () {
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            // document.getElementById("loginMsg").innerHTML = "Welcome, " + username;
+            // isUserLoggedIn(false);
+            console.log("Signup Successful!");
+          } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+            // document.getElementById("loginMsg").innerHTML = "Invalid username/password!";
+            // isUserLoggedIn(true);
+            console.log("Signup Unsuccessful!")
+          }
+        }
+        xmlHttp.send(JSON.stringify(user));
+      }
+
       function readAllCorrespondingFlights() {
         var flightFrom = document.getElementById("txtFrom").value;
         var flightTo = document.getElementById("txtTo").value;
         var departureDate = document.getElementById("txtDepartureDate").value;
-
 
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function () {
@@ -107,13 +145,55 @@
     `
       }
 
-      function send_to_flight_res() {
+      function send_to_signup() {
+        document.getElementById("container").innerHTML = `
+        <div>
+          <div>
+            <h1>SIGN UP</h1>
+            <label for="username_field">Username: </label>
+            <input type="text" id="username_field" required>
+            <br />
+            <label for="firstname_field">First Name: </label>
+            <input type="text" id="firstname_field" required>
+            <br />
+            <label for="lastname_field">Last Name: </label>
+            <input type="text" id="lastname_field" required>
+            <br />
+            <label for="email_field">Email: </label>
+            <input type="email" id="email_field" required>
+            <br />
+            <label for="phonenumber_field">Phone Number: </label>
+            <input type="tel" id="phonenumber_field"
+                   pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
+            <br />
+            <small>Format: (+0)-111-222-3333</small>
+            <br />
+            <label for="password_field">Password: </label>
+            <input type="password" id="password_field" required>
+            <br />
+            <label for="confirmpass_field">Confirm Password: </label>
+            <input type="password" id="confirmpass_field">
+        <!--    set validity https://codepen.io/diegoleme/pen/qBpyvr -->
+            <br />
+            <input type="submit" onclick="sign_up()">
+            <br />
+        <!--    maybe a dash here-->
+          </div>
+          <br />
+          <a onclick="send_to_login()">Log In</a>
+        </div>
+        `
+      }
 
-        document.getElementById("container").innerHTML =
-                `
-        hello
-        <button onclick="send_to_login();">login</button>
-    `
+      function send_to_flight_res() {
+        if (authHeaderValue == null) {
+          send_to_signup();
+        } else {
+          document.getElementById("container").innerHTML = `
+              hello
+             <button onclick="send_to_login();">login</button>
+          `
+        }
       }
     </script>
   </head>
