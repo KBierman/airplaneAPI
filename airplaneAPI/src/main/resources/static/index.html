@@ -22,11 +22,11 @@
       xmlHttp.setRequestHeader('Authorization', authHeaderValue);
       xmlHttp.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-          document.getElementById("response_message").innerHTML = "Welcome, " + username;
+          document.getElementById("loginMsg").innerHTML = "Welcome, " + username;
           isUserLoggedIn(false);
           console.log("Login Successful!");
         } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-          document.getElementById("response_message").innerHTML = "Invalid username/password!";
+          document.getElementById("loginMsg").innerHTML = "Invalid username/password!";
           isUserLoggedIn(true);
           console.log("Login Unsuccessful!")
         }
@@ -57,7 +57,8 @@
       var flights_list = document.getElementById("displayFlights");
       flights_list.innerHTML = "";
       for(var flight of flights) {
-        var flight_html =  "<li>" + "Origin: &nbsp;" + flight.origin +  " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + "</li>" + "<br>";
+        var flight_html =  "<li>" + "Origin: &nbsp;" + flight.origin +  " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
+
         flights_list.innerHTML += flight_html;
       }
     }
