@@ -4,26 +4,27 @@
     <meta charset="UTF-8">
     <title>Admin</title>
     <script Type="text/javascript">
-
     </script>
 </head>
 <body>
 <h1>Admin page</h1>
-// navigation/hyperlinks
+    <!--navigation/hyperlinks-->
 <nav>
     <a href="index.html">user</a>
 </nav>
 
-//Flight information
-<div>
+    <!--Flight information-->
+    <div>
+    <ul id="flights_List"> </ul>
+    <!--Display Lists-->
     <label for="flNumber">Flight Number</label>
     <input type="text" id="flNumber" />
     <br/>
     <label for="flOrigin">Origin</label>
     <input id="flOrigin"/>
     <br/>
-    <label for="flDesitination">Destination</label>
-    <input id="flDesitination"/>
+    <label for="flDestination">Destination</label>
+    <input id="flDestination"/>
     <br/>
     <label for="flArrTime">Arrival Time</label>
     <input id="flArrTime"/>
@@ -52,14 +53,18 @@
     <label for="flStatusDate">Status Date</label>
     <input id="flStatusDate"/>
     <br/>
-    <button onclick="createEntry();">Add Flight</button>
+    <button onclick="createFlight();">Add Flight</button>
     <br/>
-    <button onclick="updateEntry();">Update Flight Information</button>
+    <button onclick="updateFlight();">Update Flight Information</button>
+<!--    <br/>-->
+<!--    <button onclick="deleteFlight();">Delete Flight</button>-->
     <br/>
-    <button onclick="deleteEntry();">Delete Entry</button>
+    <button onclick="getAllFlights">See All Flights</button>
     <br/>
-    <button onclick="findEntryById();">findEntryById</button>
+    <button onclick="findFlightById();">Find Flight by Flight Number</button>
 </div>
+
+<!-- User Information -->
 <div>
     <button onclick="createEntry();">Add Flight</button>
     <br/>
