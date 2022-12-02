@@ -31,7 +31,7 @@
       var flights_list = document.getElementById("displayFlights");
       flights_list.innerHTML = "";
       for(var flight of flights) {
-        var flight_html =  "<li>" + "Flight: &nbsp;" + flight.flightNumber + "</li>" + "<br>";
+        var flight_html =  "<li>" + "Origin: &nbsp;" + flight.origin +  " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + "</li>" + "<br>";
         flights_list.innerHTML += flight_html;
       }
     }
