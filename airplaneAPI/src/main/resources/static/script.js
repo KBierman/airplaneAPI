@@ -136,7 +136,43 @@ function readAllCorrespondingFlights() {
 function send_to_login() {
     document.getElementById("container").innerHTML =
         `
-        
+      <div id="login_div">
+        <h3>Login:</h3>
+        <label>Username: </label>
+        <input type="text" id="txtUsername" />
+        <br/>
+    
+        <label>Password: </label>
+        <input type="text" id="txtPassword" />
+        <br/>
+    
+        <button onclick="login();">Login</button>
+      </div>
+    
+      <div id="loginMsg"> </div>
+      <br />
+    
+      <div id="flights_lookup">
+    
+        <label>From:</label>
+        <input type="text" id="txtFrom" />
+        <br />
+        <label>To:</label>
+        <input type="text" id="txtTo" />
+        <br />
+    
+        <label>Departure Date:</label>
+        <input type="text" id="txtDepartureDate" />
+        <br />
+    
+    
+        <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+    
+        <br/>
+        <div>
+          <ul id="displayFlights" style="list-style-type:none";></ul>
+        </div>
+      </div>
     `
 }
 
@@ -150,9 +186,10 @@ function send_to_user_tickets() {
 
 // Will send user to the flight reservation page
 function send_to_flight_res() {
+
     document.getElementById("container").innerHTML =
-        `
-        
+    `
+        hello
     `
 }
 

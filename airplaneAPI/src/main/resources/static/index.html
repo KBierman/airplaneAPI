@@ -1,123 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome Page</title>
-  <script type="text/javascript">
-    // Variables
-    let authHeaderValue = null;
-    let username = null;
-    let password = null;
+  <head>
+      <meta charset="UTF-8">
+      <title>Welcome Page</title>
+    <script type="text/javascript">
+      // Variables
+      let authHeaderValue = null;
+      let username = null;
+      let password = null;
 
-    // Login functions
-    function login() {
-      // Grab variables
-      username = document.getElementById("txtUsername").value;
-      password = document.getElementById("txtPassword").value;
-      authHeaderValue = "Basic " + btoa(username + ":" + password); // btoa turns it into base64 encoding
+      // Login functions
+      function login() {
+        // Grab variables
+        username = document.getElementById("txtUsername").value;
+        password = document.getElementById("txtPassword").value;
+        authHeaderValue = "Basic " + btoa(username + ":" + password); // btoa turns it into base64 encoding
 
-      // XMLHttpRequest to send base64 encoded user login information and then stores it in authHeaderValue
-      let xmlHttp = new XMLHttpRequest();
-      xmlHttp.open('GET', '');
-      xmlHttp.setRequestHeader('Authorization', authHeaderValue);
-      xmlHttp.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-          document.getElementById("loginMsg").innerHTML = "Welcome, " + username;
-          isUserLoggedIn(false);
-          console.log("Login Successful!");
-        } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-          document.getElementById("loginMsg").innerHTML = "Invalid username/password!";
-          isUserLoggedIn(true);
-          console.log("Login Unsuccessful!")
+        // XMLHttpRequest to send base64 encoded user login information and then stores it in authHeaderValue
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.open('GET', '');
+        xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+        xmlHttp.onreadystatechange = function () {
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            document.getElementById("loginMsg").innerHTML = "Welcome, " + username;
+            isUserLoggedIn(false);
+            console.log("Login Successful!");
+          } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+            document.getElementById("loginMsg").innerHTML = "Invalid username/password!";
+            isUserLoggedIn(true);
+            console.log("Login Unsuccessful!")
+          }
+        }
+        xmlHttp.send();
+      }
+
+      function readAllCorrespondingFlights() {
+        var flightFrom = document.getElementById("txtFrom").value;
+        var flightTo = document.getElementById("txtTo").value;
+        var departureDate = document.getElementById("txtDepartureDate").value;
+
+
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function () {
+          if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+            var flights = JSON.parse(this.responseText);
+            console.log("readAllCorrespondingFlights WORKING")
+            console.log(flights)
+            renderFlights(flights);
+          }
+        }
+        xmlHttp.open("GET", "/api/flight/" + flightFrom + "/" + flightTo + "/" + departureDate, true);
+        xmlHttp.send();
+      }
+
+      function renderFlights(flights) {
+        var flights_list = document.getElementById("displayFlights");
+        flights_list.innerHTML = "";
+        for(var flight of flights) {
+          var flight_html =  "<li>" + "Origin: &nbsp;" + flight.origin +  " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
+
+          flights_list.innerHTML += flight_html;
         }
       }
-      xmlHttp.send();
-    }
 
-    function readAllCorrespondingFlights() {
-      var flightFrom = document.getElementById("txtFrom").value;
-      var flightTo = document.getElementById("txtTo").value;
-      var departureDate = document.getElementById("txtDepartureDate").value;
+      // Page functions
+      function send_to_login() {
+        document.getElementById("container").innerHTML =
+                `
+      <div id="login_div">
+        <h3>Login:</h3>
+        <label>Username: </label>
+        <input type="text" id="txtUsername" />
+        <br/>
+
+        <label>Password: </label>
+        <input type="text" id="txtPassword" />
+        <br/>
+
+        <button onclick="login();">Login</button>
+      </div>
+
+      <div id="loginMsg"> </div>
+      <br />
+
+      <div id="flights_lookup">
+
+        <label>From:</label>
+        <input type="text" id="txtFrom" />
+        <br />
+        <label>To:</label>
+        <input type="text" id="txtTo" />
+        <br />
+
+        <label>Departure Date:</label>
+        <input type="text" id="txtDepartureDate" />
+        <br />
 
 
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.onreadystatechange = function () {
-        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          var flights = JSON.parse(this.responseText);
-          console.log("readAllCorrespondingFlights WORKING")
-          console.log(flights)
-          renderFlights(flights);
-        }
+        <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+
+        <br/>
+        <div>
+          <ul id="displayFlights" style="list-style-type:none";></ul>
+        </div>
+      </div>
+    `
       }
-      xmlHttp.open("GET", "/api/flight/" + flightFrom + "/" + flightTo + "/" + departureDate, true);
-      xmlHttp.send();
-    }
 
-    function renderFlights(flights) {
-      var flights_list = document.getElementById("displayFlights");
-      flights_list.innerHTML = "";
-      for(var flight of flights) {
-        var flight_html =  "<li>" + "Origin: &nbsp;" + flight.origin +  " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
+      function send_to_flight_res() {
 
-        flights_list.innerHTML += flight_html;
+        document.getElementById("container").innerHTML =
+                `
+        hello
+        <button onclick="send_to_login();">login</button>
+    `
       }
-    }
+    </script>
+  </head>
+  <body>
+    <h1>Welcome to SkyHappy</h1>
 
-  </script>
-</head>
-<body>
-<h1>Welcome to SkyHappy</h1>
+    <div id="container">
+      <div id="login_div">
+        <h3>Login:</h3>
+        <label>Username: </label>
+        <input type="text" id="txtUsername" />
+        <br/>
 
-<div id="entire page">
+        <label>Password: </label>
+        <input type="text" id="txtPassword" />
+        <br/>
 
-  <div id="login_div">
-    <h3>Login:</h3>
-    <label>Username: </label>
-    <input type="text" id="txtUsername" />
-    <br/>
+        <button onclick="login();">Login</button>
+      </div>
 
-    <label>Password: </label>
-    <input type="text" id="txtPassword" />
-    <br/>
+      <div id="loginMsg"> </div>
+      <br />
 
-    <button onclick="login();">Login</button>
-  </div>
+      <div id="flights_lookup">
 
-  <div id="loginMsg"> </div>
-  <br />
+        <label>From:</label>
+        <input type="text" id="txtFrom" />
+        <br />
+        <label>To:</label>
+        <input type="text" id="txtTo" />
+        <br />
 
-  <div id="flights_lookup">
-
-    <label>From:</label>
-    <input type="text" id="txtFrom" />
-    <br />
-    <label>To:</label>
-    <input type="text" id="txtTo" />
-    <br />
-
-    <label>Departure Date:</label>
-    <input type="text" id="txtDepartureDate" />
-    <br />
+        <label>Departure Date:</label>
+        <input type="text" id="txtDepartureDate" />
+        <br />
 
 
-    <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+        <button onclick="readAllCorrespondingFlights();">Find Flights</button>
 
-    <br/>
-    <div>
-      <ul id="displayFlights" style="list-style-type:none";></ul>
+        <br/>
+        <div>
+          <ul id="displayFlights" style="list-style-type:none";></ul>
+        </div>
+      </div>
     </div>
-
-
-  </div>
-
-
-
-
-
-
-</div>
-
-
-
-</body>
+  </body>
 </html>
