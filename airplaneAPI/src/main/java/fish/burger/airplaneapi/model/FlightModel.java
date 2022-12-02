@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class FlightModel {
 
-    @Id
+//    @Id
     private int fltNo;
     private String origin;
     private String destination;

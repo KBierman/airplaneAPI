@@ -2,9 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Welcome Page</title>
+  <script type="text/javascript">
+    var authHeaderValue = null;
+    var username = null;
+    var password = null;
+
+    function readAllCorrespondingFlights() {
+      var flightFrom = document.getElementById("txtFrom").value;
+      var flightTo = document.getElementById("txtTo").value;
+      var departureDate = document.getElementById("txtDepartureDate").value;
+
+
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function () {
+        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+          var flights = JSON.parse(this.responseText);
+          console.log("readAllCorrespondingFlights WORKING")
+          console.log(flights)
+          renderFlights(flights);
+        }
+      }
+      xmlHttp.open("GET", "/api/flight/" + flightFrom + "/" + flightTo + "/" + departureDate, true);
+      xmlHttp.send();
+    }
+
+    function renderFlights(flights) {
+      var flights_list = document.getElementById("displayFlights");
+      flights_list.innerHTML = "";
+      for(var flight of flights) {
+        var flight_html =  "<li>" + "Flight: &nbsp;" + flight.flightNumber + "</li>" + "<br>";
+        flights_list.innerHTML += flight_html;
+      }
+    }
+
+  </script>
 </head>
 <body>
+<h1>Welcome to SkyHappy</h1>
+
+<div id="entire page">
+
+  <div id="login_div">
+    <h3>Login:</h3>
+    <label>Username: </label>
+    <input type="text" id="txtUsername" />
+    <br/>
+
+    <label>Password: </label>
+    <input type="text" id="txtPassword" />
+    <br/>
+
+    <button onclick="login();">Login</button>
+  </div>
+
+  <div id="loginMsg"> </div>
+  <br />
+
+  <div id="flights_lookup">
+
+    <label>From:</label>
+    <input type="text" id="txtFrom" />
+    <br />
+    <label>To:</label>
+    <input type="text" id="txtTo" />
+    <br />
+
+    <label>Departure Date:</label>
+    <input type="text" id="txtDepartureDate" />
+    <br />
+
+
+    <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+
+    <br/>
+    <div>
+      <ul id="displayFlights" style="list-style-type:none";></ul>
+    </div>
+
+
+  </div>
+
+
+
+
+
+
+</div>
+
+
 
 </body>
 </html>
