@@ -3,6 +3,15 @@
     <head>
         <meta charset="UTF-8">
         <title>Welcome Page</title>
+        <style>
+            .scrollable {
+                margin: auto;
+                width: auto;
+                height: 400px;
+                overflow: auto;
+            }
+
+        </style>
         <script type="text/javascript">
             // Variables
             let authHeaderValue = null;
@@ -377,7 +386,6 @@
                         <input type="submit" onclick="updateUser()">
                         <br />
                     </form>
-                    <button onclick="findUserByUsername()">user</button>
                     <div id="response_message"></div>
                     <p>Times Flown: </p>
                     <p>"Miles" otherwise known as amount of money spent: </p>
@@ -431,7 +439,7 @@
             <div id="response_message"></div>
 
             <div>
-                <ul id="displayFlights" style="list-style-type:none"></ul>
+                <ul id="displayFlights" style="list-style-type:none" class="scrollable"></ul>
             </div>
         </div>
     </body>

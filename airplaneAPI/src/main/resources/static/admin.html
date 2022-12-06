@@ -1,78 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin</title>
-    <script Type="text/javascript">
-    </script>
-</head>
-<body>
-<h1>Admin page</h1>
-    <!--navigation/hyperlinks-->
-<nav>
-    <a href="index.html">user</a>
-</nav>
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin</title>
+        <script Type="text/javascript">
+            // Admin CRUD Functions
+            function makeUserAdmin() {
+                let id = document.getElementById("userN").value;
+                let admin = document.querySelector('input[name="isAdmin"]:checked').value;
+                let pass = document.getElementById("userP").value;
 
-    <!--Flight information-->
-    <div>
-    <ul id="flights_List"> </ul>
-    <!--Display Lists-->
-    <label for="flNumber">Flight Number</label>
-    <input type="text" id="flNumber" />
-    <br/>
-    <label for="flOrigin">Origin</label>
-    <input id="flOrigin"/>
-    <br/>
-    <label for="flDestination">Destination</label>
-    <input id="flDestination"/>
-    <br/>
-    <label for="flArrTime">Arrival Time</label>
-    <input id="flArrTime"/>
-    <br/>
-    <label for="flDepTime">Departure Time</label>
-    <input id="flDepTime"/>
-    <br/>
-    <label for="flAircraftType">Aircraft Type</label>
-    <input id="flAircraftType"/>
-    <br/>
-    <label for="flSeatsEmpty">Seats Empty</label>
-    <input id="flSeatsEmpty"/>
-    <br/>
-    <label for="flSeatsFull">Seats Full</label>
-    <input id="flSeatsFull"/>
-    <br/>
-    <label for="flFare">Price of ticket</label>
-    <input id="flFare"/>
-    <br/>
-    <label for="flDate">Flight Date</label>
-    <input id="flDate"/>
-    <br/>
-    <label for="flStatus">Flight Status</label>
-    <input id="flStatus"/>
-    <br/>
-    <label for="flStatusDate">Status Date</label>
-    <input id="flStatusDate"/>
-    <br/>
-    <button onclick="createFlight();">Add Flight</button>
-    <br/>
-    <button onclick="updateFlight();">Update Flight Information</button>
-<!--    <br/>-->
-<!--    <button onclick="deleteFlight();">Delete Flight</button>-->
-    <br/>
-    <button onclick="getAllFlights">See All Flights</button>
-    <br/>
-    <button onclick="findFlightById();">Find Flight by Flight Number</button>
-</div>
+                var xmlHttp = new XMLHttpRequest();
+                if (pass == dbPass) {
+                    xmlHttp.open("PUT", "/api/users/" + id + "/" + admin);
+                }
+                else{
+                    xmlHttp.open("PUT", "/api/users/" + id + "/" + admin + "/" + pass);
+                }
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        //the entry was read
+                        console.log("Success in posting entry");
+                        getFlights();
+                    }
+                }
+                xmlHttp.send();
+            }
 
-<!-- User Information -->
-<div>
-    <button onclick="createEntry();">Add Flight</button>
-    <br/>
-    <button onclick="updateEntry();">Update Flight Information</button>
-    <br/>
-    <button onclick="deleteEntry();">Delete Entry</button>
-    <br/>
-    <button onclick="findEntryById();">findEntryById</button>
-</div>
-</body>
+            // Page Functions
+            function send_to_user_editing() {
+                document.getElementById("container").innerHTML = `
+                    <h1>Users</h1>
+                    <div>
+
+                        <!--Display Lists-->
+                        <label for="userN">User ID</label>
+                        <input type="text" id="userN"/>
+                        <br/>
+                        <label for="userP">User Password</label>
+                        <input type="text" id="userP"/>
+                        <br/>
+                        <label> isAdmin</label>
+                        <br/>
+                        <label>True</label>
+                        <input type="radio" value="true" id="true" name="isAdmin">
+
+                        <label>False</label>
+                        <input type="radio" value="false" id="false" name="isAdmin">
+
+                        <button onclick="makeUserAdmin();">Make Admin</button>
+                    </div>
+
+                    <div class="scrollable">
+                        <ul id="users_List"></ul>
+                    </div>
+                `;
+            }
+
+            function send_to_flight_editing() {
+                document.getElementById("container").innerHTML = `
+                    <h1>Flights</h1>
+                    <!--Flight information-->
+                    <div>
+                        <!--Display Lists-->
+                        <label for="flNumber">Flight Number</label>
+                        <input type="text" id="flNumber"/>
+                        <br/>
+                        <label for="flOrigin">Origin</label>
+                        <input id="flOrigin"/>
+                        <br/>
+                        <label for="flDestination">Destination</label>
+                        <input id="flDestination"/>
+                        <br/>
+                        <label for="flArrTime">Arrival Time</label>
+                        <input id="flArrTime"/>
+                        <br/>
+                        <label for="flDepTime">Departure Time</label>
+                        <input id="flDepTime"/>
+                        <br/>
+                        <label for="flAircraftType">Aircraft Type</label>
+                        <input id="flAircraftType"/>
+                        <br/>
+                        <label for="flSeatsEmpty">Seats Empty</label>
+                        <input id="flSeatsEmpty"/>
+                        <br/>
+                        <label for="flSeatsFull">Seats Full</label>
+                        <input id="flSeatsFull"/>
+                        <br/>
+                        <label for="flFare">Price of ticket</label>
+                        <input id="flFare"/>
+                        <br/>
+                        <label for="flDate">Flight Date</label>
+                        <input id="flDate"/>
+                        <br/>
+                        <label for="flStatus">Flight Status</label>
+                        <input id="flStatus"/>
+                        <br/>
+                        <label for="flStatusDate">Status Date</label>
+                        <input id="flStatusDate"/>
+                        <br/>
+                        <button onclick="createFlight();">Add Flight</button>
+                        <button onclick="updateFlight();">Update Flight </button>
+                        <br/>
+                        <button onclick="findFlightById();">Find Flight by Flight Number</button>
+                        <button onclick="cancelFlight();">Cancel Flight</button>
+
+                    </div>
+
+                    <div class="scrollable">
+                        <ul id="flights_List"></ul>
+                    </div>
+                    <!-- User Information -->
+
+                    </body>
+                `;
+            }
+
+            function send_to_reports() {
+                document.getElementById("container").innerHTML = `
+                    <h1>Reports</h1>
+                    <label> Monthly Flights Report</label>
+                    <div id="MFR"></div>
+                    <Label> Monthly Passenger Report</Label>
+                    <div id="MPR"></div>
+                    <Label> Current Reservations Report</Label>
+                    <div id="CRR"></div>
+                `;
+            }
+        </script>
+        <script Type="text/javascript">
+
+            function createFlight() {
+                let id = document.getElementById("flNumber").value;
+                console.log(id);
+                let flOrigin = document.getElementById("flOrigin").value
+                let flDestination = document.getElementById("flDestination").value
+                let flArrTime = document.getElementById("flArrTime").value
+                let flDepTime = document.getElementById("flDepTime").value
+                let flAircraft = document.getElementById("flAircraftType").value
+                let flSeatsEmpty = document.getElementById("flSeatsEmpty").value
+                let flSeatsFull = document.getElementById("flSeatsFull").value
+                let fLFare = document.getElementById("flFare").value
+                let flDate = document.getElementById("flDate").value
+                let flStatus = document.getElementById("flStatus").value
+                let flStatusDate = document.getElementById("flStatusDate").value
+                let entry = {
+                    "fltNo": id,
+                    "origin": flOrigin,
+                    "destination": flDestination,
+                    "arrTime": flArrTime,
+                    "depTime": flDepTime,
+                    "aircraftType": flAircraft,
+                    "seatsEmpty": flSeatsEmpty,
+                    "seatsFull": flSeatsFull,
+                    "fare": fLFare,
+                    "flightDate": flDate,
+                    "flightStatus": flStatus,
+                    "statusDT": flStatusDate
+                }
+                //ajax
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("POST", "/api/flight/" + id);
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        //the entry was read
+                        console.log("Success in posting entry");
+                        getFlights();
+                    }
+                }
+                xmlHttp.send(JSON.stringify(entry));
+            }
+
+            function updateFlight() {
+                let id = document.getElementById("flNumber").value;
+                let flOrigin = document.getElementById("flOrigin").value
+                let flDestination = document.getElementById("flDestination").value
+                let flArrTime = document.getElementById("flArrTime").value
+                let flDepTime = document.getElementById("flDepTime").value
+                let flAircraft = document.getElementById("flAircraftType").value
+                let flSeatsEmpty = document.getElementById("flSeatsEmpty").value
+                let flSeatsFull = document.getElementById("flSeatsFull").value
+                let fLFare = document.getElementById("flFare").value
+                let flDate = document.getElementById("flDate").value
+                let flStatus = document.getElementById("flStatus").value
+                let flStatusDate = document.getElementById("flStatusDate").value
+                let entry = {
+                    "fltNo": id,
+                    "origin": flOrigin,
+                    "destination": flDestination,
+                    "arrTime": flArrTime,
+                    "depTime": flDepTime,
+                    "aircraftType": flAircraft,
+                    "seatsEmpty": flSeatsEmpty,
+                    "seatsFull": flSeatsFull,
+                    "fare": fLFare,
+                    "flightDate": flDate,
+                    "flightStatus": flStatus,
+                    "statusDT": flStatusDate
+                }
+                //ajax
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("PUT", "/api/flight/" + id);
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        //the entry was read
+                        console.log("Success in posting entry");
+                        getFlights();
+                    }
+                }
+                xmlHttp.send(JSON.stringify(entry));
+            }
+
+            function cancelFlight(){
+                var id= document.getElementById("flNumber").value;
+                var user= "Admin";
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ". this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200){
+                        //flight Cancelled
+                    }
+                }
+                xmlHttp.open("GET", "/api/tickets/" + user  + "/" + id, true);
+                xmlHttp.send();
+            }
+
+            function findFlightById() {
+                var id = document.getElementById("flNumber").value;
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        var entry = JSON.parse(this.responseText);
+                        document.getElementById("flOrigin").value = entry.origin;
+                        document.getElementById("flDestination").value = entry.destination;
+                        document.getElementById("flArrTime").value = entry.arrTime;
+                        document.getElementById("flDepTime").value = entry.depTime;
+                        document.getElementById("flAircraftType").value = entry.aircraftType;
+                        document.getElementById("flSeatsEmpty").value = entry.seatsEmpty;
+                        document.getElementById("flSeatsFull").value = entry.seatsFull;
+                        document.getElementById("flFare").value = entry.fare;
+                        document.getElementById("flDate").value = entry.flightDate;
+                        document.getElementById("flStatus").value = entry.flightStatus;
+                        document.getElementById("flStatusDate").value = entry.statusDT;
+
+                        console.log("Success in finding entry");
+                    }
+                }
+                xmlHttp.open("GET", "/api/flights/" + id, true);
+                xmlHttp.send();
+            }
+
+            function getFlights() {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        var entries = JSON.parse(this.responseText);
+                        renderEntries(entries);
+                    }
+                }
+                xmlHttp.open("GET", "/api/flight", true);
+                xmlHttp.send();
+            }
+
+            function renderEntries(entries) {
+                var entry_list = document.getElementById("flights_List");
+                entry_list.innerHTML = "";
+                for (var entry of entries) {
+                    var entry_html = "<li>" + entry.aircraftType + "</li>" +
+                        "<li>" + entry.destination + "</li>";
+                    entry_list.innerHTML += entry_html;
+                }
+            }
+
+            window.onload = function () {
+                getFlights();
+            }
+        </script>
+        <script type="text/javascript">
+            function getReports1() {
+                //ajax
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("PUT", "/api/reports/flights");
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        //the entry was read
+                        console.log("Success in posting entry");
+                        getFlights();
+                    }
+                }
+                xmlHttp.send();
+            }
+
+            function getReports2() {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("PUT", "/api/reports/users");
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        //the entry was read
+                        console.log("Success in posting entry");
+                        getFlights();
+                    }
+                }
+                xmlHttp.send();
+            }
+
+            function getReports3() {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("PUT", "/api/reports/reservations");
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        //the entry was read
+                        console.log("Success in posting entry");
+                        getFlights();
+                    }
+                }
+                xmlHttp.send();
+            }
+
+            window.onload = function () {
+                getReports1();
+                getReports2();
+                getReports3();
+            }
+        </script>
+    </head>
+    <body>
+        <nav id="admin_navbar">
+            <a href="index.html">Go to User Website</a>
+            <a onclick="send_to_user_editing()" href="#">Users</a>
+            <a onclick="send_to_flight_editing()" href="#">Flights</a>
+            <a onclick="send_to_reports()" href="#">Reports</a>
+        </nav>
+        <div id="container">
+            <h1>Users</h1>
+            <div>
+                <!--Display Lists-->
+                <label for="userN">User ID</label>
+                <input type="text" id="userN"/>
+                <br/>
+                <label for="userP">User Password</label>
+                <input type="text" id="userP"/>
+                <br/>
+                <label> isAdmin</label>
+                <br/>
+                <label>True</label>
+                <input type="radio" value="true" id="true" name="isAdmin">
+
+                <label>False</label>
+                <input type="radio" value="false" id="false" name="isAdmin">
+
+                <button onclick="makeUserAdmin();">Make Admin</button>
+            </div>
+
+            <div class="scrollable">
+                <ul id="users_List"></ul>
+            </div>
+        </div>
+    </body>
 </html>
+
+<!--TODO: create a rest link to users-->
