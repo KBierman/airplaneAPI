@@ -80,4 +80,15 @@ public class UserRestController {
     public void delete(@PathVariable String username) {
         userBLL.deleteUser(username);
     }
+
+    @PutMapping("/users/{id}/{pass}")
+    public void createNewAdmin(@PathVariable String id,@PathVariable String pass){
+        userBLL.createAdmin(id, pass);
+    }
+
+    @PutMapping("/users/{id}")
+    public void updateUserToAdmin(@PathVariable String id){
+        userBLL.updateUserToAdmin(id);
+    }
+
 }

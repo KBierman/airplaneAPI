@@ -9,10 +9,15 @@ import java.util.List;
 public interface FlightInterface extends MongoRepository<FlightModel, String> {
 
     @Query("{'fltNo':?0}")
-    FlightModel findFlightByFlightNumber(int fltNo);
+    FlightModel findByFltNo(int fltNo);
 
     @Query("{'origin':?0, 'destination':?1, 'flightDate':?2}")
     List<FlightModel> findCorresponding(String origin, String destination, String flightDate);
 
-    long count();
+    public long count();
+
+    @Query(value = "{'fltNo':?0}", delete=true)
+    void deleteFLightByFlightID(int id);
+
+    void setFlightStatusAndFlightDateWhereFltNo(String flightStatus, String flightDate, int fltNo);
 }

@@ -44,4 +44,14 @@ public class TicketBLL {
         tkI.deleteByUserID(ticketNo);
         return tkI.findTicketByName(ticketNo) == null;
     }
+
+    public List<Object> getPassengerReport(){
+
+        return null;
+    }
+
+    //Needs a query to set ticket status as cancelled
+    public void cancelTickets(int flightID, String user){
+        tkI.cancelTicket(flightID, user);
+    }
 }

@@ -14,7 +14,9 @@ public class FlightBLL {
     }
 
     public boolean createFlight(FlightModel flightModel) {
-        if (flI.findFlightByFlightNumber(flightModel.getFltNo()) != null){
+        System.out.println(flightModel.getFltNo());
+        if (flI.findByFltNo(flightModel.getFltNo()) != null){
+            System.out.println("ballls");
             return false;
         }
         flI.save(flightModel);
@@ -26,7 +28,8 @@ public class FlightBLL {
     }
 
     public FlightModel readFlightByFltNo(int fltNo) {
-        return flI.findFlightByFlightNumber(fltNo);
+        System.out.println(flI.findByFltNo(fltNo));
+        return flI.findByFltNo(fltNo);
     }
 
     public List<FlightModel> readAllFlights() {
@@ -34,11 +37,18 @@ public class FlightBLL {
     }
 
     public void updateFlight(FlightModel flight) {
+        flI.deleteFLightByFlightID(flight.getFltNo());
         flI.save(flight);
     }
 
     public boolean deleteFlightByFltNo(int fltNo) {
-        flI.deleteById(String.valueOf(fltNo));
-        return flI.findFlightByFlightNumber(fltNo) == null;
+        flI.deleteFLightByFlightID(fltNo);
+        return flI.findByFltNo(fltNo) == null;
     }
+
+    public String cancelFlight(int id){
+        flI.setFlightStatusAndFlightDateWhereFltNo("Cancelled", "get date", id);
+        return flI.findByFltNo(id).getFlightStatus();
+    }
+
 }

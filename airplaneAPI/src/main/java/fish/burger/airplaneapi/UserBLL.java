@@ -59,4 +59,25 @@ public class UserBLL {
         }
         System.out.println("'" + username + "' doesn't exist!");
     }
+
+    public List<Object> getReservationReport() {
+
+        return null;
+    }
+
+    public void createAdmin(String id, String pass) {
+        UserModel userModel = new UserModel();
+
+        userModel.setAdmin(true);
+        userModel.setUserID(id);
+        userModel.setUserPassword(pass);
+        createUser(userModel);
+    }
+
+    public void updateUserToAdmin(String id){
+       UserModel userModel = findUserByID(id);
+
+       userModel.setAdmin(true);
+       updateUser(userModel);
+    }
 }
