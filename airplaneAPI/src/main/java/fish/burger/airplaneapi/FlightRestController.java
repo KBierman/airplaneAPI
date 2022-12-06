@@ -43,8 +43,8 @@ public class FlightRestController {
         return flightBLL.readAllCorrespondingFlights(flightFrom, flightTo, departureDate);
     }
 
-    @GetMapping("/flight/{flightNumber}")
-    public FlightModel readFlightByFlightNumber(@PathVariable int flightNumber) {
-        return flightBLL.readFlightByFltNo(flightNumber);
+    @GetMapping("/flight/{fltNo}")
+    public FlightModel readFlightByFlightNumber(@PathVariable int fltNo) {
+        return flightBLL.readFlightByFltNo(fltNo);
     }
 }
