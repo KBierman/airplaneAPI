@@ -129,6 +129,25 @@
                 xmlHttp.send();
             }
 
+            function readFlightByFlightNumber(flightNumber) {
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("GET", "/api/flight/" + flightNumber, true);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        let flight = JSON.parse(this.responseText);
+                        document.getElementById("response_message").innerHTML = "";
+                        document.getElementById("container").innerHTML = flight;
+                        console.log("readAllCorrespondingFlights() was Successful!");
+                        console.log(flight);
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
+                        document.getElementById("response_message").innerHTML = "Flight not found!";
+                        document.getElementById("displayFlights").innerHTML = "";
+                        console.log("readAllCorrespondingFlights() was Unsuccessful!");
+                    }
+                }
+                xmlHttp.send();
+            }
+
             function renderFlights(flights) {
                 let flights_list = document.getElementById("displayFlights");
                 flights_list.innerHTML = "";
@@ -353,13 +372,14 @@
             //     }
             // }
 
-            function send_to_flight_res(flight) {
+            function send_to_flight_res(flightNumber) {
                 if (authHeaderValue == null) {
                     send_to_login();
                 } else {
-                    document.getElementById("container").innerHTML = `
-                      ${flight}
-                      `
+                    readFlightByFlightNumber(flightNumber);
+                    // document.getElementById("container").innerHTML = `
+                    //
+                    //   `
                 }
             }
 
