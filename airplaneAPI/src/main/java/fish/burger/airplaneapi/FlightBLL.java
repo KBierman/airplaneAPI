@@ -14,7 +14,7 @@ public class FlightBLL {
     }
 
     public boolean createFlight(FlightModel flightModel) {
-        if (flI.findFlightByNumber(flightModel.getFltNo()) != null){
+        if (flI.findFlightByFlightNumber(flightModel.getFltNo()) != null){
             return false;
         }
         flI.save(flightModel);
@@ -26,7 +26,7 @@ public class FlightBLL {
     }
 
     public FlightModel readFlightByFltNo(int fltNo) {
-        return flI.findFlightByNumber(fltNo);
+        return flI.findFlightByFlightNumber(fltNo);
     }
 
     public List<FlightModel> readAllFlights() {
@@ -39,6 +39,6 @@ public class FlightBLL {
 
     public boolean deleteFlightByFltNo(int fltNo) {
         flI.deleteById(String.valueOf(fltNo));
-        return flI.findFlightByNumber(fltNo) == null;
+        return flI.findFlightByFlightNumber(fltNo) == null;
     }
 }
