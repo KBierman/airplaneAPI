@@ -1,12 +1,9 @@
 package fish.burger.airplaneapi.model;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class TicketModel {
-
-    @Id
     private int ticketNo;
     private int fltNo;
     private String dateOfJourney;
