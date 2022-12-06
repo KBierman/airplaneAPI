@@ -2,7 +2,10 @@ package fish.burger.airplaneapi;
 
 import fish.burger.airplaneapi.model.FlightModel;
 import fish.burger.airplaneapi.repository.FlightInterface;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FlightBLL {
@@ -14,9 +17,7 @@ public class FlightBLL {
     }
 
     public boolean createFlight(FlightModel flightModel) {
-        System.out.println(flightModel.getFltNo());
-        if (flI.findByFltNo(flightModel.getFltNo()) != null){
-            System.out.println("ballls");
+        if (flI.findFlightByFltNo(flightModel.getFltNo()) != null){
             return false;
         }
         flI.save(flightModel);
@@ -28,8 +29,8 @@ public class FlightBLL {
     }
 
     public FlightModel readFlightByFltNo(int fltNo) {
-        System.out.println(flI.findByFltNo(fltNo));
-        return flI.findByFltNo(fltNo);
+        System.out.println(flI.findFlightByFltNo(fltNo));
+        return flI.findFlightByFltNo(fltNo);
     }
 
     public List<FlightModel> readAllFlights() {
@@ -43,12 +44,43 @@ public class FlightBLL {
 
     public boolean deleteFlightByFltNo(int fltNo) {
         flI.deleteFLightByFlightID(fltNo);
-        return flI.findByFltNo(fltNo) == null;
+        return flI.findFlightByFltNo(fltNo) == null;
     }
 
     public String cancelFlight(int id){
-        flI.setFlightStatusAndFlightDateWhereFltNo("Cancelled", "get date", id);
-        return flI.findByFltNo(id).getFlightStatus();
+        FlightModel flightModel = flI.findFlightByFltNo(id);
+        flightModel.setFlightStatus("Cancelled");
+        flightModel.setFlightDate(LocalDate.now().toString());
+        updateFlight(flightModel);
+        return flI.findFlightByFltNo(id).getFlightStatus();
     }
 
+    public List<FlightModel> getLastMonthsFlights(){
+        LocalDate local = LocalDate.now().minusMonths(1);
+        return flI.findFlightModelsByFlightDateRegex("(" + local.getMonth() + "/).*(/" + local.getYear() + ")");
+    }
+
+    public List<Object> getReport(){
+        List<FlightModel> monthlyReports = getLastMonthsFlights();
+        List<String> destinations = new ArrayList<>();
+        List<Integer> amounts = new ArrayList<>();
+        for (FlightModel fm : monthlyReports){
+            if (!destinations.contains(fm.getDestination())){
+                destinations.add(fm.getDestination());
+            }
+            for (int i = 0; i < destinations.size(); i++) {
+                if(destinations.get(i).equals(fm.getDestination())){
+                    if (amounts.size() == i){
+                        amounts.add(1);
+                    }else{
+                        amounts.set(i, amounts.get(i)+1);
+                    }
+                }
+            }
+        }
+        List<Object> finalVal = new ArrayList<>();
+        finalVal.add(destinations);
+        finalVal.add(amounts);
+        return finalVal;
+    }
 }

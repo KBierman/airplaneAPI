@@ -12,16 +12,16 @@ import java.util.List;
 public class FlightRestController {
     private FlightBLL flightBLL = new FlightBLL();
 
-    @GetMapping("/flight")
+    @PostMapping("/flight")
     @ResponseBody
     public void createFlight(@RequestBody FlightModel flight, @PathVariable int fltno) {
-        flight.setFlightNumber(fltno);
+        flight.setFltNo(fltno);
         flightBLL.createFlight(flight);
     }
 
     @PutMapping("/flight/{fltno}")
     public void updateFlight(@RequestBody FlightModel flight, @PathVariable int fltno) {
-        flight.setFlightNumber(fltno);
+        flight.setFltNo(fltno);
         flightBLL.updateFlight(flight);
     }
 
@@ -39,12 +39,6 @@ public class FlightRestController {
     public void deleteByFlightId(int fltId) {
         flightBLL.deleteFlightByFltNo(fltId);
     }
-//    @PutMapping("")
-
-//    @GetMapping("/flight/{flightFrom}/{flightTo}/{departureDate}")
-//    public List<FlightModel> readAllCorrespondingFlights(@PathVariable String flightFrom, @PathVariable String flightTo, @PathVariable String departureDate) {
-//        return flightBLL.readAllCorrespondingFlights(flightFrom, flightTo, departureDate);
-//    }
 
     @GetMapping("/flight/**")
     @ResponseBody

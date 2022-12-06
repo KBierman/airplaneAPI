@@ -16,20 +16,19 @@ public class ReportRestController {
 
     @GetMapping("/reports/flights")
     public List<Object> monthlyFlightReports() {
-        flightBLL.getReport();
-        return null;
+        return flightBLL.getReport();
     }
 
     @GetMapping("/reports/reservations")
     public List<Object> monthlyReservationsReports() {
-        ticketBll.getReport(flightBll.getLastMonthsFlight());
+        ticketBll.getReport(flightBLL.getLastMonthsFlights());
         return null;
     }
 
     @GetMapping("/reports/users")
     public List<Object> monthlyUsersReports() {
         //collective fare collected
-        userBLL.getReport(ticketBll.getReport);
+        ticketBll.getLastMonthCosts(flightBLL.getLastMonthsFlights());
         return null;
     }
 

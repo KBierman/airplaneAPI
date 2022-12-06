@@ -9,7 +9,7 @@ import java.util.List;
 public interface FlightInterface extends MongoRepository<FlightModel, String> {
 
     @Query("{'fltNo':?0}")
-    FlightModel findByFltNo(int fltNo);
+    FlightModel findFlightByFltNo(int fltNo);
 
     @Query("{'origin':?0, 'destination':?1, 'flightDate':?2}")
     List<FlightModel> findCorresponding(String origin, String destination, String flightDate);
@@ -19,5 +19,5 @@ public interface FlightInterface extends MongoRepository<FlightModel, String> {
     @Query(value = "{'fltNo':?0}", delete=true)
     void deleteFLightByFlightID(int id);
 
-    void setFlightStatusAndFlightDateWhereFltNo(String flightStatus, String flightDate, int fltNo);
+    List<FlightModel> findFlightModelsByFlightDateRegex(String regex);
 }

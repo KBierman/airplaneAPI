@@ -13,11 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class UserRestController {
-    @Autowired
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager;
-
-    @Autowired
-    public PasswordEncoder passwordEncoder;
 
     // UserBLL object
     private UserBLL userBLL = new UserBLL();
@@ -37,11 +32,6 @@ public class UserRestController {
 
         newUser.setAdmin(isAdmin);
         newUser.setRoles(roles);
-        System.out.println(newUser);
-
-        inMemoryUserDetailsManager.createUser(User.withUsername(newUser.getUsername())
-                .password(passwordEncoder.encode(newUser.getUserPassword()))
-                .roles(roles[0]).build());
         return userBLL.createUser(newUser);
     }
 
@@ -56,17 +46,6 @@ public class UserRestController {
         return userBLL.findUserByUsername(username);
     }
 
-    // This function will grab all users from database and put them in memory
-    @GetMapping("/loadusers")
-    public void loadAllusersInMemory() {
-        List<UserModel> allUsers = findAllEntries();
-
-        for (UserModel user : allUsers){
-            inMemoryUserDetailsManager.createUser(User.withUsername(user.getUsername())
-                    .password(passwordEncoder.encode(user.getUserPassword()))
-                    .roles(user.getRoles()).build());
-        }
-    }
 
     // Update
     @PutMapping("/user/{username}")
@@ -92,3 +71,4 @@ public class UserRestController {
     }
 
 }
+//TODO: FIX AUTHORIZATION IN FILE

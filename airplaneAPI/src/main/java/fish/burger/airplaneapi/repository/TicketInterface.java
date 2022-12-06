@@ -8,8 +8,12 @@ import java.util.List;
 
 public interface TicketInterface extends MongoRepository<TicketModel, String> {
 
-    @Query("{ticketNo:'?0'}")
+    @Query("{'ticketNo':'?0'}")
     TicketModel findTicketByName(int ticketNo);
+
+    List<TicketModel> findTicketModelsByFltNo(int fltNo);
+
+    int countByFltNo(int fltNo);
 
     @Query("{'userID':?0}")
     List<TicketModel> findByUserID(String userID);

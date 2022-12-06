@@ -60,9 +60,8 @@ public class UserBLL {
         System.out.println("'" + username + "' doesn't exist!");
     }
 
-    public List<Object> getReservationReport() {
-
-        return null;
+    public UserModel findUser(String username){
+        return userITF.findUserByUsername(username);
     }
 
     public void createAdmin(String id, String pass) {
@@ -75,8 +74,7 @@ public class UserBLL {
     }
 
     public void updateUserToAdmin(String id){
-       UserModel userModel = findUserByID(id);
-
+       UserModel userModel = findUserByUsername(id);
        userModel.setAdmin(true);
        updateUser(userModel);
     }
