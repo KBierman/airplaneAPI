@@ -100,29 +100,32 @@
             // Flight CRUD functions
             // Find
             function readAllCorrespondingFlights() {
-                var origin = document.getElementById("flightorigin_field").value;
-                var destination = document.getElementById("flightdestination_field").value;
-                var departure_date = document.getElementById("departuredate_field").value
+                let origin = document.getElementById("flightorigin_field").value;
+                let destination = document.getElementById("flightdestination_field").value;
+                let departure_date = document.getElementById("departuredate_field").value
                 console.log("Called readAllCorrespondingFlights()...");
 
-                var xmlHttp = new XMLHttpRequest();
+                let xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", "/api/flight/" + origin + "/" + destination + "/" + departure_date, true);
                 xmlHttp.onreadystatechange = function () {
-                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                        var flights = JSON.parse(this.responseText);
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        let flights = JSON.parse(this.responseText);
+                        document.getElementById("response_message").innerHTML = "";
+                        renderFlights(flights);
                         console.log("readAllCorrespondingFlights() Successful!");
                         console.log(flights);
-                        renderFlights(flights);
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
+                        document.getElementById("response_message").innerHTML = "Flight not found!";
                     }
                 }
                 xmlHttp.send();
             }
 
             function renderFlights(flights) {
-                var flights_list = document.getElementById("displayFlights");
+                let flights_list = document.getElementById("displayFlights");
                 flights_list.innerHTML = "";
-                for (var flight of flights) {
-                    var flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
+                for (let flight of flights) {
+                    let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
 
                     flights_list.innerHTML += flight_html;
                 }
@@ -385,7 +388,7 @@
 
             function send_to_flight_res() {
                 if (authHeaderValue == null) {
-                    send_to_signup();
+                    send_to_login();
                 } else {
                     document.getElementById("container").innerHTML = `
                       hello :)
@@ -472,9 +475,9 @@
             <label for="departuredate_field">Departure Date:</label>
             <input type="text" id="departuredate_field"/>
             <br/>
-
             <button onclick="readAllCorrespondingFlights();">Find Flights</button>
             <br/>
+            <div id="response_message"></div>
 
             <div>
                 <ul id="displayFlights" style="list-style-type:none"></ul>
