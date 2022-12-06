@@ -4,7 +4,6 @@ import fish.burger.airplaneapi.model.FlightModel;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Array;
 import java.util.List;
 
 @RestController
@@ -12,6 +11,7 @@ import java.util.List;
 public class FlightRestController {
     private FlightBLL flightBLL = new FlightBLL();
 
+    // Create
     @GetMapping("/flight")
     @ResponseBody
     public void createFlight(@RequestBody FlightModel flight) {
@@ -23,6 +23,7 @@ public class FlightRestController {
 //        return flightBLL.readAllCorrespondingFlights(flightFrom, flightTo, departureDate);
 //    }
 
+    // Read
     @GetMapping("/flight/**")
     @ResponseBody
     public List<FlightModel> readAllCorrespondingFlights(HttpServletRequest request) {
@@ -40,5 +41,10 @@ public class FlightRestController {
 
 
         return flightBLL.readAllCorrespondingFlights(flightFrom, flightTo, departureDate);
+    }
+
+    @GetMapping("/flight/{flightNumber}")
+    public FlightModel readFlightByFlightNumber(@PathVariable int flightNumber) {
+        return flightBLL.readFlightByFltNo(flightNumber);
     }
 }
