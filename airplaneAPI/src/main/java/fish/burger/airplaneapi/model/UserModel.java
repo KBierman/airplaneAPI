@@ -8,22 +8,26 @@ public class UserModel {
 
     @Id
     private String userID;
+    private String username;
     private String firstName;
     private String lastName;
     private String userPassword;
     private String userEmail;
     private String userPhoneNumber;
-    private Boolean isAdmin;
+    private String[] roles;
+    private boolean isAdmin;
     private int fareCollected;
     private int timesFlown;
 
-    public UserModel(String userID, String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, Boolean isAdmin, int fareCollected, int timesFlown) {
+    public UserModel(String userID, String username, String firstName, String lastName, String userPassword, String userEmail, String userPhoneNumber, String[] roles, boolean isAdmin, int fareCollected, int timesFlown) {
         this.userID = userID;
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userPassword = userPassword;
         this.userEmail = userEmail;
         this.userPhoneNumber = userPhoneNumber;
+        this.roles = roles;
         this.isAdmin = isAdmin;
         this.fareCollected = fareCollected;
         this.timesFlown = timesFlown;
@@ -38,6 +42,14 @@ public class UserModel {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -80,11 +92,19 @@ public class UserModel {
         this.userPhoneNumber = userPhoneNumber;
     }
 
-    public Boolean getAdmin() {
+    public String[] getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String[] roles) {
+        this.roles = roles;
+    }
+
+    public boolean getAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(Boolean admin) {
+    public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
 
@@ -102,5 +122,21 @@ public class UserModel {
 
     public void setTimesFlown(int timesFlown) {
         this.timesFlown = timesFlown;
+    }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "userID='" + userID + '\'' +
+                ", username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userPhoneNumber='" + userPhoneNumber + '\'' +
+                ", isAdmin=" + isAdmin +
+                ", fareCollected=" + fareCollected +
+                ", timesFlown=" + timesFlown +
+                '}';
     }
 }

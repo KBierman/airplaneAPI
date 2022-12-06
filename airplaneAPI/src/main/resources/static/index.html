@@ -1,243 +1,484 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <title>Welcome Page</title>
-    <script type="text/javascript">
-      // Variables
-      let authHeaderValue = null;
-      let username = null;
-      let password = null;
+    <head>
+        <meta charset="UTF-8">
+        <title>Welcome Page</title>
+        <script type="text/javascript">
+            // Variables
+            let authHeaderValue = null;
+            let username = null;
+            let password = null;
 
-      // Login functions
-      function login() {
-        // Grab variables
-        username = document.getElementById("txtUsername").value;
-        password = document.getElementById("txtPassword").value;
-        authHeaderValue = "Basic " + btoa(username + ":" + password); // btoa turns it into base64 encoding
+            // Login functions
+            function login() {
+                // Grab variables
+                username = document.getElementById("username_field").value;
+                password = document.getElementById("password_field").value;
+                authHeaderValue = "Basic " + btoa(username + ":" + password); // btoa turns it into base64 encoding
+                console.log("authHeaderValue: " + authHeaderValue)
 
-        // XMLHttpRequest to send base64 encoded user login information and then stores it in authHeaderValue
-        let xmlHttp = new XMLHttpRequest();
-        xmlHttp.open('GET', '');
-        xmlHttp.setRequestHeader('Authorization', authHeaderValue);
-        xmlHttp.onreadystatechange = function () {
-          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            document.getElementById("loginMsg").innerHTML = "Welcome, " + username;
-            isUserLoggedIn(false);
-            console.log("Login Successful!");
-          } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-            document.getElementById("loginMsg").innerHTML = "Invalid username/password!";
-            isUserLoggedIn(true);
-            console.log("Login Unsuccessful!")
-          }
-        }
-        xmlHttp.send();
-      }
+                // XMLHttpRequest to send base64 encoded user login information and then stores it in authHeaderValue
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '');
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        document.getElementById("response_message").innerHTML = "Welcome, " + username;
+                        is_user_logged_in(true);
+                        console.log("Login Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        document.getElementById("response_message").innerHTML = "Invalid username/password!";
+                        is_user_logged_in(false);
+                        console.log("Login Unsuccessful!")
+                    }
+                }
+                xmlHttp.send();
+            }
 
-      function sign_up() {
-        // Grab variables
-        let username = document.getElementById("username_field").value;
-        let first_name = document.getElementById("firstname_field").value;
-        let last_name = document.getElementById("lastname_field").value;
-        let email = document.getElementById("email_field").value;
-        let phone_number = document.getElementById("phonenumber_field").value;
-        let password = document.getElementById("password_field").value;
-        let confirm_password = document.getElementById("confirmpass_field").value;
+            function sign_up() {
+                // Grab variables
+                let username = document.getElementById("username_field").value;
+                let first_name = document.getElementById("firstname_field").value;
+                let last_name = document.getElementById("lastname_field").value;
+                let email = document.getElementById("email_field").value;
+                let phone_number = document.getElementById("phonenumber_field").value;
+                let password = document.getElementById("password_field").value;
+                let confirm_password = document.getElementById("confirmpass_field").value;
 
-        // Confirm password here (wip)
+                // Compares passwords
+                if (password !== confirm_password) {
+                    document.getElementById("response.message").innerHTML = `Passwords don't match! Please check your password!`
+                    return console.log(`Signup Unsuccessful!\nPasswords don't match!`);
+                }
 
-        let user =
-        {
-          "username": username,
-          "firstName": first_name,
-          "lastName": last_name,
-          "userPassword": password,
-          "userEmail": email,
-          "userPhoneNumber": phone_number
-        }
+                // Creates JSON for user
+                let user =
+                    {
+                        "username": username,
+                        "firstName": first_name,
+                        "lastName": last_name,
+                        "userPassword": password,
+                        "userEmail": email,
+                        "userPhoneNumber": phone_number
+                    }
 
-        let xmlHttp = new XMLHttpRequest();
-        xmlHttp.open('POST', '/user');
-        xmlHttp.setRequestHeader("Content-Type", 'application/json');
-        xmlHttp.onreadystatechange = function () {
-          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            // document.getElementById("loginMsg").innerHTML = "Welcome, " + username;
-            // isUserLoggedIn(false);
-            console.log("Signup Successful!");
-          } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-            // document.getElementById("loginMsg").innerHTML = "Invalid username/password!";
-            // isUserLoggedIn(true);
-            console.log("Signup Unsuccessful!")
-          }
-        }
-        xmlHttp.send(JSON.stringify(user));
-      }
+                // Checks for any null values in JSON
+                for (let key in user) {
+                    if (!user[key]) {
+                        document.getElementById("response_message").innerHTML = `Please fill out all fields!`;
+                        return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
+                    }
+                }
 
-      function readAllCorrespondingFlights() {
-        var flightFrom = document.getElementById("txtFrom").value;
-        var flightTo = document.getElementById("txtTo").value;
-        var departureDate = document.getElementById("txtDepartureDate").value;
+                // Sends JSON to API
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('POST', '/api/user/false');
+                xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        if (this.responseText === "true") {
+                            send_to_login()
+                            console.log("Signup Successful!");
+                        } else { // If the username already existed, will return this (Refer to UserBLL for username check function)
+                            document.getElementById("response_message").innerHTML = `Username already exists!`;
+                            console.log("Signup Unsuccessful!");
+                        }
+                    }
+                }
+                xmlHttp.send(JSON.stringify(user));
+            }
 
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function () {
-          if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-            var flights = JSON.parse(this.responseText);
-            console.log("readAllCorrespondingFlights WORKING")
-            console.log(flights)
-            renderFlights(flights);
-          }
-        }
-        xmlHttp.open("GET", "/api/flight/" + flightFrom + "/" + flightTo + "/" + departureDate, true);
-        xmlHttp.send();
-      }
+            function log_out() {
+                authHeaderValue = null;
+                username = null;
+                password = null;
+                console.log("authHeaderValue: " + authHeaderValue)
+                is_user_logged_in(false);
+                send_to_login();
+            }
 
-      function renderFlights(flights) {
-        var flights_list = document.getElementById("displayFlights");
-        flights_list.innerHTML = "";
-        for(var flight of flights) {
-          var flight_html =  "<li>" + "Origin: &nbsp;" + flight.origin +  " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
+            // Flight CRUD functions
+            // Find
+            function readAllCorrespondingFlights() {
+                var origin = document.getElementById("flightorigin_field").value;
+                var destination = document.getElementById("flightdestination_field").value;
+                var departure_date = document.getElementById("departuredate_field").value
+                console.log("Called readAllCorrespondingFlights()...");
 
-          flights_list.innerHTML += flight_html;
-        }
-      }
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("GET", "/api/flight/" + origin + "/" + destination + "/" + departure_date, true);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        var flights = JSON.parse(this.responseText);
+                        console.log("readAllCorrespondingFlights() Successful!");
+                        console.log(flights);
+                        renderFlights(flights);
+                    }
+                }
+                xmlHttp.send();
+            }
 
-      // Page functions
-      function send_to_login() {
-        document.getElementById("container").innerHTML =
-                `
-      <div id="login_div">
-        <h3>Login:</h3>
-        <label>Username: </label>
-        <input type="text" id="txtUsername" />
-        <br/>
+            function renderFlights(flights) {
+                var flights_list = document.getElementById("displayFlights");
+                flights_list.innerHTML = "";
+                for (var flight of flights) {
+                    var flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
 
-        <label>Password: </label>
-        <input type="text" id="txtPassword" />
-        <br/>
+                    flights_list.innerHTML += flight_html;
+                }
+            }
 
-        <button onclick="login();">Login</button>
-      </div>
+            // User CRUD functions
+            // Find
+            function findUserByUsername() {
+                console.log("Called findUserByUsername()...")
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '/api/user/' + username);
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        console.log("findUserByUsername() was Successful!");
+                        return JSON.parse(this.responseText);
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        console.log("findUserByUsername() was Unsuccessful!");
+                    }
+                }
+                xmlHttp.send();
+            }
 
-      <div id="loginMsg"> </div>
-      <br />
+            function loadAllUsersInMemory() {
+                console.log("Called loadAllUsersInMemory()");
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '/api/loadusers');
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        console.log("loadAllUsersInMemory() was Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        console.log("loadAllUsersInMemory() was Unsuccessful!");
+                    }
+                }
+                xmlHttp.send();
+            }
 
-      <div id="flights_lookup">
+            // Update
+            function updateUser() {
+                let email = document.getElementById("email_field").value;
+                let phone_number = document.getElementById("phonenumber_field").value;
+                let password = document.getElementById("password_field").value;
+                let confirm_password = document.getElementById("confirmpassword_field").value;
+                console.log("Called updateUser()...")
 
-        <label>From:</label>
-        <input type="text" id="txtFrom" />
-        <br />
-        <label>To:</label>
-        <input type="text" id="txtTo" />
-        <br />
+                // Compares passwords
+                if (password !== confirm_password) {
+                    document.getElementById("response.message").innerHTML = `Passwords don't match! Please check your password!`
+                    return console.log(`Signup Unsuccessful!\nPasswords don't match!`);
+                }
 
-        <label>Departure Date:</label>
-        <input type="text" id="txtDepartureDate" />
-        <br />
+                let user =
+                    {
+                        "userPassword": password,
+                        "userEmail": email,
+                        "userPhoneNumber": phone_number
+                    }
+                // Checks for any null values in JSON
+                for (let key in user) {
+                    if (!user[key]) {
+                        document.getElementById("response_message").innerHTML = `Please fill out all fields!`;
+                        return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
+                    }
+                }
 
+                // Sends JSON to API
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('PUT', '/api/user/' + username);
+                xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
+                        console.log("User Update Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
+                        console.log("User Update Unsuccessful!");
+                    }
+                }
+                xmlHttp.send(JSON.stringify(user));
+            }
 
-        <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+            // DON'T FORGET DUMBASSSSSS, these functions break the mongodb by removing values from the user object (Maybe it has to do with how the buttons in the form work, maybe since they are a 'submit' type button, all of them trigger, resulting in the other functions grabbing empty values and then updating the mongodb? Also don't forget to check application.properties because you changed the URI again) ok have a nice day and go to sleep :>
+            function updateUserPassword() {
+                let password = document.getElementById("password_field").value;
+                let confirm_password = document.getElementById("confirmpassword_field").value;
+                console.log("Called updateUser()...")
 
-        <br/>
-        <div>
-          <ul id="displayFlights" style="list-style-type:none";></ul>
+                // Compares passwords
+                if (password !== confirm_password) {
+                    document.getElementById("response.message").innerHTML = `Passwords don't match! Please check your password!`
+                    return console.log(`Signup Unsuccessful!\nPasswords don't match!`);
+                }
+
+                let user =
+                    {
+                        "userPassword": password
+                    }
+
+                // Checks for any null values in JSON
+                if (!user["userPassword"]) {
+                    document.getElementById("response_message").innerHTML = `Please fill out your password field!`;
+                    return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
+                }
+
+                // Sends JSON to API
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('PUT', '/api/user/' + username);
+                xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
+                        console.log("User Update Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
+                        console.log("User Update Unsuccessful!");
+                    }
+                }
+                xmlHttp.send(JSON.stringify(user));
+            }
+
+            function updateUserEmail() {
+                let email = document.getElementById("email_field").value;
+
+                let user =
+                    {
+                        "userEmail": email
+                    }
+
+                // Checks for any null values in JSON
+                if (!user["userEmail"]) {
+                    document.getElementById("response_message").innerHTML = `Please fill out your email field!`;
+                    return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
+                }
+
+                // Sends JSON to API
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('PUT', '/api/user/' + username);
+                xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
+                        console.log("User Update Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
+                        console.log("User Update Unsuccessful!");
+                    }
+                }
+                xmlHttp.send(JSON.stringify(user));
+            }
+
+            function updateUserPhoneNum() {
+                let phone_number = document.getElementById("phonenumber_field").value;
+
+                let user =
+                    {
+                        "userPhoneNumber": phone_number
+                    }
+
+                console.log(findUserByUsername());
+
+                // Checks for any null values in JSON
+                if (!user["userPhoneNumber"]) {
+                    document.getElementById("response_message").innerHTML = `Please fill out your phone number field!`;
+                    return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
+                }
+
+                // Sends JSON to API
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('PUT', '/api/user/' + username);
+                xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
+                        console.log("User Update Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
+                        console.log("User Update Unsuccessful!");
+                    }
+                }
+                xmlHttp.send(JSON.stringify(user));
+            }
+
+            // Page functions
+            function send_to_login() {
+                document.getElementById("container").innerHTML = `
+                  <h3>Login:</h3>
+                  <label>Username: </label>
+                  <input type="text" id="username_field" />
+                  <br/>
+
+                  <label>Password: </label>
+                  <input type="password" id="password_field" />
+                  <br/>
+
+                  <button onclick="login();">Login</button>
+                  <a onclick="send_to_signup()" href="#">Don't have an account?</a>
+                  <br/>
+                  <div id="response_message"></div>
+                  <br />
+                  `
+            }
+
+            function send_to_signup() {
+                document.getElementById("container").innerHTML = `
+                  <form>
+                    <h1>SIGN UP</h1>
+                    <label for="username_field">Username: </label>
+                    <input type="text" id="username_field" required>
+                    <br />
+                    <label for="firstname_field">First Name: </label>
+                    <input type="text" id="firstname_field" required>
+                    <br />
+                    <label for="lastname_field">Last Name: </label>
+                    <input type="text" id="lastname_field" required>
+                    <br />
+                    <label for="email_field">Email: </label>
+                    <input type="email" id="email_field" required>
+                    <br />
+                    <label for="phonenumber_field">Phone Number: </label>
+                    <input type="tel" id="phonenumber_field"
+                           pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
+                    <br />
+                    <small>Format: (+0)-111-222-3333</small>
+                    <br />
+                    <label for="password_field">Password: </label>
+                    <input type="password" id="password_field" required>
+                    <br />
+                    <label for="confirmpass_field">Confirm Password: </label>
+                    <input type="password" id="confirmpass_field">
+                    <br />
+                    <input type="submit" onclick="sign_up()">
+                    <br />
+                  </form>
+                  <div id="response_message"></div>
+                  `
+            }
+
+            function send_to_flight_lookup() {
+                document.getElementById("container").innerHTML = `
+                    <label>From:</label>
+                    <input type="text" id="flightorigin_field" />
+                    <br />
+                    <label>To:</label>
+                    <input type="text" id="flightdestination_field" />
+                    <br />
+                    <label>Departure Date:</label>
+                    <input type="text" id="departuredate_field" />
+                    <br />
+
+                    <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+                    <br/>
+
+                    <ul id="displayFlights" style="list-style-type:none"></ul>
+                    `
+            }
+
+            function send_to_flight_res() {
+                if (authHeaderValue == null) {
+                    send_to_signup();
+                } else {
+                    document.getElementById("container").innerHTML = `
+                      hello :)
+                      `
+                }
+            }
+
+            function send_to_user_profile() {
+                document.getElementById("container").innerHTML = `
+                    <form>
+                        <h1 id="profile_header"></h1>
+                        <label for="email_field">Email: </label>
+                        <input type="email" id="email_field" required>
+                        <br />
+                        <input type="submit" onclick="updateUserEmail()">
+                        <br />
+                    </form>
+
+                    <form>
+                        <label for="phonenumber_field">Phone Number: </label>
+                        <input type="tel" id="phonenumber_field"
+                               pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
+                        <br />
+                        <small>Format: (+0)-111-222-3333</small>
+                        <br />
+                        <input type="submit" onclick="updateUserPhoneNum()">
+                        <br />
+                    </form>
+
+                    <form>
+                        <label for="password_field">Password: </label>
+                        <input type="password" id="password_field" required>
+                        <br />
+                        <label for="confirmpassword_field">Confirm Password: </label>
+                        <input type="password" id="confirmpassword_field">
+                        <br />
+                        <input type="submit" onclick="updateUserPassword()">
+                        <br />
+                    </form>
+                    <div id="response_message"></div>
+                    <p>Times Flown: </p>
+                    <p>"Miles" otherwise known as amount of money spent: </p>
+                    `
+                document.getElementById("profile_header").innerHTML = `${username}'s Profile`
+            }
+
+            // Navbar functions
+            function is_user_logged_in(isTrue) {
+                if (isTrue === true) {
+                    document.getElementById("navbar").innerHTML = `
+                        <a onclick="send_to_flight_lookup()" href="#">Reserve a Flight</a>
+                        <a onclick="send_to_user_profile()" href="#">Profile</a>
+                        <a onclick="log_out()" href="#">Log Out</a>
+                        `
+                } else {
+                    document.getElementById("navbar").innerHTML = `
+                        <a onclick="send_to_flight_lookup()" href="#">Reserve a Flight</a>
+                        <a onclick="send_to_signup()" href="#">Signup</a>
+                        <a onclick="send_to_login()" href="#">Login</a>
+                        `
+                }
+            }
+
+            window.onload = function () {
+                loadAllUsersInMemory(); // Will load all the users in the databse into memory
+            }
+        </script>
+    </head>
+    <body>
+        <nav id="navbar">
+            <a onclick="send_to_flight_lookup()" href="#">Reserve a Flight</a>
+            <a onclick="send_to_signup()" href="#">Signup</a>
+            <a onclick="send_to_login()" href="#">Login</a>
+        </nav>
+        <h1>Welcome to SkyHappy</h1>
+
+        <div id="container">
+            <label for="flightorigin_field">From:</label>
+            <input type="text" id="flightorigin_field"/>
+            <br/>
+            <label for="flightdestination_field">To:</label>
+            <input type="text" id="flightdestination_field"/>
+            <br/>
+            <label for="departuredate_field">Departure Date:</label>
+            <input type="text" id="departuredate_field"/>
+            <br/>
+
+            <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+            <br/>
+
+            <div>
+                <ul id="displayFlights" style="list-style-type:none"></ul>
+            </div>
         </div>
-      </div>
-    `
-      }
-
-      function send_to_signup() {
-        document.getElementById("container").innerHTML = `
-        <div>
-          <div>
-            <h1>SIGN UP</h1>
-            <label for="username_field">Username: </label>
-            <input type="text" id="username_field" required>
-            <br />
-            <label for="firstname_field">First Name: </label>
-            <input type="text" id="firstname_field" required>
-            <br />
-            <label for="lastname_field">Last Name: </label>
-            <input type="text" id="lastname_field" required>
-            <br />
-            <label for="email_field">Email: </label>
-            <input type="email" id="email_field" required>
-            <br />
-            <label for="phonenumber_field">Phone Number: </label>
-            <input type="tel" id="phonenumber_field"
-                   pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
-            <br />
-            <small>Format: (+0)-111-222-3333</small>
-            <br />
-            <label for="password_field">Password: </label>
-            <input type="password" id="password_field" required>
-            <br />
-            <label for="confirmpass_field">Confirm Password: </label>
-            <input type="password" id="confirmpass_field">
-        <!--    set validity https://codepen.io/diegoleme/pen/qBpyvr -->
-            <br />
-            <input type="submit" onclick="sign_up()">
-            <br />
-        <!--    maybe a dash here-->
-          </div>
-          <br />
-          <a onclick="send_to_login()">Log In</a>
-        </div>
-        `
-      }
-
-      function send_to_flight_res() {
-        if (authHeaderValue == null) {
-          send_to_signup();
-        } else {
-          document.getElementById("container").innerHTML = `
-              hello
-             <button onclick="send_to_login();">login</button>
-          `
-        }
-      }
-    </script>
-  </head>
-  <body>
-    <h1>Welcome to SkyHappy</h1>
-
-    <div id="container">
-      <div id="login_div">
-        <h3>Login:</h3>
-        <label>Username: </label>
-        <input type="text" id="txtUsername" />
-        <br/>
-
-        <label>Password: </label>
-        <input type="text" id="txtPassword" />
-        <br/>
-
-        <button onclick="login();">Login</button>
-      </div>
-
-      <div id="loginMsg"> </div>
-      <br />
-
-      <div id="flights_lookup">
-
-        <label>From:</label>
-        <input type="text" id="txtFrom" />
-        <br />
-        <label>To:</label>
-        <input type="text" id="txtTo" />
-        <br />
-
-        <label>Departure Date:</label>
-        <input type="text" id="txtDepartureDate" />
-        <br />
-
-
-        <button onclick="readAllCorrespondingFlights();">Find Flights</button>
-
-        <br/>
-        <div>
-          <ul id="displayFlights" style="list-style-type:none";></ul>
-        </div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

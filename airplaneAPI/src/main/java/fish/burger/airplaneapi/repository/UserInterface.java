@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 public interface UserInterface extends MongoRepository<UserModel, String> {
-    @Query("{'userID':'?0'}")
-    UserModel findUserByID(String userID);
+    @Query("{'username':'?0'}")
+    UserModel findUserByUsername(String username);
 
     public long count();
 }

@@ -15,18 +15,20 @@ public class UserBLL {
     }
 
     // Create
-    public void createUser(UserModel newUser) {
-        if (findUserByID(newUser.getUserID()) != null) {
-            System.out.println("'" + newUser.getUserID() + "' already exists!");
-            return;
+    public boolean createUser(UserModel newUser) {
+        if (findUserByUsername(newUser.getUsername()) != null) {
+            System.out.println("'" + newUser.getUsername() + "' already exists!");
+            return false;
+        } else {
+            userITF.save(newUser);
+            System.out.println("'" + newUser.getUsername() + "' was created successfully!");
+            return true;
         }
-        userITF.save(newUser);
-        System.out.println("'" + newUser.getUserID() + "' was created successfully!");
     }
 
     // Read
-    public UserModel findUserByID(String userID) {
-        return userITF.findUserByID(userID);
+    public UserModel findUserByUsername(String username) {
+        return userITF.findUserByUsername(username);
     }
 
     public List<UserModel> findAll() {
@@ -35,21 +37,23 @@ public class UserBLL {
 
     // Update
     public void updateUser(UserModel updatedUser) {
-        if (findUserByID(updatedUser.getUserID()) != null) {
+        UserModel oldUser = findUserByUsername(updatedUser.getUsername());
+        if (oldUser != null) {
+            updatedUser.setUserID(oldUser.getUserID());
             userITF.save(updatedUser);
-            System.out.println("'" + updatedUser.getUserID() + "' was successfully updated!");
+            System.out.println("'" + updatedUser.getUsername() + "' was successfully updated!");
             return;
         }
-        System.out.println("'" + updatedUser.getUserID() + "' doesn't exist!");
+        System.out.println("'" + updatedUser.getUsername() + "' doesn't exist!");
     }
 
     // Delete
-    public void deleteUser(String userID) {
-        if (findUserByID(userID) != null) {
-            userITF.deleteById(userID);
-            System.out.println("'" + userID + "' was deleted successfully!");
+    public void deleteUser(String username) {
+        if (findUserByUsername(username) != null) {
+            userITF.deleteById(username);
+            System.out.println("'" + username + "' was deleted successfully!");
             return;
         }
-        System.out.println("'" + userID + "' doesn't exist!");
+        System.out.println("'" + username + "' doesn't exist!");
     }
 }
