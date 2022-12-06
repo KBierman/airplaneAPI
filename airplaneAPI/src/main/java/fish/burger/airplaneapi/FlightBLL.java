@@ -14,7 +14,7 @@ public class FlightBLL {
     }
 
     public boolean createFlight(FlightModel flightModel) {
-        if (flI.findFlightByNumber(flightModel.getFlightNumber()) != null){
+        if (flI.findFlightByNumber(flightModel.getFltNo()) != null){
             return false;
         }
         flI.save(flightModel);

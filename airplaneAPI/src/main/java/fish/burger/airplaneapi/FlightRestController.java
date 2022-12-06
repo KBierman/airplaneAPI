@@ -44,7 +44,10 @@ public class FlightRestController {
     }
 
     @GetMapping("/flight/{fltNo}")
+    @ResponseBody
     public FlightModel readFlightByFlightNumber(@PathVariable int fltNo) {
+        System.out.println("readFlightByFlightNumber() called!");
+        System.out.println(flightBLL.readFlightByFltNo(fltNo));
         return flightBLL.readFlightByFltNo(fltNo);
     }
 }

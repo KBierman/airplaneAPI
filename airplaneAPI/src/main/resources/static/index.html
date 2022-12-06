@@ -153,7 +153,7 @@
                 flights_list.innerHTML = "";
                 for (let flight of flights) {
                     // let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
-                    let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + ` <button id='reserve' onclick='send_to_flight_res("${flight.flightNumber}")'>Reserve</button>` + "</li>" + "<br>";
+                    let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + ` <button id='reserve' onclick='send_to_flight_res("${flight.fltNo}")'>Reserve</button>` + "</li>" + "<br>";
 
                     flights_list.innerHTML += flight_html;
                 }
@@ -173,6 +173,20 @@
                         JSON.parse(this.responseText);
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
                         console.log("findUserByUsername() was Unsuccessful!");
+                    }
+                }
+                xmlHttp.send();
+            }
+
+            function loadAllUsersInMemory() {
+                console.log("Called loadAllUsersInMemory()");
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '/api/loadusers');
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        console.log("loadAllUsersInMemory() was Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        console.log("loadAllUsersInMemory() was Unsuccessful!");
                     }
                 }
                 xmlHttp.send();
@@ -216,20 +230,6 @@
                         console.log("findUserByUsername() was Successful!");
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
                         console.log("findUserByUsername() was Unsuccessful!");
-                    }
-                }
-                xmlHttp.send();
-            }
-
-            function loadAllUsersInMemory() {
-                console.log("Called loadAllUsersInMemory()");
-                let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('GET', '/api/loadusers');
-                xmlHttp.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        console.log("loadAllUsersInMemory() was Successful!");
-                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-                        console.log("loadAllUsersInMemory() was Unsuccessful!");
                     }
                 }
                 xmlHttp.send();

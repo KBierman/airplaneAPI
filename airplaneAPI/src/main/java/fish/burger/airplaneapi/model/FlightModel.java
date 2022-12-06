@@ -38,11 +38,11 @@ public class FlightModel {
     public FlightModel() {
     }
 
-    public int getFlightNumber() {
+    public int getFltNo() {
         return fltNo;
     }
 
-    public void setFlightNumber(int fltNo) {
+    public void setFltNo(int fltNo) {
         this.fltNo = fltNo;
     }
 
