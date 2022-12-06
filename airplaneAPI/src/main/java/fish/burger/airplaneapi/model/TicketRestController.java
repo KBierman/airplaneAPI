@@ -14,7 +14,7 @@ public class TicketRestController {
 
     @PostMapping("/ticket")
     @ResponseBody
-    public void CreateTicket(@RequestBody TicketModel ticket) {
+    public void createTicket(@RequestBody TicketModel ticket) {
         ticketBLL.createTicket(ticket);
     }
 

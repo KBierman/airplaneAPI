@@ -26,8 +26,14 @@ public class UserRestController {
     @PostMapping("/user/{isAdmin}")
     @ResponseBody
     public boolean createUser(@RequestBody UserModel newUser, @PathVariable boolean isAdmin) {
-        String[] roles = new String[1];
-        roles[0] = "USER";
+        String[] roles;
+
+        // Will give admin depending on parameter value in mapping (isAdmin)
+        if (isAdmin) {
+            roles = new String[]{"USER", "ADMIN"};
+        } else {
+            roles = new String[]{"USER"};
+        }
 
         newUser.setAdmin(isAdmin);
         newUser.setRoles(roles);

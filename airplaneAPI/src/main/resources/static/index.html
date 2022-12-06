@@ -97,7 +97,48 @@
                 send_to_login();
             }
 
-            // Flight CRUD functions
+            // Ticket CRUD Functions
+            function createTicket(user, flight) {
+                console.log("Called createTicket()...");
+                let current_date = new Date();
+                let dd = String(current_date.getDate()).padStart(2, '0');
+                let mm = String(current_date.getMonth() + 1).padStart(2, '0'); //January is 0!
+                let yyyy = current_date.getFullYear();
+
+                current_date = mm + '/' + dd + '/' + yyyy;
+
+                let ticket =
+                    {
+                        "fltNo": flight.fltNo,
+                        "dateOfJourney": flight.flightDate,
+                        "userID": user.userID,
+                        "firstName": user.firstName,
+                        "lastName": user.lastName,
+                        "email": user.userEmail,
+                        "fare": flight.fare,
+                        "status": flight.flightStatus,
+                        "reservedBy": user.username,
+                        "dateOfReservation": current_date
+                    }
+
+                console.log(ticket);
+
+                // Sends JSON to API
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('PUT', '/api/user/' + username);
+                xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+
+                    }
+                }
+                xmlHttp.send(JSON.stringify(user));
+            }
+
+            // Flight CRUD Functions
             // Find
             function readAllCorrespondingFlights() {
                 let origin = document.getElementById("flightorigin_field").value;
@@ -129,18 +170,19 @@
                 xmlHttp.send();
             }
 
-            function readFlightByFlightNumber(flightNumber) {
+            function readFlightByFlightNumber(flightNumber, user) {
                 let xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", "/api/flight/" + flightNumber, true);
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flight = JSON.parse(this.responseText);
                         console.log(flight);
+                        console.log(user);
                         document.getElementById("response_message").innerHTML = "";
                         document.getElementById("container").innerHTML = `
                             <div>
                                 Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
-                                <button id='buy' onclick=''>Buy</button>
+                                <button id='buy' onclick='createTicket(${user}, ${flight})'>Buy</button>
                             </div>
                             <br />
                             `;
@@ -378,10 +420,21 @@
                 if (authHeaderValue == null) {
                     send_to_login();
                 } else {
-                    readFlightByFlightNumber(flightNumber);
-                    // document.getElementById("container").innerHTML = `
-                    //
-                    //   `
+                    console.log("Called send_to_flight_res()...")
+                    let xmlHttp = new XMLHttpRequest();
+                    xmlHttp.open('GET', '/api/user/' + username);
+                    xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                    xmlHttp.onreadystatechange = function () {
+                        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                            let user = JSON.parse(this.responseText);
+                            console.log(user);
+                            readFlightByFlightNumber(flightNumber, user);
+                            console.log("send_to_flight_res() was Successful!");
+                        } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                            console.log("send_to_flight_res() was Unsuccessful!");
+                        }
+                    }
+                    xmlHttp.send();
                 }
             }
 
@@ -396,8 +449,7 @@
                         <input type="email" id="email_field" required>
                         <br />
                         <label for="phonenumber_field">Phone Number: </label>
-                        <input type="tel" id="phonenumber_field"
-                               pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
+                        <input type="tel" id="phonenumber_field" pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
                         <br />
                         <small>Format: (+0)-111-222-3333</small>
                         <br />
