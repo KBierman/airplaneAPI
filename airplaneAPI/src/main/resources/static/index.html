@@ -176,13 +176,16 @@
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flight = JSON.parse(this.responseText);
+
+                        console.log("readFlightByFlightNumber")
                         console.log(flight);
+                        console.log("readFlightByFlightNumber")
                         console.log(user);
                         document.getElementById("response_message").innerHTML = "";
                         document.getElementById("container").innerHTML = `
                             <div>
                                 Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
-                                <button id='buy' onclick='createTicket(${user}, ${flight})'>Buy</button>
+                                <button id='buy' onclick='createTicket(${JSON.stringify(user)}, ${JSON.stringify(flight)})'>Buy</button>
                             </div>
                             <br />
                             `;
