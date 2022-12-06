@@ -40,6 +40,9 @@ public class UserBLL {
         UserModel oldUser = findUserByUsername(updatedUser.getUsername());
         if (oldUser != null) {
             updatedUser.setUserID(oldUser.getUserID());
+            updatedUser.setFirstName(oldUser.getFirstName());
+            updatedUser.setLastName(oldUser.getLastName());
+            updatedUser.setRoles(oldUser.getRoles());
             userITF.save(updatedUser);
             System.out.println("'" + updatedUser.getUsername() + "' was successfully updated!");
             return;

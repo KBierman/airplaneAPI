@@ -149,7 +149,51 @@
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         console.log("findUserByUsername() was Successful!");
-                        return JSON.parse(this.responseText);
+                        console.log(JSON.parse(this.responseText));
+                        JSON.parse(this.responseText);
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        console.log("findUserByUsername() was Unsuccessful!");
+                    }
+                }
+                xmlHttp.send();
+            }
+
+            function updateUserIfEmptyField(user) {
+                console.log("Called updateUserIfEmptyField()...")
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '/api/user/' + username);
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        let old_user = JSON.parse(this.responseText);
+
+                        // Checks for any null values in JSON
+                        for (let key in user) {
+                            if (!user[key]) {
+                                user[key] = old_user[key];
+                                console.log(user[key]);
+                            }
+                            console.log(user[key]);
+                        }
+
+                        console.log(user);
+
+                        // Sends JSON to API
+                        let xmlHttp = new XMLHttpRequest();
+                        xmlHttp.open('PUT', '/api/user/' + username);
+                        xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                        xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                        xmlHttp.onreadystatechange = function () {
+                            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                                document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
+                                console.log("User Update Successful!");
+                            } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                                document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
+                                console.log("User Update Unsuccessful!");
+                            }
+                        }
+                        xmlHttp.send(JSON.stringify(user));
+                        console.log("findUserByUsername() was Successful!");
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
                         console.log("findUserByUsername() was Unsuccessful!");
                     }
@@ -173,17 +217,11 @@
 
             // Update
             function updateUser() {
+                console.log("Called updateUser()...");
                 let email = document.getElementById("email_field").value;
                 let phone_number = document.getElementById("phonenumber_field").value;
                 let password = document.getElementById("password_field").value;
                 let confirm_password = document.getElementById("confirmpassword_field").value;
-                console.log("Called updateUser()...")
-
-                // Compares passwords
-                if (password !== confirm_password) {
-                    document.getElementById("response.message").innerHTML = `Passwords don't match! Please check your password!`
-                    return console.log(`Signup Unsuccessful!\nPasswords don't match!`);
-                }
 
                 let user =
                     {
@@ -191,134 +229,44 @@
                         "userEmail": email,
                         "userPhoneNumber": phone_number
                     }
-                // Checks for any null values in JSON
-                for (let key in user) {
-                    if (!user[key]) {
-                        document.getElementById("response_message").innerHTML = `Please fill out all fields!`;
-                        return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
-                    }
-                }
 
-                // Sends JSON to API
-                let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('PUT', '/api/user/' + username);
-                xmlHttp.setRequestHeader("Content-Type", 'application/json');
-                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
-                xmlHttp.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
-                        console.log("User Update Successful!");
-                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-                        document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
-                        console.log("User Update Unsuccessful!");
+                if (!email || !phone_number || !password) {
+                    updateUserIfEmptyField(user);
+                } else {
+                    // Compares passwords
+                    if (password !== confirm_password) {
+                        document.getElementById("response.message").innerHTML = `Passwords don't match! Please check your password!`
+                        return console.log(`Signup Unsuccessful!\nPasswords don't match!`);
+
                     }
+
+                    // Checks for any null values in JSON
+                    for (let key in user) {
+                        if (!user[key]) {
+                            document.getElementById("response_message").innerHTML = `Please fill out all fields!`;
+                            return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
+                        }
+                    }
+
+                    // Sends JSON to API
+                    let xmlHttp = new XMLHttpRequest();
+                    xmlHttp.open('PUT', '/api/user/' + username);
+                    xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                    xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                    xmlHttp.onreadystatechange = function () {
+                        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                            document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
+                            console.log("User Update Successful!");
+                        } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                            document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
+                            console.log("User Update Unsuccessful!");
+                        }
+                    }
+                    xmlHttp.send(JSON.stringify(user));
                 }
-                xmlHttp.send(JSON.stringify(user));
             }
 
             // DON'T FORGET DUMBASSSSSS, these functions break the mongodb by removing values from the user object (Maybe it has to do with how the buttons in the form work, maybe since they are a 'submit' type button, all of them trigger, resulting in the other functions grabbing empty values and then updating the mongodb? Also don't forget to check application.properties because you changed the URI again) ok have a nice day and go to sleep :>
-            function updateUserPassword() {
-                let password = document.getElementById("password_field").value;
-                let confirm_password = document.getElementById("confirmpassword_field").value;
-                console.log("Called updateUser()...")
-
-                // Compares passwords
-                if (password !== confirm_password) {
-                    document.getElementById("response.message").innerHTML = `Passwords don't match! Please check your password!`
-                    return console.log(`Signup Unsuccessful!\nPasswords don't match!`);
-                }
-
-                let user =
-                    {
-                        "userPassword": password
-                    }
-
-                // Checks for any null values in JSON
-                if (!user["userPassword"]) {
-                    document.getElementById("response_message").innerHTML = `Please fill out your password field!`;
-                    return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
-                }
-
-                // Sends JSON to API
-                let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('PUT', '/api/user/' + username);
-                xmlHttp.setRequestHeader("Content-Type", 'application/json');
-                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
-                xmlHttp.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
-                        console.log("User Update Successful!");
-                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-                        document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
-                        console.log("User Update Unsuccessful!");
-                    }
-                }
-                xmlHttp.send(JSON.stringify(user));
-            }
-
-            function updateUserEmail() {
-                let email = document.getElementById("email_field").value;
-
-                let user =
-                    {
-                        "userEmail": email
-                    }
-
-                // Checks for any null values in JSON
-                if (!user["userEmail"]) {
-                    document.getElementById("response_message").innerHTML = `Please fill out your email field!`;
-                    return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
-                }
-
-                // Sends JSON to API
-                let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('PUT', '/api/user/' + username);
-                xmlHttp.setRequestHeader("Content-Type", 'application/json');
-                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
-                xmlHttp.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
-                        console.log("User Update Successful!");
-                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-                        document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
-                        console.log("User Update Unsuccessful!");
-                    }
-                }
-                xmlHttp.send(JSON.stringify(user));
-            }
-
-            function updateUserPhoneNum() {
-                let phone_number = document.getElementById("phonenumber_field").value;
-
-                let user =
-                    {
-                        "userPhoneNumber": phone_number
-                    }
-
-                console.log(findUserByUsername());
-
-                // Checks for any null values in JSON
-                if (!user["userPhoneNumber"]) {
-                    document.getElementById("response_message").innerHTML = `Please fill out your phone number field!`;
-                    return console.log(`Signup Unsuccessful!\n(JSON had a key that was null!) Key: ${key} | Value: ${user[key]}`);
-                }
-
-                // Sends JSON to API
-                let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('PUT', '/api/user/' + username);
-                xmlHttp.setRequestHeader("Content-Type", 'application/json');
-                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
-                xmlHttp.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
-                        console.log("User Update Successful!");
-                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-                        document.getElementById("response_message").innerHTML = "Your info couldn't be updated, please try again later!";
-                        console.log("User Update Unsuccessful!");
-                    }
-                }
-                xmlHttp.send(JSON.stringify(user));
-            }
 
             // Page functions
             function send_to_login() {
@@ -405,42 +353,37 @@
             }
 
             function send_to_user_profile() {
+                let user = findUserByUsername();
+                console.log(user)
+
                 document.getElementById("container").innerHTML = `
                     <form>
                         <h1 id="profile_header"></h1>
                         <label for="email_field">Email: </label>
                         <input type="email" id="email_field" required>
                         <br />
-                        <input type="submit" onclick="updateUserEmail()">
-                        <br />
-                    </form>
-
-                    <form>
                         <label for="phonenumber_field">Phone Number: </label>
                         <input type="tel" id="phonenumber_field"
                                pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
                         <br />
                         <small>Format: (+0)-111-222-3333</small>
                         <br />
-                        <input type="submit" onclick="updateUserPhoneNum()">
-                        <br />
-                    </form>
-
-                    <form>
                         <label for="password_field">Password: </label>
                         <input type="password" id="password_field" required>
                         <br />
                         <label for="confirmpassword_field">Confirm Password: </label>
                         <input type="password" id="confirmpassword_field">
                         <br />
-                        <input type="submit" onclick="updateUserPassword()">
+                        <input type="submit" onclick="updateUser()">
                         <br />
                     </form>
+                    <button onclick="findUserByUsername()">user</button>
                     <div id="response_message"></div>
                     <p>Times Flown: </p>
                     <p>"Miles" otherwise known as amount of money spent: </p>
                     `
                 document.getElementById("profile_header").innerHTML = `${username}'s Profile`
+                // document.getElementById("email_field").value = user
             }
 
             // Navbar functions
