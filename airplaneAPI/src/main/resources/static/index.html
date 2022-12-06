@@ -133,7 +133,8 @@
                 let flights_list = document.getElementById("displayFlights");
                 flights_list.innerHTML = "";
                 for (let flight of flights) {
-                    let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
+                    // let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
+                    let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + ` <button name='${flight.flightNumber}' id='reserve' onclick='send_to_flight_res("${flight.flightNumber}")'>Reserve</button>` + "</li>" + "<br>";
 
                     flights_list.innerHTML += flight_html;
                 }
@@ -342,12 +343,22 @@
                     `
             }
 
-            function send_to_flight_res() {
+            // function send_to_flight_res() {
+            //     if (authHeaderValue == null) {
+            //         send_to_login();
+            //     } else {
+            //         document.getElementById("container").innerHTML = `
+            //           hello :)
+            //           `
+            //     }
+            // }
+
+            function send_to_flight_res(flight) {
                 if (authHeaderValue == null) {
                     send_to_login();
                 } else {
                     document.getElementById("container").innerHTML = `
-                      hello :)
+                      ${flight}
                       `
                 }
             }
