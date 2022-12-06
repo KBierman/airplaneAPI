@@ -110,7 +110,6 @@
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flights = JSON.parse(this.responseText);
-
                         if (flights === undefined || flights.length == 0) {
                             document.getElementById("response_message").innerHTML = "Flight not found!";
                             document.getElementById("displayFlights").innerHTML = "";
@@ -121,6 +120,10 @@
                             console.log("readAllCorrespondingFlights() was Successful!");
                             console.log(flights);
                         }
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
+                        document.getElementById("response_message").innerHTML = "Flight not found!";
+                        document.getElementById("displayFlights").innerHTML = "";
+                        console.log("readAllCorrespondingFlights() was Unsuccessful!");
                     }
                 }
                 xmlHttp.send();
