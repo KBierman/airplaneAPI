@@ -135,6 +135,7 @@
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flight = JSON.parse(this.responseText);
+                        console.log(flight);
                         document.getElementById("response_message").innerHTML = "";
                         document.getElementById("container").innerHTML = flight;
                         console.log("readAllCorrespondingFlights() was Successful!");

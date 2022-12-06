@@ -12,7 +12,7 @@ public class FlightRestController {
     private FlightBLL flightBLL = new FlightBLL();
 
     // Create
-    @GetMapping("/flight")
+    @PostMapping("/flight")
     @ResponseBody
     public void createFlight(@RequestBody FlightModel flight) {
         flightBLL.createFlight(flight);
