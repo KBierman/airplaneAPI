@@ -110,12 +110,16 @@
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flights = JSON.parse(this.responseText);
-                        document.getElementById("response_message").innerHTML = "";
-                        renderFlights(flights);
-                        console.log("readAllCorrespondingFlights() Successful!");
-                        console.log(flights);
-                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
-                        document.getElementById("response_message").innerHTML = "Flight not found!";
+
+                        if (flights === undefined || flights.length == 0) {
+                            document.getElementById("response_message").innerHTML = "Flight not found!";
+                            console.log("readAllCorrespondingFlights() was Unsuccessful!");
+                        } else {
+                            document.getElementById("response_message").innerHTML = "";
+                            renderFlights(flights);
+                            console.log("readAllCorrespondingFlights() was Successful!");
+                            console.log(flights);
+                        }
                     }
                 }
                 xmlHttp.send();
@@ -378,9 +382,9 @@
                     <label>Departure Date:</label>
                     <input type="text" id="departuredate_field" />
                     <br />
-
                     <button onclick="readAllCorrespondingFlights();">Find Flights</button>
                     <br/>
+                    <div id="response_message"></div>
 
                     <ul id="displayFlights" style="list-style-type:none"></ul>
                     `
