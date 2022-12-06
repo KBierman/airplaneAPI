@@ -113,6 +113,7 @@
 
                         if (flights === undefined || flights.length == 0) {
                             document.getElementById("response_message").innerHTML = "Flight not found!";
+                            document.getElementById("displayFlights").innerHTML = "";
                             console.log("readAllCorrespondingFlights() was Unsuccessful!");
                         } else {
                             document.getElementById("response_message").innerHTML = "";
