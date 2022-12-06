@@ -136,7 +136,13 @@
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flight = JSON.parse(this.responseText);
                         document.getElementById("response_message").innerHTML = "";
-                        document.getElementById("container").innerHTML = flight;
+                        document.getElementById("container").innerHTML = `
+                            <div>
+                                Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
+                                <button id='buy' onclick=''>Buy</button>
+                            </div>
+                            <br />
+                            `;
                         console.log("readAllCorrespondingFlights() was Successful!");
                         console.log(flight);
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
@@ -152,8 +158,13 @@
                 let flights_list = document.getElementById("displayFlights");
                 flights_list.innerHTML = "";
                 for (let flight of flights) {
-                    // let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
-                    let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + ` <button id='reserve' onclick='send_to_flight_res("${flight.fltNo}")'>Reserve</button>` + "</li>" + "<br>";
+                    let flight_html = `
+                        <div>
+                            Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
+                            <button id='reserve' onclick='send_to_flight_res("${flight.fltNo}")'>Reserve</button>
+                        </div>
+                        <br />
+                        `;
 
                     flights_list.innerHTML += flight_html;
                 }
@@ -361,16 +372,6 @@
                     <ul id="displayFlights" style="list-style-type:none"></ul>
                     `
             }
-
-            // function send_to_flight_res() {
-            //     if (authHeaderValue == null) {
-            //         send_to_login();
-            //     } else {
-            //         document.getElementById("container").innerHTML = `
-            //           hello :)
-            //           `
-            //     }
-            // }
 
             function send_to_flight_res(flightNumber) {
                 if (authHeaderValue == null) {
