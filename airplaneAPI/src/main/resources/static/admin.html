@@ -4,6 +4,9 @@
         <meta charset="UTF-8">
         <title>Admin</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Karla&family=Rubik&display=swap" rel="stylesheet">
         <style>
             .scrollable {
                 margin: auto;
@@ -136,8 +139,7 @@
 
             /* The text fields for searching flights */
             #flight_form {
-                display: flex;
-                justify-content: center;
+
                 width: 100%;
                 height: auto;
             }
@@ -149,11 +151,11 @@
                 font-size: 13pt;
             }
 
-            #flight_form input[type=text], input[type=email], input[type=password], input[type=tel] {
+            #flight_form input[type=text], #flight_form input[type=email], #flight_form input[type=password], #flight_form input[type=tel], #flight_form input {
                 width: 200px;
                 border-radius: 2px;
                 border-color: transparent;
-                margin: 0 5px;
+                margin: 5px;
                 padding: 3px;
             }
 
@@ -198,7 +200,7 @@
                 margin-left: 10px;
             }
 
-            #flight_info, #ticket_info {
+            .info {
                 display: inline;
                 margin: 5px;
                 width: auto;
@@ -246,6 +248,11 @@
                 color: black;
                 font-family: 'Rubik', sans-serif;
                 font-size: 12pt;
+            }
+
+            /* For the reports element */
+            canvas {
+                width: 100px;
             }
 
             footer {
@@ -307,7 +314,6 @@
                 document.getElementById("container").innerHTML = `
                     <h1>Users</h1>
                     <div>
-
                         <!--Display Lists-->
                         <label for="userN">Username: </label>
                         <input type="text" id="userN"/>
@@ -325,43 +331,31 @@
                 document.getElementById("container").innerHTML = `
                     <h1>Flights</h1>
                     <!--Flight information-->
-                    <div>
+                    <div id="flight_form">
                         <!--Display Lists-->
-                        <label for="flNumber">Flight Number</label>
-                        <input type="text" id="flNumber"/>
+                        <label for="flNumber">Flight Number: <input type="text" id="flNumber"/></label>
                         <br/>
-                        <label for="flOrigin">Origin</label>
-                        <input id="flOrigin"/>
+                        <label for="flOrigin">Origin: <input id="flOrigin"/></label>
                         <br/>
-                        <label for="flDestination">Destination</label>
-                        <input id="flDestination"/>
+                        <label for="flDestination">Destination: <input id="flDestination"/></label>
                         <br/>
-                        <label for="flArrTime">Arrival Time</label>
-                        <input id="flArrTime"/>
+                        <label for="flArrTime">Arrival Time: <input id="flArrTime"/></label>
                         <br/>
-                        <label for="flDepTime">Departure Time</label>
-                        <input id="flDepTime"/>
+                        <label for="flDepTime">Departure Time: <input id="flDepTime"/></label>
                         <br/>
-                        <label for="flAircraftType">Aircraft Type</label>
-                        <input id="flAircraftType"/>
+                        <label for="flAircraftType">Aircraft Type: <input id="flAircraftType"/></label>
                         <br/>
-                        <label for="flSeatsEmpty">Seats Empty</label>
-                        <input id="flSeatsEmpty"/>
+                        <label for="flSeatsEmpty">Seats Empty: <input id="flSeatsEmpty"/></label>
                         <br/>
-                        <label for="flSeatsFull">Seats Full</label>
-                        <input id="flSeatsFull"/>
+                        <label for="flSeatsFull">Seats Full: <input id="flSeatsFull"/></label>
                         <br/>
-                        <label for="flFare">Price of ticket</label>
-                        <input id="flFare"/>
+                        <label for="flFare">Fare: <input id="flFare"/></label>
                         <br/>
-                        <label for="flDate">Flight Date</label>
-                        <input id="flDate"/>
+                        <label for="flDate">Flight Date: <input id="flDate"/></label>
                         <br/>
-                        <label for="flStatus">Flight Status</label>
-                        <input id="flStatus"/>
+                        <label for="flStatus">Flight Status: <input id="flStatus"/></label>
                         <br/>
-                        <label for="flStatusDate">Status Date</label>
-                        <input id="flStatusDate"/>
+                        <label for="flStatusDate">Status Date: <input id="flStatusDate"/></label>
                         <br/>
                         <button onclick="createFlight();">Add Flight</button>
                         <button onclick="updateFlight();">Update Flight </button>
@@ -371,12 +365,9 @@
 
                     </div>
 
-                    <div class="scrollable">
-                        <ul id="flights_List"></ul>
+                    <div id="flights_container" class="scrollable">
+                        <div id="flights_list"></div>
                     </div>
-                    <!-- User Information -->
-
-                    </body>
                 `;
                 getFlights();
             }
@@ -538,7 +529,7 @@
             }
 
             function renderEntries(entries) {
-                var entry_list = document.getElementById("flights_List");
+                var entry_list = document.getElementById("flights_list");
                 entry_list.innerHTML = "";
                 for (var entry of entries) {
                     var entry_html = "<li>" + entry.aircraftType + "</li>" +
@@ -673,11 +664,9 @@
             <h1>Users</h1>
             <div>
                 <!--Display Lists-->
-                <label for="userN">Username: </label>
-                <input type="text" id="userN"/>
+                <label for="userN">Username: <input type="text" id="userN"/></label>
                 <br/>
-                <label for="userP">Password: </label>
-                <input type="text" id="userP"/>
+                <label for="userP">Password: <input type="text" id="userP"/></label>
                 <br/>
                 <button onclick="makeUserAdmin();">Make Admin</button>
                 <button onclick="deleteUser();">Delete User</button>

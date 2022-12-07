@@ -10,7 +10,7 @@
             .scrollable {
                 margin: auto;
                 width: auto;
-                min-height: 100px;
+                min-height: 20px;
                 height: auto;
                 overflow: auto;
                 background-color: #2F4562;
@@ -189,7 +189,7 @@
 
             /* The container for a listed flight */
             #listed_flight, #listed_ticket {
-                margin: 0;
+                margin: 20px 0;
                 padding: 0;
                 width: auto;
                 height: auto;
@@ -502,7 +502,6 @@
                         }
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
                         document.getElementById("response_message").innerHTML = "Flight not found!";
-                        document.getElementById("display_flights").innerHTML = "";
                         console.log("readAllCorrespondingFlights() was Unsuccessful!");
                     }
                 }
@@ -836,8 +835,7 @@
                         let user = JSON.parse(this.responseText);
                         document.getElementById("user_dashboard").innerHTML = `
                             <h3>Your Tickets</h3>
-                            <hr>
-                            <div id="tickets_list"></div>
+                            <div id="tickets_list" class="scrollable"><hr></div>
                             `;
                         readAllTicketsFromUser(user.userID);
                         console.log("send_to_user_tickets() was Successful!");
