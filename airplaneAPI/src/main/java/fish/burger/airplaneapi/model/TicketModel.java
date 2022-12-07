@@ -18,12 +18,12 @@ public class TicketModel {
     private String origin;
     private String destination;
     private String arrivalTime;
-    private String destinationTime;
+    private String departureTime;
 
     public TicketModel() {
     }
 
-    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String userID, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, String origin, String destination, String arrivalTime, String destinationTime) {
+    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String userID, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, String origin, String destination, String arrivalTime, String departureTime) {
         this.ticketNo = ticketNo;
         this.fltNo = fltNo;
         this.dateOfJourney = dateOfJourney;
@@ -38,7 +38,7 @@ public class TicketModel {
         this.origin = origin;
         this.destination = destination;
         this.arrivalTime = arrivalTime;
-        this.destinationTime = destinationTime;
+        this.departureTime = departureTime;
     }
 
     public int getTicketNo() {
@@ -153,11 +153,11 @@ public class TicketModel {
         this.arrivalTime = arrivalTime;
     }
 
-    public String getDestinationTime() {
-        return destinationTime;
+    public String getDepartureTime() {
+        return departureTime;
     }
 
-    public void setDestinationTime(String destinationTime) {
-        this.destinationTime = destinationTime;
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
     }
 }
