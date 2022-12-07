@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Admin</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script Type="text/javascript">
             // Admin CRUD Functions
             function makeUserAdmin() {
@@ -41,7 +42,6 @@
                     }
                 }
                 xmlHttp.send();
-
             }
 
             // Page Functions
@@ -124,21 +124,23 @@
 
                     </body>
                 `;
+                getFlights();
             }
 
             function send_to_reports() {
                 document.getElementById("container").innerHTML = `
                     <h1>Reports</h1>
-                    <label> Monthly Flights Report</label>
+  <canvas id="repo1"></canvas>
                     <div id="MFR"></div>
-                    <Label> Monthly Passenger Report</Label>
+  <canvas id="repo2"></canvas>
                     <div id="MPR"></div>
-                    <Label> Current Reservations Report</Label>
+  <canvas id="repo3"></canvas>
                     <div id="CRR"></div>
                 `;
+                getReports1();
+                getReports2();
+                getReports3();
             }
-        </script>
-        <script Type="text/javascript">
 
             function createFlight() {
                 let id = document.getElementById("flNumber").value;
@@ -287,12 +289,6 @@
                     entry_list.innerHTML += entry_html;
                 }
             }
-
-            window.onload = function () {
-                getFlights();
-            }
-        </script>
-        <script type="text/javascript">
             function getReports1() {
                 //ajax
                 var xmlHttp = new XMLHttpRequest();
@@ -302,8 +298,30 @@
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                        //the entry was read
-                        console.log("Success in posting entry");
+                        console.log(xmlHttp.getResponseHeader('content-type'));
+                        var entry = JSON.parse(this.responseText);
+                        let label = entry[0];
+                        let num = entry[1];
+                        const ctx = document.getElementById('repo1');
+
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: label,
+                                datasets: [{
+                                    label: '# of Flights',
+                                    data: num,
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
                 xmlHttp.send();
@@ -317,6 +335,30 @@
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        console.log(xmlHttp.getResponseHeader('content-type'));
+                        var entry = JSON.parse(this.responseText);
+                        let label = entry[0];
+                        let num = entry[1];
+                        const ctx = document.getElementById('repo2');
+
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: label,
+                                datasets: [{
+                                    label: 'Cost to Destinations',
+                                    data: num,
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
                         //the entry was read
                         console.log("Success in posting entry");
                     }
@@ -332,18 +374,33 @@
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                        console.log(this.response)
-                        //the entry was read
-                        console.log("Success in posting entry");
+                        console.log(xmlHttp.getResponseHeader('content-type'));
+                        var entry = JSON.parse(this.responseText);
+                        let label = entry[0];
+                        let num = entry[1];
+                        const ctx = document.getElementById('repo3');
+
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: label,
+                                datasets: [{
+                                    label: '# of Reservations',
+                                    data: num,
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
                 xmlHttp.send();
-            }
-
-            window.onload = function () {
-                getReports1();
-                getReports2();
-                getReports3();
             }
         </script>
     </head>

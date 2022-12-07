@@ -18,6 +18,5 @@ public interface FlightInterface extends MongoRepository<FlightModel, String> {
 
     @Query(value = "{'fltNo':?0}", delete=true)
     void deleteFLightByFlightID(int id);
-    @Query(value = "{'flightDate': {'$regex': ?0, '$options': 'i'}}")
-    List<FlightModel> findFlightModelsByFlightDateRegex(String regex);
+    List<FlightModel> findFlightModelsByFlightDateIsLike(String like);
 }

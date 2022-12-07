@@ -23,16 +23,13 @@ public class ReportRestController {
 
     @GetMapping("/reports/reservations")
     public List<Object> monthlyReservationsReports() {
-        ticketBll.getReport(flightBLL.getLastMonthsFlights());
-        return null;
+        return ticketBll.getReport(flightBLL.getLastMonthsFlights());
     }
 
     @GetMapping("/reports/users")
-    @ResponseBody
     public List<Object> monthlyUsersReports() {
         //collective fare collected
-        ticketBll.getLastMonthCosts(flightBLL.getLastMonthsFlights());
-        return null;
+        return ticketBll.getLastMonthCosts(flightBLL.getLastMonthsFlights());
     }
 
     @GetMapping("/reports/{user}/{id}")
