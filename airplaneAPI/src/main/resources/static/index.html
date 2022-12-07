@@ -511,7 +511,7 @@
             function readFlightByFlightNumber(flightNumber, user) {
                 let xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", "/api/flight/" + flightNumber, true);
-                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
+                // xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flight = JSON.parse(this.responseText);

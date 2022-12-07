@@ -22,9 +22,9 @@ public class TicketBLL {
     //creates a ticket in the mongoDB
     public boolean createTicket(TicketModel ticketModel) {
         //findTicketByName in TicketInterface.java
-        if(tkI.findTicketByName(ticketModel.getTicketNo())!= null) {
-            return false;
-            }
+//        if(tkI.findTicketByName(ticketModel.getTicketNo())!= null) {
+//            return false;
+//            }
         tkI.save(ticketModel);
         return true;
     }
@@ -102,9 +102,10 @@ public class TicketBLL {
     //Needs a query to set ticket status as cancelled
     public void cancelTickets(int flightID){
         List<TicketModel> ticketModels = tkI.findTicketModelsByFltNo(flightID);
+        tkI.deleteByFltNo(flightID);
         for (TicketModel ticket : ticketModels){
             ticket.setStatus("Cancelled");
-            updateTicket(ticket);
+            tkI.save(ticket);
         }
     }
 }

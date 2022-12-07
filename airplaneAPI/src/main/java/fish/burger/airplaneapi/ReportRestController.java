@@ -35,7 +35,7 @@ public class ReportRestController {
     @GetMapping("/reports/{flightId}")
     public void cancelFlight(@PathVariable int flightId) {
         String fb = flightBLL.cancelFlight(flightId);
-        if (fb == "Cancelled") {
+        if (fb.equals("Cancelled")) {
             ticketBll.cancelTickets(flightId);
         }
     }

@@ -8,9 +8,10 @@ import java.util.List;
 
 public interface TicketInterface extends MongoRepository<TicketModel, String> {
 
-    @Query("{'ticketNo':'?0'}")
+    @Query("{'ticketNo': ?0}")
     TicketModel findTicketByName(int ticketNo);
 
+    @Query("{'fltNo': ?0}")
     List<TicketModel> findTicketModelsByFltNo(int fltNo);
 
     int countByFltNo(int fltNo);
@@ -20,6 +21,8 @@ public interface TicketInterface extends MongoRepository<TicketModel, String> {
 
     @Query(value="{'_id': ?0}", delete = true)
     void deleteByUserID(int ticketNo);
+
+    void deleteByFltNo(int fltNo);
 
     public long count();
 }
