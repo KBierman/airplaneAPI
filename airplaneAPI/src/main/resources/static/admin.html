@@ -18,6 +18,7 @@
                     xmlHttp.open("PUT", "/api/users/" + id + "/" + pass);
                 }
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
@@ -34,6 +35,7 @@
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("PUT", "/api/users/delete/" + id);
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
@@ -174,6 +176,7 @@
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("POST", "/api/flight/" + id);
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
@@ -216,6 +219,7 @@
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("PUT", "/api/flight/" + id);
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"))
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
@@ -232,12 +236,12 @@
                 var user= "Admin";
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.onreadystatechange = function () {
-                    console.log("ready state: ". this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200){
                         //flight Cancelled
                     }
                 }
-                xmlHttp.open("GET", "/api/tickets/" + user  + "/" + id, true);
+                xmlHttp.open("GET", "/api/reports/" + user  + "/" + id, true);
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.send();
             }
 
@@ -277,6 +281,7 @@
                     }
                 }
                 xmlHttp.open("GET", "/api/flight", true);
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.send();
             }
 
@@ -289,6 +294,7 @@
                     entry_list.innerHTML += entry_html;
                 }
             }
+
             function getReports1() {
                 //ajax
                 var xmlHttp = new XMLHttpRequest();

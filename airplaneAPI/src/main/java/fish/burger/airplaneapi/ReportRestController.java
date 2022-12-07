@@ -33,10 +33,10 @@ public class ReportRestController {
     }
 
     @GetMapping("/reports/{user}/{id}")
-    public void cancelFlight(String user, int flightId) {
-        String fb = flightBLL.cancelFlight(flightId);
+    public void cancelFlight(@PathVariable String user, @PathVariable int id) {
+        String fb = flightBLL.cancelFlight(id);
         if (fb == "Cancelled") {
-            ticketBll.cancelTickets(flightId, user);
+            ticketBll.cancelTickets(id, user);
         }
     }
 }
