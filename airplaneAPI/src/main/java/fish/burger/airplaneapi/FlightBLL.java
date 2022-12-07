@@ -57,11 +57,13 @@ public class FlightBLL {
 
     public List<FlightModel> getLastMonthsFlights(){
         LocalDate local = LocalDate.now().minusMonths(1);
-        return flI.findFlightModelsByFlightDateRegex("(" + local.getMonth() + "/).*(/" + local.getYear() + ")");
+        System.out.println("(" + local.getMonthValue() + "\\/).*(\\/" + local.getYear() + ")");
+        return flI.findFlightModelsByFlightDateIsLike(local.getMonthValue()+"/");
     }
 
     public List<Object> getReport(){
         List<FlightModel> monthlyReports = getLastMonthsFlights();
+        System.out.println(monthlyReports);
         List<String> destinations = new ArrayList<>();
         List<Integer> amounts = new ArrayList<>();
         for (FlightModel fm : monthlyReports){
@@ -81,6 +83,7 @@ public class FlightBLL {
         List<Object> finalVal = new ArrayList<>();
         finalVal.add(destinations);
         finalVal.add(amounts);
+        System.out.println(finalVal);
         return finalVal;
     }
 }

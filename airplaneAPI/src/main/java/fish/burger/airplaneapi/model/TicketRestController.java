@@ -13,14 +13,12 @@ public class TicketRestController {
     private TicketBLL ticketBLL = new TicketBLL();
 
     @PostMapping("/ticket")
-    @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public void createTicket(@RequestBody TicketModel ticket) {
         ticketBLL.createTicket(ticket);
     }
 
     @GetMapping("/ticket/{userID}")
-    @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public List<TicketModel> readAllTicketsFromUser(@PathVariable String userID) {
         return ticketBLL.readTicketsFromUser(userID);

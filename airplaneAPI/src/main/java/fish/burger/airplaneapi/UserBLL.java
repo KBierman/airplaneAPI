@@ -53,7 +53,7 @@ public class UserBLL {
     // Delete
     public void deleteUser(String username) {
         if (findUserByUsername(username) != null) {
-            userITF.deleteById(username);
+            userITF.deleteByUsername(username);
             System.out.println("'" + username + "' was deleted successfully!");
             return;
         }
@@ -68,7 +68,7 @@ public class UserBLL {
         UserModel userModel = new UserModel();
 
         userModel.setAdmin(true);
-        userModel.setUserID(id);
+        userModel.setUsername(id);
         userModel.setUserPassword(pass);
         createUser(userModel);
     }

@@ -22,22 +22,17 @@ public class ReportRestController {
     }
 
     @GetMapping("/reports/reservations")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<Object> monthlyReservationsReports() {
-        ticketBll.getReport(flightBLL.getLastMonthsFlights());
-        return null;
+        return ticketBll.getReport(flightBLL.getLastMonthsFlights());
     }
 
     @GetMapping("/reports/users")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<Object> monthlyUsersReports() {
         //collective fare collected
-        ticketBll.getLastMonthCosts(flightBLL.getLastMonthsFlights());
-        return null;
+        return ticketBll.getLastMonthCosts(flightBLL.getLastMonthsFlights());
     }
 
     @GetMapping("/reports/{user}/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public void cancelFlight(String user, int flightId) {
         String fb = flightBLL.cancelFlight(flightId);
         if (fb == "Cancelled") {

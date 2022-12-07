@@ -68,6 +68,7 @@ public class TicketBLL {
         }
         finalVal.add(destinations);
         finalVal.add(counts);
+        System.out.println(finalVal);
         return finalVal;
     }
 
@@ -94,6 +95,7 @@ public class TicketBLL {
         }
         finalVal.add(destinations);
         finalVal.add(counts);
+        System.out.println(finalVal);
         return finalVal;
     }
 

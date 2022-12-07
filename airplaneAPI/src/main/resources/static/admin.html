@@ -3,19 +3,19 @@
     <head>
         <meta charset="UTF-8">
         <title>Admin</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script Type="text/javascript">
             // Admin CRUD Functions
             function makeUserAdmin() {
                 let id = document.getElementById("userN").value;
-                let admin = document.querySelector('input[name="isAdmin"]:checked').value;
                 let pass = document.getElementById("userP").value;
 
                 var xmlHttp = new XMLHttpRequest();
-                if (pass == dbPass) {
-                    xmlHttp.open("PUT", "/api/users/" + id + "/" + admin);
+                if (pass == "") {
+                    xmlHttp.open("PUT", "/api/users/" + id);
                 }
                 else{
-                    xmlHttp.open("PUT", "/api/users/" + id + "/" + admin + "/" + pass);
+                    xmlHttp.open("PUT", "/api/users/" + id + "/" + pass);
                 }
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
                 xmlHttp.onreadystatechange = function () {
@@ -23,7 +23,22 @@
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                         //the entry was read
                         console.log("Success in posting entry");
-                        getFlights();
+                    }
+                }
+                xmlHttp.send();
+            }
+
+            function deleteUser(){
+                let id = document.getElementById("userN").value;
+
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("PUT", "/api/users/delete/" + id);
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        //the entry was read
+                        console.log("Success in posting entry");
                     }
                 }
                 xmlHttp.send();
@@ -42,15 +57,8 @@
                         <label for="userP">User Password</label>
                         <input type="text" id="userP"/>
                         <br/>
-                        <label> isAdmin</label>
-                        <br/>
-                        <label>True</label>
-                        <input type="radio" value="true" id="true" name="isAdmin">
-
-                        <label>False</label>
-                        <input type="radio" value="false" id="false" name="isAdmin">
-
                         <button onclick="makeUserAdmin();">Make Admin</button>
+                        <button onclick="deleteUser();">Delete User</button>
                     </div>
 
                     <div class="scrollable">
@@ -116,21 +124,23 @@
 
                     </body>
                 `;
+                getFlights();
             }
 
             function send_to_reports() {
                 document.getElementById("container").innerHTML = `
                     <h1>Reports</h1>
-                    <label> Monthly Flights Report</label>
+  <canvas id="repo1"></canvas>
                     <div id="MFR"></div>
-                    <Label> Monthly Passenger Report</Label>
+  <canvas id="repo2"></canvas>
                     <div id="MPR"></div>
-                    <Label> Current Reservations Report</Label>
+  <canvas id="repo3"></canvas>
                     <div id="CRR"></div>
                 `;
+                getReports1();
+                getReports2();
+                getReports3();
             }
-        </script>
-        <script Type="text/javascript">
 
             function createFlight() {
                 let id = document.getElementById("flNumber").value;
@@ -254,6 +264,7 @@
                     }
                 }
                 xmlHttp.open("GET", "/api/flights/" + id, true);
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.send();
             }
 
@@ -278,23 +289,39 @@
                     entry_list.innerHTML += entry_html;
                 }
             }
-
-            window.onload = function () {
-                getFlights();
-            }
-        </script>
-        <script type="text/javascript">
             function getReports1() {
                 //ajax
                 var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("PUT", "/api/reports/flights");
+                xmlHttp.open("GET", "/api/reports/flights");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                        //the entry was read
-                        console.log("Success in posting entry");
-                        getFlights();
+                        console.log(xmlHttp.getResponseHeader('content-type'));
+                        var entry = JSON.parse(this.responseText);
+                        let label = entry[0];
+                        let num = entry[1];
+                        const ctx = document.getElementById('repo1');
+
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: label,
+                                datasets: [{
+                                    label: '# of Flights',
+                                    data: num,
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
                 xmlHttp.send();
@@ -302,14 +329,38 @@
 
             function getReports2() {
                 var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("PUT", "/api/reports/users");
+                xmlHttp.open("GET", "/api/reports/users");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        console.log(xmlHttp.getResponseHeader('content-type'));
+                        var entry = JSON.parse(this.responseText);
+                        let label = entry[0];
+                        let num = entry[1];
+                        const ctx = document.getElementById('repo2');
+
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: label,
+                                datasets: [{
+                                    label: 'Cost to Destinations',
+                                    data: num,
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
                         //the entry was read
                         console.log("Success in posting entry");
-                        getFlights();
                     }
                 }
                 xmlHttp.send();
@@ -317,23 +368,39 @@
 
             function getReports3() {
                 var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("PUT", "/api/reports/reservations");
+                xmlHttp.open("GET", "/api/reports/reservations");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                        //the entry was read
-                        console.log("Success in posting entry");
-                        getFlights();
+                        console.log(xmlHttp.getResponseHeader('content-type'));
+                        var entry = JSON.parse(this.responseText);
+                        let label = entry[0];
+                        let num = entry[1];
+                        const ctx = document.getElementById('repo3');
+
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: label,
+                                datasets: [{
+                                    label: '# of Reservations',
+                                    data: num,
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
                 xmlHttp.send();
-            }
-
-            window.onload = function () {
-                getReports1();
-                getReports2();
-                getReports3();
             }
         </script>
     </head>
@@ -354,15 +421,8 @@
                 <label for="userP">User Password</label>
                 <input type="text" id="userP"/>
                 <br/>
-                <label> isAdmin</label>
-                <br/>
-                <label>True</label>
-                <input type="radio" value="true" id="true" name="isAdmin">
-
-                <label>False</label>
-                <input type="radio" value="false" id="false" name="isAdmin">
-
                 <button onclick="makeUserAdmin();">Make Admin</button>
+                <button onclick="deleteUser();">Delete User</button>
             </div>
 
             <div class="scrollable">

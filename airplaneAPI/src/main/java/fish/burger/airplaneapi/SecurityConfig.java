@@ -3,6 +3,7 @@ package fish.burger.airplaneapi;
 import fish.burger.airplaneapi.model.UserModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -52,7 +53,7 @@ public class SecurityConfig{
                 Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
                 grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
                 if (user.getAdmin()){
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
+                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
                 }
 
                 UserAuthority ua = new UserAuthority(user.getUsername(), passwordEncoder().encode(user.getUserPassword()), grantedAuthorities);
@@ -83,8 +84,22 @@ public class SecurityConfig{
                 .httpBasic(Customizer.withDefaults())
                 .authorizeRequests()
                 .antMatchers("index.html").permitAll()
-                .antMatchers("/api/login/**").hasAnyRole("USER")
-                .antMatchers("/api/flight").permitAll()
+                .antMatchers("/api/login").hasAnyRole("USER")
+                .antMatchers("/api/adminLogin").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/user").permitAll()
+                .antMatchers( "/api/user/{username}").hasRole("USER")
+                .antMatchers("/api/user/{id}").hasRole("ADMIN")
+                .antMatchers("/api/user/{id}/{pass}").hasRole("ADMIN")
+                .antMatchers("/api/user/delete/{id}").hasRole("ADMIN")
+                .antMatchers("/api/flight/{fltno}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/flight").permitAll()
+                .antMatchers("/api/flight/{fltno}").hasRole("ADMIN")
+                .antMatchers("/api/reports/flights").hasRole("ADMIN")
+                .antMatchers("/api/reports/users").hasRole("ADMIN")
+                .antMatchers("/api/reports/reservations").hasRole("ADMIN")
+                .antMatchers("/api/reports/{user}/{id}").hasRole("ADMIN")
+                .antMatchers("api/ticket").hasRole("USER")
+                .antMatchers("api/ticket/{userID}").hasRole("USER")
                 .and().csrf().disable()
                 .sessionManagement().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
