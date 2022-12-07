@@ -285,7 +285,7 @@
                         localStorage.setItem("login", authHeaderValue);
                         document.getElementById("response_message").innerHTML = "Welcome, " + username;
                         isAdmin();
-                        send_to_user_profile();
+                        send_to_flight_lookup();
                         is_user_logged_in(true);
                         console.log("Login Successful!");
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
