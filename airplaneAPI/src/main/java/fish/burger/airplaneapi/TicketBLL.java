@@ -22,9 +22,9 @@ public class TicketBLL {
     //creates a ticket in the mongoDB
     public boolean createTicket(TicketModel ticketModel) {
         //findTicketByName in TicketInterface.java
-        if(tkI.findTicketByName(ticketModel.getTicketNo())!= null) {
-            return false;
-            }
+//        if(tkI.findTicketByName(ticketModel.getTicketNo())!= null) {
+//            return false;
+//            }
         tkI.save(ticketModel);
         return true;
     }
