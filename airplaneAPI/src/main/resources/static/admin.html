@@ -532,8 +532,10 @@
                 var entry_list = document.getElementById("flights_list");
                 entry_list.innerHTML = "";
                 for (var entry of entries) {
-                    var entry_html = "<li>" + entry.aircraftType + "</li>" +
-                        "<li>" + entry.destination + "</li>";
+                    var entry_html = "<ul><li>" + entry.fltNo + "</li>" +
+                        "<li>" + entry.origin + "</li>" +
+                        "<li>" + entry.destination + "</li>" +
+                        "<li>" + entry.flightStatus + "</li></ul>";
                     entry_list.innerHTML += entry_html;
                 }
             }
