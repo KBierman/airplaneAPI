@@ -2,6 +2,7 @@ package fish.burger.airplaneapi;
 
 import fish.burger.airplaneapi.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -18,21 +19,16 @@ public class UserRestController {
     private UserBLL userBLL = new UserBLL();
 
     // Create
-    @PostMapping("/user/{isAdmin}")
+    @PostMapping("/user")
+    @PreAuthorize("")
     @ResponseBody
-    public boolean createUser(@RequestBody UserModel newUser, @PathVariable boolean isAdmin) {
-        String[] roles;
-
-        // Will give admin depending on parameter value in mapping (isAdmin)
-        if (isAdmin) {
-            roles = new String[]{"USER", "ADMIN"};
-        } else {
-            roles = new String[]{"USER"};
-        }
-
-        newUser.setAdmin(isAdmin);
-        newUser.setRoles(roles);
+    public boolean createUser(@RequestBody UserModel newUser) {
         return userBLL.createUser(newUser);
+    }
+
+    @GetMapping("/login")
+    public void login(){
+
     }
 
     // Read
