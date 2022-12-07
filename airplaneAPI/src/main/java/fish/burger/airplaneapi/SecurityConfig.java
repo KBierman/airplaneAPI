@@ -52,10 +52,12 @@ public class SecurityConfig{
                 Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
                 grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
                 if (user.getAdmin()){
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                    grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
                 }
 
-                return new UserAuthority(user.getUserID(), passwordEncoder().encode(user.getUserPassword()), grantedAuthorities);
+                UserAuthority ua = new UserAuthority(user.getUsername(), passwordEncoder().encode(user.getUserPassword()), grantedAuthorities);
+                System.out.println(ua.getAuthorities());
+                return ua;
             }
         };
     }
@@ -81,12 +83,14 @@ public class SecurityConfig{
                 .httpBasic(Customizer.withDefaults())
                 .authorizeRequests()
                 .antMatchers("index.html").permitAll()
-                .antMatchers("/").hasRole("USER")
+                .antMatchers("/api/login").hasAnyRole("USER")
                 .antMatchers("/api/flight").permitAll()
+                .and().csrf().disable()
+                .sessionManagement().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic()
                 .authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint())
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().cors()
                 .and()
                 .build();
     }
