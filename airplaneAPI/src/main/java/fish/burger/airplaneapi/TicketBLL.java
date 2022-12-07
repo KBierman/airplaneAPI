@@ -100,11 +100,10 @@ public class TicketBLL {
     }
 
     //Needs a query to set ticket status as cancelled
-    public void cancelTickets(int flightID, String user){
+    public void cancelTickets(int flightID){
         List<TicketModel> ticketModels = tkI.findTicketModelsByFltNo(flightID);
         for (TicketModel ticket : ticketModels){
             ticket.setStatus("Cancelled");
-            ticket.setReservedBy(user);
             updateTicket(ticket);
         }
     }
