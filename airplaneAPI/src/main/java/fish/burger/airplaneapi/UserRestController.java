@@ -78,5 +78,11 @@ public class UserRestController {
         userBLL.updateUserToAdmin(id);
     }
 
+    @PutMapping("/users/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteUser(@PathVariable String id){
+        userBLL.deleteUser(id);
+    }
+
 }
 //TODO: FIX AUTHORIZATION IN FILE

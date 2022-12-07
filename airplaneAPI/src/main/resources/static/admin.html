@@ -7,15 +7,14 @@
             // Admin CRUD Functions
             function makeUserAdmin() {
                 let id = document.getElementById("userN").value;
-                let admin = document.querySelector('input[name="isAdmin"]:checked').value;
                 let pass = document.getElementById("userP").value;
 
                 var xmlHttp = new XMLHttpRequest();
-                if (pass == dbPass) {
-                    xmlHttp.open("PUT", "/api/users/" + id + "/" + admin);
+                if (pass == "") {
+                    xmlHttp.open("PUT", "/api/users/" + id);
                 }
                 else{
-                    xmlHttp.open("PUT", "/api/users/" + id + "/" + admin + "/" + pass);
+                    xmlHttp.open("PUT", "/api/users/" + id + "/" + pass);
                 }
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
                 xmlHttp.onreadystatechange = function () {
@@ -23,10 +22,26 @@
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                         //the entry was read
                         console.log("Success in posting entry");
-                        getFlights();
                     }
                 }
                 xmlHttp.send();
+            }
+
+            function deleteUser(){
+                let id = document.getElementById("userN").value;
+
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("PUT", "/api/users/delete/" + id);
+                xmlHttp.setRequestHeader("Content-Type", "application/json");
+                xmlHttp.onreadystatechange = function () {
+                    console.log("ready state: ", this.status);
+                    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        //the entry was read
+                        console.log("Success in posting entry");
+                    }
+                }
+                xmlHttp.send();
+
             }
 
             // Page Functions
@@ -42,15 +57,8 @@
                         <label for="userP">User Password</label>
                         <input type="text" id="userP"/>
                         <br/>
-                        <label> isAdmin</label>
-                        <br/>
-                        <label>True</label>
-                        <input type="radio" value="true" id="true" name="isAdmin">
-
-                        <label>False</label>
-                        <input type="radio" value="false" id="false" name="isAdmin">
-
                         <button onclick="makeUserAdmin();">Make Admin</button>
+                        <button onclick="deleteUser();">Delete User</button>
                     </div>
 
                     <div class="scrollable">
@@ -254,6 +262,7 @@
                     }
                 }
                 xmlHttp.open("GET", "/api/flights/" + id, true);
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
                 xmlHttp.send();
             }
 
@@ -354,15 +363,8 @@
                 <label for="userP">User Password</label>
                 <input type="text" id="userP"/>
                 <br/>
-                <label> isAdmin</label>
-                <br/>
-                <label>True</label>
-                <input type="radio" value="true" id="true" name="isAdmin">
-
-                <label>False</label>
-                <input type="radio" value="false" id="false" name="isAdmin">
-
                 <button onclick="makeUserAdmin();">Make Admin</button>
+                <button onclick="deleteUser();">Delete User</button>
             </div>
 
             <div class="scrollable">

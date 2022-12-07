@@ -13,7 +13,7 @@ import java.util.List;
 public class FlightRestController {
     private FlightBLL flightBLL = new FlightBLL();
 
-    @PostMapping("/flight")
+    @PostMapping("/flight/{fltno}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public void createFlight(@RequestBody FlightModel flight, @PathVariable int fltno) {
