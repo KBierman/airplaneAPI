@@ -4,6 +4,262 @@
         <meta charset="UTF-8">
         <title>Admin</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            .scrollable {
+                margin: auto;
+                width: auto;
+                min-height: 100px;
+                height: auto;
+                overflow: auto;
+                background-color: #2F4562;
+                border-radius: 2px;
+                padding: 20px;
+            }
+
+            .flex_direction_row {
+                display: flex;
+                flex-direction: row;
+            }
+
+            body {
+                font-family: 'Rubik', sans-serif;
+                color: #fff;
+                background-color: #081B33;
+                margin: 0;
+                position: relative;
+                min-height: 100vh;
+            }
+
+            h1 {
+                font-family: 'Karla', sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+
+            h2 {
+                font-family: 'Karla', sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+
+            h3 {
+                font-family: 'Karla', sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+
+            #link_donthaveaccount {
+                border-radius: 2px;
+                padding: 3px;
+                margin-top: 5px;
+                text-decoration: none;
+                color: #2F4562;
+            }
+
+            #link_donthaveaccount:visited {
+                color: #506680;
+            }
+
+            #link_donthaveaccount:hover {
+                color: #9abbf3;
+            }
+
+            #response_message {
+                margin: 5px auto;
+            }
+
+            #navbar {
+                margin: auto;
+                width: auto;
+                height: 15px;
+                background-color: #2F4562;
+                padding: 20px;
+            }
+
+            #navbar a {
+                border-radius: 2px;
+                padding: 5px;
+                background-color: papayawhip;
+                text-decoration: none;
+                color: #152642;
+            }
+
+            #navbar a:visited {
+                color: #2b3f5b;
+            }
+
+            #navbar a:hover {
+                color: #496486;
+            }
+
+            #navbar #false_logo {
+                background-color: #9abbf3;
+                color: #081B33;
+                border-radius: 15px;
+                margin-right: 10px;
+                margin-left: -5px;
+            }
+
+            #user_navbar {
+                margin: -15px -15px 15px -15px;
+                width: auto;
+                height: 60px;
+                background-color: #2F4562;
+                padding: 15px;
+                border-radius: 5px 5px 0 0;
+            }
+
+            #user_navbar a {
+                border-radius: 2px;
+                padding: 5px;
+                background-color: #506680;
+                text-decoration: none;
+            }
+
+            #user_navbar a:visited {
+                color: #9abbf3;
+            }
+
+            #user_navbar a:hover {
+                color: #767D92;
+            }
+
+            #container {
+                margin: 50px auto;
+                width: 85%;
+                min-width: 1000px;
+                height: auto;
+                border-radius: 5px;
+                background: #152642;
+                padding: 15px;
+            }
+
+            /* The text fields for searching flights */
+            #flight_form {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                height: auto;
+            }
+
+            /* The text fields in question */
+            #flight_form label {
+                width: auto;
+                margin: auto;
+                font-size: 13pt;
+            }
+
+            #flight_form input[type=text], input[type=email], input[type=password], input[type=tel] {
+                width: 200px;
+                border-radius: 2px;
+                border-color: transparent;
+                margin: 0 5px;
+                padding: 3px;
+            }
+
+            #flight_form button {
+                margin: 10px auto;
+                height: fit-content;
+                border-radius: 2px;
+                border-color: transparent;
+                background-color: papayawhip;
+                color: black;
+                font-family: 'Rubik', sans-serif;
+                font-size: 12pt;
+            }
+
+            #profile_header {
+                margin: 0 0 15px 0;
+            }
+
+            /* The header of the search for flights page */
+            #flights_container h3, #tickets_container h3 {
+                margin-bottom: 10px;
+            }
+
+            /* The flight headers */
+            #flight_header, #ticket_header {
+                margin-bottom: 10px;
+                padding: 7px;
+                background-color: #5b7ca7;
+                border-radius: 2px;
+            }
+
+            /* The container for a listed flight */
+            #listed_flight, #listed_ticket {
+                margin: 0;
+                padding: 0;
+                width: auto;
+                height: auto;
+            }
+
+            /* The element that wraps around the flight's information */
+            #flight_info_wrapper, #ticket_info_wrapper {
+                margin-left: 10px;
+            }
+
+            #flight_info, #ticket_info {
+                display: inline;
+                margin: 5px;
+                width: auto;
+                padding: 5px;
+                background-color: #496486;
+                border-radius: 2px;
+            }
+
+            #listed_flight button {
+                margin: 10px 15px;
+            }
+
+            /* labels, inputs and buttons outside of #flight_form */
+            label {
+                width: auto;
+                margin: auto;
+                font-size: 12pt;
+            }
+
+            input[type=text], input[type=email], input[type=password], input[type=tel] {
+                width: 200px;
+                border-radius: 2px;
+                border-color: transparent;
+                margin: 5px;
+                padding: 3px;
+            }
+
+            button {
+                margin: auto 5px;
+                height: fit-content;
+                border-radius: 2px;
+                border-color: transparent;
+                background-color: papayawhip;
+                color: black;
+                font-family: 'Rubik', sans-serif;
+                font-size: 12pt;
+            }
+
+            input[type=submit] {
+                margin: auto 5px;
+                height: fit-content;
+                border-radius: 2px;
+                border-color: transparent;
+                background-color: papayawhip;
+                color: black;
+                font-family: 'Rubik', sans-serif;
+                font-size: 12pt;
+            }
+
+            footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 5px;
+                height: auto;
+                font-size: 14px;
+                background-color: #152642;
+                color: #767D92;
+            }
+        </style>
         <script Type="text/javascript">
             // Admin CRUD Functions
             function makeUserAdmin() {
@@ -53,18 +309,14 @@
                     <div>
 
                         <!--Display Lists-->
-                        <label for="userN">User ID</label>
+                        <label for="userN">Username: </label>
                         <input type="text" id="userN"/>
                         <br/>
-                        <label for="userP">User Password</label>
+                        <label for="userP">Password: </label>
                         <input type="text" id="userP"/>
                         <br/>
                         <button onclick="makeUserAdmin();">Make Admin</button>
                         <button onclick="deleteUser();">Delete User</button>
-                    </div>
-
-                    <div class="scrollable">
-                        <ul id="users_List"></ul>
                     </div>
                 `;
             }
@@ -240,7 +492,7 @@
                         //flight Cancelled
                     }
                 }
-                xmlHttp.open("GET", "/api/reports/" + user  + "/" + id, true);
+                xmlHttp.open("GET", "/api/reports/" + id, true);
                 xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.send();
             }
@@ -411,7 +663,7 @@
         </script>
     </head>
     <body>
-        <nav id="admin_navbar">
+        <nav id="navbar">
             <a href="index.html">Go to User Website</a>
             <a onclick="send_to_user_editing()" href="#">Users</a>
             <a onclick="send_to_flight_editing()" href="#">Flights</a>
@@ -421,18 +673,14 @@
             <h1>Users</h1>
             <div>
                 <!--Display Lists-->
-                <label for="userN">User ID</label>
+                <label for="userN">Username: </label>
                 <input type="text" id="userN"/>
                 <br/>
-                <label for="userP">User Password</label>
+                <label for="userP">Password: </label>
                 <input type="text" id="userP"/>
                 <br/>
                 <button onclick="makeUserAdmin();">Make Admin</button>
                 <button onclick="deleteUser();">Delete User</button>
-            </div>
-
-            <div class="scrollable">
-                <ul id="users_List"></ul>
             </div>
         </div>
     </body>
