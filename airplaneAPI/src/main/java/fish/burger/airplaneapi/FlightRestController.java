@@ -14,6 +14,7 @@ public class FlightRestController {
     private FlightBLL flightBLL = new FlightBLL();
 
     @PostMapping("/flight")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public void createFlight(@RequestBody FlightModel flight, @PathVariable int fltno) {
         flight.setFltNo(fltno);
@@ -21,12 +22,14 @@ public class FlightRestController {
     }
 
     @PutMapping("/flight/{fltno}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateFlight(@RequestBody FlightModel flight, @PathVariable int fltno) {
         flight.setFltNo(fltno);
         flightBLL.updateFlight(flight);
     }
 
     @GetMapping("/flights/{user}")
+    @PreAuthorize("hasRole('ADMIN')")
     public FlightModel readFlight(@PathVariable int user) {
         return flightBLL.readFlightByFltNo(user);
     }
@@ -37,6 +40,7 @@ public class FlightRestController {
     }
 
     @DeleteMapping("/flight")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteByFlightId(int fltId) {
         flightBLL.deleteFlightByFltNo(fltId);
     }
@@ -62,6 +66,7 @@ public class FlightRestController {
     }
 
     @GetMapping("/flight/{fltNo}")
+    @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public FlightModel readFlightByFlightNumber(@PathVariable int fltNo) {
         return flightBLL.readFlightByFltNo(fltNo);

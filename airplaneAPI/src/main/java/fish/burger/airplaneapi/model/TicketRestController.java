@@ -1,6 +1,7 @@
 package fish.burger.airplaneapi.model;
 
 import fish.burger.airplaneapi.TicketBLL;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,12 +13,14 @@ public class TicketRestController {
     private TicketBLL ticketBLL = new TicketBLL();
 
     @PostMapping("/ticket")
+    @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public void createTicket(@RequestBody TicketModel ticket) {
         ticketBLL.createTicket(ticket);
     }
 
     @GetMapping("/ticket/{userID}")
+    @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public List<TicketModel> readAllTicketsFromUser(@PathVariable String userID) {
         return ticketBLL.readTicketsFromUser(userID);
