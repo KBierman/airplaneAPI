@@ -20,7 +20,7 @@ public class UserRestController {
 
     // Create
     @PostMapping("/user")
-    @PreAuthorize("")
+    @PreAuthorize("permitAll()")
     @ResponseBody
     public boolean createUser(@RequestBody UserModel newUser) {
         return userBLL.createUser(newUser);
@@ -33,11 +33,13 @@ public class UserRestController {
 
     // Read
     @GetMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserModel> findAllEntries() {
         return userBLL.findAll();
     }
 
     @GetMapping("/user/{username}")
+    @PreAuthorize("hasRole('USER')")
     public UserModel findUserByUsername(@PathVariable String username) {
         return userBLL.findUserByUsername(username);
     }
@@ -45,6 +47,7 @@ public class UserRestController {
 
     // Update
     @PutMapping("/user/{username}")
+    @PreAuthorize("hasRole('USER')")
     public void updateUser(@PathVariable String username, @RequestBody UserModel updatedUser) {
         updatedUser.setUsername(username);
         userBLL.updateUser(updatedUser);
@@ -52,16 +55,19 @@ public class UserRestController {
 
     // Delete
     @DeleteMapping("/user/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable String username) {
         userBLL.deleteUser(username);
     }
 
     @PutMapping("/users/{id}/{pass}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void createNewAdmin(@PathVariable String id,@PathVariable String pass){
         userBLL.createAdmin(id, pass);
     }
 
     @PutMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateUserToAdmin(@PathVariable String id){
         userBLL.updateUserToAdmin(id);
     }
