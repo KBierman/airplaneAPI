@@ -52,7 +52,7 @@ public class SecurityConfig{
                 Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
                 grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
                 if (user.getAdmin()){
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
+                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
                 }
 
                 UserAuthority ua = new UserAuthority(user.getUsername(), passwordEncoder().encode(user.getUserPassword()), grantedAuthorities);

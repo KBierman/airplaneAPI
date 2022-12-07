@@ -31,13 +31,30 @@
                 xmlHttp.setRequestHeader('Authorization', authHeaderValue);
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        localStorage.setItem("login", authHeaderValue);
                         document.getElementById("response_message").innerHTML = "Welcome, " + username;
                         is_user_logged_in(true);
                         console.log("Login Successful!");
+                        isAdmin();
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
                         document.getElementById("response_message").innerHTML = "Invalid username/password!";
                         is_user_logged_in(false);
                         console.log("Login Unsuccessful!")
+                    }
+                }
+                xmlHttp.send();
+            }
+
+            function isAdmin(){
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '/api/adminLogin');
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    //     bring to admin page
+                        window.location.href = "http://localhost:8080/admin.html";
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                    //     nothing
                     }
                 }
                 xmlHttp.send();
@@ -127,11 +144,7 @@
                         "fare": flight.fare,
                         "status": flight.flightStatus,
                         "reservedBy": user.username,
-                        "dateOfReservation": current_date,
-                        "origin": flight.origin,
-                        "destination": flight.destination,
-                        "arrivalTime": flight.arrTime,
-                        "departureTime": flight.depTime
+                        "dateOfReservation": current_date
                     }
 
                 console.log(ticket);
@@ -140,7 +153,7 @@
                 let xmlHttp = new XMLHttpRequest();
                 xmlHttp.open('POST', '/api/ticket');
                 xmlHttp.setRequestHeader("Content-Type", 'application/json');
-                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         document.getElementById("response_message").innerHTML = "Ticket bought successfully!";
@@ -164,7 +177,7 @@
             function readAllTicketsFromUser(userID) {
                 let xmlHttp = new XMLHttpRequest();
                 xmlHttp.open('GET', '/api/ticket/' + userID);
-                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let tickets = JSON.parse(this.responseText);
@@ -219,9 +232,11 @@
             function readFlightByFlightNumber(flightNumber, user) {
                 let xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", "/api/flight/" + flightNumber, true);
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flight = JSON.parse(this.responseText);
+
                         console.log("readFlightByFlightNumber()")
                         console.log(flight);
                         console.log("readFlightByFlightNumber()")
@@ -289,7 +304,7 @@
                         let xmlHttp = new XMLHttpRequest();
                         xmlHttp.open('PUT', '/api/user/' + username);
                         xmlHttp.setRequestHeader("Content-Type", 'application/json');
-                        xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                        xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                         xmlHttp.onreadystatechange = function () {
                             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                                 document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
@@ -303,20 +318,6 @@
                         console.log("findUserByUsername() was Successful!");
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
                         console.log("findUserByUsername() was Unsuccessful!");
-                    }
-                }
-                xmlHttp.send();
-            }
-
-            function loadAllUsersInMemory() {
-                console.log("Called loadAllUsersInMemory()");
-                let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('GET', '/api/loadusers');
-                xmlHttp.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        console.log("loadAllUsersInMemory() was Successful!");
-                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-                        console.log("loadAllUsersInMemory() was Unsuccessful!");
                     }
                 }
                 xmlHttp.send();
@@ -359,7 +360,7 @@
                     let xmlHttp = new XMLHttpRequest();
                     xmlHttp.open('PUT', '/api/user/' + username);
                     xmlHttp.setRequestHeader("Content-Type", 'application/json');
-                    xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                    xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                     xmlHttp.onreadystatechange = function () {
                         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                             document.getElementById("response_message").innerHTML = "Your info has been updated successfully!";
@@ -479,7 +480,7 @@
                         <a onclick="send_to_user_tickets()" href="#">Reserved Flights</a>
                     </nav>
                     <div id="user_dashboard">
-                        <div>
+                        <form>
                             <label for="email_field">Email: </label>
                             <input type="email" id="email_field" required>
                             <br />
@@ -496,7 +497,7 @@
                             <br />
                             <input type="submit" onclick="updateUser()">
                             <br />
-                        </div>
+                        </form>
                         <div id="response_message"></div>
                     </div>
                     `
@@ -561,7 +562,12 @@
                         `
                 }
             }
+
+            window.onload = function () {
+                loadAllUsersInMemory(); // Will load all the users in the databse into memory
+            }
         </script>
+        <title>Welcome Page</title>
     </head>
     <body>
         <nav id="navbar">

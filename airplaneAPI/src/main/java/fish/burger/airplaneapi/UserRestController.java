@@ -31,6 +31,12 @@ public class UserRestController {
 
     }
 
+    @GetMapping("/adminLogin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void admin(){
+
+    }
+
     // Read
     @GetMapping("/user")
     @PreAuthorize("hasRole('ADMIN')")
