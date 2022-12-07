@@ -10,17 +10,21 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,12 +68,22 @@ public class SecurityConfig{
                 .and().build();
     }
 
+    public static class NoPopupBasicAuthenticationEntryPoint implements AuthenticationEntryPoint {
+        @Override
+        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+        }
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http.csrf().disable()
                 .httpBasic(Customizer.withDefaults())
                 .authorizeRequests()
-                .anyRequest().permitAll()
+                .antMatchers("index.html").permitAll()
+                .antMatchers("/api/flight").permitAll()
+                .and().httpBasic()
+                .authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint())
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
