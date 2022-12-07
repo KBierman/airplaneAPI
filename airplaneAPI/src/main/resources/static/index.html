@@ -3,12 +3,263 @@
     <head>
         <meta charset="UTF-8">
         <title>Welcome Page</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Karla&family=Rubik&display=swap" rel="stylesheet">
         <style>
             .scrollable {
                 margin: auto;
                 width: auto;
-                height: 400px;
+                min-height: 100px;
+                height: auto;
                 overflow: auto;
+                background-color: #2F4562;
+                border-radius: 2px;
+                padding: 20px;
+            }
+
+            .flex_direction_row {
+                display: flex;
+                flex-direction: row;
+            }
+
+            body {
+                font-family: 'Rubik', sans-serif;
+                color: #fff;
+                background-color: #081B33;
+                margin: 0;
+                position: relative;
+                min-height: 100vh;
+            }
+
+            h1 {
+                font-family: 'Karla', sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+
+            h2 {
+                font-family: 'Karla', sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+
+            h3 {
+                font-family: 'Karla', sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+
+            #link_donthaveaccount {
+                border-radius: 2px;
+                padding: 3px;
+                margin-top: 5px;
+                text-decoration: none;
+                color: #2F4562;
+            }
+
+            #link_donthaveaccount:visited {
+                color: #506680;
+            }
+
+            #link_donthaveaccount:hover {
+                color: #9abbf3;
+            }
+
+            #response_message {
+                margin: 5px auto;
+            }
+
+            #navbar {
+                margin: auto;
+                width: auto;
+                height: 15px;
+                background-color: #2F4562;
+                padding: 20px;
+            }
+
+            #navbar a {
+                border-radius: 2px;
+                padding: 5px;
+                background-color: papayawhip;
+                text-decoration: none;
+                color: #152642;
+            }
+
+            #navbar a:visited {
+                color: #2b3f5b;
+            }
+
+            #navbar a:hover {
+                color: #496486;
+            }
+
+            #navbar #false_logo {
+                background-color: #9abbf3;
+                color: #081B33;
+                border-radius: 15px;
+                margin-right: 10px;
+                margin-left: -5px;
+            }
+
+            #user_navbar {
+                margin: -15px -15px 15px -15px;
+                width: auto;
+                height: 60px;
+                background-color: #2F4562;
+                padding: 15px;
+                border-radius: 5px 5px 0 0;
+            }
+
+            #user_navbar a {
+                border-radius: 2px;
+                padding: 5px;
+                background-color: #506680;
+                text-decoration: none;
+            }
+
+            #user_navbar a:visited {
+                color: #9abbf3;
+            }
+
+            #user_navbar a:hover {
+                color: #767D92;
+            }
+
+            #container {
+                margin: 50px auto;
+                width: 85%;
+                min-width: 1000px;
+                height: auto;
+                border-radius: 5px;
+                background: #152642;
+                padding: 15px;
+            }
+
+            /* The text fields for searching flights */
+            #flight_form {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                height: auto;
+            }
+
+            /* The text fields in question */
+            #flight_form label {
+                width: auto;
+                margin: auto;
+                font-size: 13pt;
+            }
+
+            #flight_form input[type=text], input[type=email], input[type=password], input[type=tel] {
+                width: 200px;
+                border-radius: 2px;
+                border-color: transparent;
+                margin: 0 5px;
+                padding: 3px;
+            }
+
+            #flight_form button {
+                margin: 10px auto;
+                height: fit-content;
+                border-radius: 2px;
+                border-color: transparent;
+                background-color: papayawhip;
+                color: black;
+                font-family: 'Rubik', sans-serif;
+                font-size: 12pt;
+            }
+
+            #profile_header {
+                margin: 0 0 15px 0;
+            }
+
+            /* The header of the search for flights page */
+            #flights_container h3, #tickets_container h3 {
+                margin-bottom: 10px;
+            }
+
+            /* The flight headers */
+            #flight_header, #ticket_header {
+                margin-bottom: 10px;
+                padding: 7px;
+                background-color: #5b7ca7;
+                border-radius: 2px;
+            }
+
+            /* The container for a listed flight */
+            #listed_flight, #listed_ticket {
+                margin: 0;
+                padding: 0;
+                width: auto;
+                height: auto;
+            }
+
+            /* The element that wraps around the flight's information */
+            #flight_info_wrapper, #ticket_info_wrapper {
+                margin-left: 10px;
+            }
+
+            #flight_info, #ticket_info {
+                display: inline;
+                margin: 5px;
+                width: auto;
+                padding: 5px;
+                background-color: #496486;
+                border-radius: 2px;
+            }
+
+            #listed_flight button {
+                margin: 10px 15px;
+            }
+
+            /* labels, inputs and buttons outside of #flight_form */
+            label {
+                width: auto;
+                margin: auto;
+                font-size: 12pt;
+            }
+
+            input[type=text], input[type=email], input[type=password], input[type=tel] {
+                width: 200px;
+                border-radius: 2px;
+                border-color: transparent;
+                margin: 5px;
+                padding: 3px;
+            }
+
+            button {
+                margin: auto 5px;
+                height: fit-content;
+                border-radius: 2px;
+                border-color: transparent;
+                background-color: papayawhip;
+                color: black;
+                font-family: 'Rubik', sans-serif;
+                font-size: 12pt;
+            }
+
+            input[type=submit] {
+                margin: auto 5px;
+                height: fit-content;
+                border-radius: 2px;
+                border-color: transparent;
+                background-color: papayawhip;
+                color: black;
+                font-family: 'Rubik', sans-serif;
+                font-size: 12pt;
+            }
+
+            footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 5px;
+                height: auto;
+                font-size: 14px;
+                background-color: #152642;
+                color: #767D92;
             }
         </style>
         <script type="text/javascript">
@@ -32,6 +283,7 @@
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         document.getElementById("response_message").innerHTML = "Welcome, " + username;
+                        send_to_user_profile();
                         is_user_logged_in(true);
                         console.log("Login Successful!");
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
@@ -80,7 +332,7 @@
 
                 // Sends JSON to API
                 let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('POST', '/api/user/false');
+                xmlHttp.open('POST', '/api/user');
                 xmlHttp.setRequestHeader("Content-Type", 'application/json');
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
@@ -143,14 +395,25 @@
                 xmlHttp.setRequestHeader('Authorization', authHeaderValue);
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        document.getElementById("response_message").innerHTML = "Ticket bought successfully!";
                         document.getElementById("container").innerHTML = `
-                            <div>
-                                Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
+                            <div id="flights_container">
+                                <h3>Reserve a Seat for This Flight?</h3>
+                                <hr>
+                                <div id="listed_flight">
+                                    <h3 id="flight_header">From: ${flight.origin} -> To: ${flight.destination}</h3>
+                                    <div id="flight_info_wrapper" class="flex_direction_row">
+                                        <p id="flight_info">Flight Date: ${flight.flightDate}</p>
+                                        <p id="flight_info">Departure Time: ${flight.depTime}</p>
+                                        <p id="flight_info">Arrival Time: ${flight.arrTime}</p>
+                                        <p id="flight_info">Available Seats: ${flight.seatsEmpty}</p>
+                                        <p id="flight_info">Fare: ${flight.fare}</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div id="response_message"></div>
                             </div>
-                            <div id="response_message"></div>
-                            <br />
                             `;
+                        document.getElementById("response_message").innerHTML = "Ticket bought successfully!";
                         console.log("createTicket() was Successful!");
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
                         document.getElementById("response_message").innerHTML = "Couldn't buy ticket! Please try again later...";
@@ -170,10 +433,22 @@
                         let tickets = JSON.parse(this.responseText);
                         for (let ticket of tickets) {
                             let ticket_html = `
-                                <div>
-                                    Ticket Number: ${ticket.ticketNo} | Flight Number: ${ticket.fltNo} | Flight Date: ${ticket.dateOfJourney} | Departure Time: ${ticket.departureTime} | Arrival Time: ${ticket.arrivalTime} | From: ${ticket.origin} | To: ${ticket.destination} | First Name: ${ticket.firstName} | Last Name: ${ticket.lastName} | Fare: ${ticket.fare} | Flight Status: ${ticket.status} | Date of Reservation: ${ticket.dateOfReservation}
+                                <div id="tickets_container">
+                                    <div id="listed_ticket">
+                                        <h3 id="ticket_header"> Ticket Number: ${ticket.ticketNo} | Reserved By: ${ticket.firstName} ${ticket.lastName} | From: ${ticket.origin} -> To: ${ticket.destination}</h3>
+                                        <div id="ticket_info_wrapper" class="flex_direction_row">
+                                            <p id="ticket_info">Plane Number: ${ticket.fltNo}</p>
+                                            <p id="ticket_info">Flight Date: ${ticket.dateOfJourney}</p>
+                                            <p id="ticket_info">Departure Time: ${ticket.departureTime}</p>
+                                            <p id="ticket_info">Arrival Time: ${ticket.arrivalTime}</p>
+                                            <p id="ticket_info">Flight Status: ${ticket.status}</p>
+                                            <p id="ticket_info">Fare: ${ticket.fare}</p>
+                                            <p id="ticket_info">Ticket was Reserved on: ${ticket.dateOfReservation}</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div id="response_message"></div>
                                 </div>
-                                <br />
                                 `;
                             tickets_list.innerHTML += ticket_html;
                         }
@@ -199,7 +474,7 @@
                         let flights = JSON.parse(this.responseText);
                         if (flights === undefined || flights.length == 0) {
                             document.getElementById("response_message").innerHTML = "Flight not found!";
-                            document.getElementById("displayFlights").innerHTML = "";
+                            document.getElementById("display_flights").innerHTML = "";
                             console.log("readAllCorrespondingFlights() was Unsuccessful!");
                         } else {
                             document.getElementById("response_message").innerHTML = "";
@@ -209,7 +484,7 @@
                         }
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
                         document.getElementById("response_message").innerHTML = "Flight not found!";
-                        document.getElementById("displayFlights").innerHTML = "";
+                        document.getElementById("display_flights").innerHTML = "";
                         console.log("readAllCorrespondingFlights() was Unsuccessful!");
                     }
                 }
@@ -228,18 +503,29 @@
                         console.log(user);
                         document.getElementById("response_message").innerHTML = "";
                         document.getElementById("container").innerHTML = `
-                            <div>
-                                Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
-                                <button id='buy' onclick='createTicket(${JSON.stringify(user)}, ${JSON.stringify(flight)})'>Buy</button>
+                            <div id="flights_container">
+                                <h3>Reserve a Seat for This Flight?</h3>
+                                <hr>
+                                <div id="listed_flight">
+                                    <h3 id="flight_header">From: ${flight.origin} -> To: ${flight.destination}</h3>
+                                    <div id="flight_info_wrapper" class="flex_direction_row">
+                                        <p id="flight_info">Flight Date: ${flight.flightDate}</p>
+                                        <p id="flight_info">Departure Time: ${flight.depTime}</p>
+                                        <p id="flight_info">Arrival Time: ${flight.arrTime}</p>
+                                        <p id="flight_info">Available Seats: ${flight.seatsEmpty}</p>
+                                        <p id="flight_info">Fare: ${flight.fare}</p>
+                                    </div>
+                                    <button id='buy' onclick='createTicket(${JSON.stringify(user)}, ${JSON.stringify(flight)})'>Buy Ticket</button>
+                                </div>
+                                <hr>
+                                <div id="response_message"></div>
                             </div>
-                            <div id="response_message"></div>
-                            <br />
                             `;
                         console.log("readAllCorrespondingFlights() was Successful!");
                         console.log(flight);
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
                         document.getElementById("response_message").innerHTML = "Flight not found!";
-                        document.getElementById("displayFlights").innerHTML = "";
+                        document.getElementById("display_flights").innerHTML = "";
                         console.log("readAllCorrespondingFlights() was Unsuccessful!");
                     }
                 }
@@ -247,15 +533,26 @@
             }
 
             function renderFlights(flights) {
-                let flights_list = document.getElementById("displayFlights");
+                document.getElementById("flights_container").innerHTML = `
+                    <h3>Current Flights: </h3>
+                    <ul id="display_flights" style="list-style-type:none" class="scrollable"><hr></ul>
+                `;
+                let flights_list = document.getElementById("display_flights");
                 flights_list.innerHTML = "";
                 for (let flight of flights) {
                     let flight_html = `
-                        <div>
-                            Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
+                        <div id="listed_flight">
+                            <h3 id="flight_header">From: ${flight.origin} -> To: ${flight.destination}</h3>
+                            <div id="flight_info_wrapper" class="flex_direction_row">
+                                <p id="flight_info">Flight Date: ${flight.flightDate}</p>
+                                <p id="flight_info">Departure Time: ${flight.depTime}</p>
+                                <p id="flight_info">Arrival Time: ${flight.arrTime}</p>
+                                <p id="flight_info">Available Seats: ${flight.seatsEmpty}</p>
+                                <p id="flight_info">Fare: ${flight.fare}</p>
+                            </div>
                             <button id='reserve' onclick='send_to_flight_res("${flight.fltNo}")'>Reserve</button>
                         </div>
-                        <br />
+                        <hr>
                         `;
 
                     flights_list.innerHTML += flight_html;
@@ -378,50 +675,42 @@
             // Page functions
             function send_to_login() {
                 document.getElementById("container").innerHTML = `
-                  <h3>Login:</h3>
-                  <label>Username: </label>
-                  <input type="text" id="username_field" />
-                  <br/>
+                    <h1>Login</h1>
+                    <hr>
+                    <label>Username: <input type="text" id="username_field" /></label>
+                    <br/>
 
-                  <label>Password: </label>
-                  <input type="password" id="password_field" />
-                  <br/>
+                    <label>Password: <input type="password" id="password_field" /></label>
+                    <br/>
 
-                  <button onclick="login();">Login</button>
-                  <a onclick="send_to_signup()" href="#">Don't have an account?</a>
-                  <br/>
-                  <div id="response_message"></div>
-                  <br />
-                  `
+                    <button onclick="login();">Login</button>
+                    <a onclick="send_to_signup()" href="#" id="link_donthaveaccount">Don't have an account?</a>
+                    <br/>
+                    <div id="response_message"></div>
+                    `
             }
 
             function send_to_signup() {
                 document.getElementById("container").innerHTML = `
                   <form>
-                    <h1>SIGN UP</h1>
-                    <label for="username_field">Username: </label>
-                    <input type="text" id="username_field" required>
+                    <h1>Sign Up for an Account</h1>
+                    <hr>
+                    <label for="username_field">Username: <input type="text" id="username_field" required></label>
                     <br />
-                    <label for="firstname_field">First Name: </label>
-                    <input type="text" id="firstname_field" required>
+                    <label for="firstname_field">First Name: <input type="text" id="firstname_field" required></label>
                     <br />
-                    <label for="lastname_field">Last Name: </label>
-                    <input type="text" id="lastname_field" required>
+                    <label for="lastname_field">Last Name: <input type="text" id="lastname_field" required></label>
                     <br />
-                    <label for="email_field">Email: </label>
-                    <input type="email" id="email_field" required>
+                    <label for="email_field">Email: <input type="email" id="email_field" required></label>
                     <br />
-                    <label for="phonenumber_field">Phone Number: </label>
-                    <input type="tel" id="phonenumber_field"
-                           pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
+                    <label for="phonenumber_field">Phone Number: <input type="tel" id="phonenumber_field"
+                           pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required></label>
                     <br />
                     <small>Format: (+0)-111-222-3333</small>
                     <br />
-                    <label for="password_field">Password: </label>
-                    <input type="password" id="password_field" required>
+                    <label for="password_field">Password: <input type="password" id="password_field" required></label>
                     <br />
-                    <label for="confirmpass_field">Confirm Password: </label>
-                    <input type="password" id="confirmpass_field">
+                    <label for="confirmpass_field">Confirm Password: <input type="password" id="confirmpass_field"></label>
                     <br />
                     <input type="submit" onclick="sign_up()">
                     <br />
@@ -432,20 +721,29 @@
 
             function send_to_flight_lookup() {
                 document.getElementById("container").innerHTML = `
-                    <label>From:</label>
-                    <input type="text" id="flightorigin_field" />
-                    <br />
-                    <label>To:</label>
-                    <input type="text" id="flightdestination_field" />
-                    <br />
-                    <label>Departure Date:</label>
-                    <input type="text" id="departuredate_field" />
-                    <br />
-                    <button onclick="readAllCorrespondingFlights();">Find Flights</button>
-                    <br/>
+                    <h1>Welcome to SkyHappy Airlines!</h1>
+                    <hr>
+                    <div id="flight_form">
+                        <label for="flightorigin_field">
+                            From: <input type="text" id="flightorigin_field"/>
+                        </label>
+                        <br/>
+                        <label for="flightdestination_field">
+                            To: <input type="text" id="flightdestination_field"/>
+                        </label>
+                        <br/>
+                        <label for="departuredate_field">
+                            Departure Date: <input type="text" id="departuredate_field"/>
+                        </label>
+                        <br/>
+                        <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+                        <br/>
+                    </div>
                     <div id="response_message"></div>
 
-                    <ul id="displayFlights" style="list-style-type:none"></ul>
+                    <div id="flights_container">
+
+                    </div>
                     `
             }
 
@@ -473,26 +771,24 @@
 
             function send_to_user_profile() {
                 document.getElementById("container").innerHTML = `
-                    <h1 id="profile_header"></h1>
                     <nav id="user_navbar">
+                        <h1 id="profile_header"></h1>
                         <a onclick="send_to_update_user()" href="#">Update Info</a>
                         <a onclick="send_to_user_tickets()" href="#">Reserved Flights</a>
                     </nav>
                     <div id="user_dashboard">
+                        <h3>Edit Profile</h3>
+                        <hr>
                         <div>
-                            <label for="email_field">Email: </label>
-                            <input type="email" id="email_field" required>
+                            <label for="email_field">Email: <input type="email" id="email_field" required></label>
                             <br />
-                            <label for="phonenumber_field">Phone Number: </label>
-                            <input type="tel" id="phonenumber_field" pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
+                            <label for="phonenumber_field">Phone Number: <input type="tel" id="phonenumber_field" pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required></label>
                             <br />
                             <small>Format: (+0)-111-222-3333</small>
                             <br />
-                            <label for="password_field">Password: </label>
-                            <input type="password" id="password_field" required>
+                            <label for="password_field">Password: <input type="password" id="password_field" required></label>
                             <br />
-                            <label for="confirmpassword_field">Confirm Password: </label>
-                            <input type="password" id="confirmpassword_field">
+                            <label for="confirmpassword_field">Confirm Password: <input type="password" id="confirmpassword_field"></label>
                             <br />
                             <input type="submit" onclick="updateUser()">
                             <br />
@@ -505,26 +801,23 @@
 
             function send_to_update_user() {
                 document.getElementById("user_dashboard").innerHTML = `
-                    <form>
-                            <h1 id="profile_header"></h1>
-                            <label for="email_field">Email: </label>
-                            <input type="email" id="email_field" required>
-                            <br />
-                            <label for="phonenumber_field">Phone Number: </label>
-                            <input type="tel" id="phonenumber_field" pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
-                            <br />
-                            <small>Format: (+0)-111-222-3333</small>
-                            <br />
-                            <label for="password_field">Password: </label>
-                            <input type="password" id="password_field" required>
-                            <br />
-                            <label for="confirmpassword_field">Confirm Password: </label>
-                            <input type="password" id="confirmpassword_field">
-                            <br />
-                            <input type="submit" onclick="updateUser()">
-                            <br />
-                        </form>
-                        <div id="response_message"></div>
+                    <h3>Edit Profile</h3>
+                    <hr>
+                    <div>
+                        <label for="email_field">Email: <input type="email" id="email_field" required></label>
+                        <br />
+                        <label for="phonenumber_field">Phone Number: <input type="tel" id="phonenumber_field" pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required></label>
+                        <br />
+                        <small>Format: (+0)-111-222-3333</small>
+                        <br />
+                        <label for="password_field">Password: <input type="password" id="password_field" required></label>
+                        <br />
+                        <label for="confirmpassword_field">Confirm Password: <input type="password" id="confirmpassword_field"></label>
+                        <br />
+                        <input type="submit" onclick="updateUser()">
+                        <br />
+                    </div>
+                    <div id="response_message"></div>
                 `
             }
 
@@ -535,7 +828,11 @@
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let user = JSON.parse(this.responseText);
-                        document.getElementById("user_dashboard").innerHTML = `<div id="tickets_list"></div>`;
+                        document.getElementById("user_dashboard").innerHTML = `
+                            <h3>Your Tickets</h3>
+                            <hr>
+                            <div id="tickets_list"></div>
+                            `;
                         readAllTicketsFromUser(user.userID);
                         console.log("send_to_user_tickets() was Successful!");
                     } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
@@ -549,12 +846,14 @@
             function is_user_logged_in(isTrue) {
                 if (isTrue === true) {
                     document.getElementById("navbar").innerHTML = `
+                        <a id="false_logo">Skyhappy Airlines</a>
                         <a onclick="send_to_flight_lookup()" href="#">Reserve a Flight</a>
                         <a onclick="send_to_user_profile()" href="#">Profile</a>
                         <a onclick="log_out()" href="#">Log Out</a>
                         `
                 } else {
                     document.getElementById("navbar").innerHTML = `
+                        <a id="false_logo">Skyhappy Airlines</a>
                         <a onclick="send_to_flight_lookup()" href="#">Reserve a Flight</a>
                         <a onclick="send_to_signup()" href="#">Signup</a>
                         <a onclick="send_to_login()" href="#">Login</a>
@@ -565,29 +864,40 @@
     </head>
     <body>
         <nav id="navbar">
+            <a id="false_logo">Skyhappy Airlines</a>
             <a onclick="send_to_flight_lookup()" href="#">Reserve a Flight</a>
             <a onclick="send_to_signup()" href="#">Signup</a>
             <a onclick="send_to_login()" href="#">Login</a>
         </nav>
-        <h1>Welcome to SkyHappy</h1>
 
         <div id="container">
-            <label for="flightorigin_field">From:</label>
-            <input type="text" id="flightorigin_field"/>
-            <br/>
-            <label for="flightdestination_field">To:</label>
-            <input type="text" id="flightdestination_field"/>
-            <br/>
-            <label for="departuredate_field">Departure Date:</label>
-            <input type="text" id="departuredate_field"/>
-            <br/>
-            <button onclick="readAllCorrespondingFlights();">Find Flights</button>
-            <br/>
+            <h1>Search for a Flight</h1>
+            <hr>
+            <div id="flight_form">
+                <label for="flightorigin_field">
+                    From: <input type="text" id="flightorigin_field"/>
+                </label>
+                <br/>
+                <label for="flightdestination_field">
+                    To: <input type="text" id="flightdestination_field"/>
+                </label>
+                <br/>
+                <label for="departuredate_field">
+                    Departure Date: <input type="text" id="departuredate_field"/>
+                </label>
+                <br/>
+                <button onclick="readAllCorrespondingFlights();">Find Flights</button>
+                <br/>
+            </div>
             <div id="response_message"></div>
 
-            <div>
-                <ul id="displayFlights" style="list-style-type:none"></ul>
+            <div id="flights_container">
+
             </div>
         </div>
+
+        <footer>
+            Skyhappy Airlines &copy;
+        </footer>
     </body>
 </html>

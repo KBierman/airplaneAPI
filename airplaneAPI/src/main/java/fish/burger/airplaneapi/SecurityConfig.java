@@ -83,7 +83,7 @@ public class SecurityConfig{
                 .httpBasic(Customizer.withDefaults())
                 .authorizeRequests()
                 .antMatchers("index.html").permitAll()
-                .antMatchers("/api/login").hasAnyRole("USER")
+                .antMatchers("/api/login/**").hasAnyRole("USER")
                 .antMatchers("/api/flight").permitAll()
                 .and().csrf().disable()
                 .sessionManagement().disable()
