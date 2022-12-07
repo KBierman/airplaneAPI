@@ -83,7 +83,6 @@ public class FlightBLL {
         List<Object> finalVal = new ArrayList<>();
         finalVal.add(destinations);
         finalVal.add(amounts);
-        System.out.println(finalVal);
         return finalVal;
     }
 }

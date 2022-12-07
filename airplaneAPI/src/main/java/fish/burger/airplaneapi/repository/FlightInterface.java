@@ -11,7 +11,7 @@ public interface FlightInterface extends MongoRepository<FlightModel, String> {
     @Query("{'fltNo':?0}")
     FlightModel findFlightByFltNo(int fltNo);
 
-    @Query("{'origin':?0, 'destination':?1, 'flightDate':?2, 'emptySeats': { $not: 0 } }")
+    @Query("{'origin':?0, 'destination':?1, 'flightDate':?2, 'emptySeats': { $ne: 0 } }")
     List<FlightModel> findCorresponding(String origin, String destination, String flightDate);
 
     public long count();
