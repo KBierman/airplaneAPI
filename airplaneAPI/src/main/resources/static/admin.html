@@ -262,7 +262,7 @@
                     }
                 }
                 xmlHttp.open("GET", "/api/flights/" + id, true);
-                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.send();
             }
 
@@ -296,14 +296,14 @@
             function getReports1() {
                 //ajax
                 var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("PUT", "/api/reports/flights");
+                xmlHttp.open("GET", "/api/reports/flights");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                         //the entry was read
                         console.log("Success in posting entry");
-                        getFlights();
                     }
                 }
                 xmlHttp.send();
@@ -311,14 +311,14 @@
 
             function getReports2() {
                 var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("PUT", "/api/reports/users");
+                xmlHttp.open("GET", "/api/reports/users");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                         //the entry was read
                         console.log("Success in posting entry");
-                        getFlights();
                     }
                 }
                 xmlHttp.send();
@@ -326,14 +326,15 @@
 
             function getReports3() {
                 var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("PUT", "/api/reports/reservations");
+                xmlHttp.open("GET", "/api/reports/reservations");
+                xmlHttp.setRequestHeader('Authorization', localStorage.getItem("login"));
                 xmlHttp.setRequestHeader("Content-Type", "application/json");
                 xmlHttp.onreadystatechange = function () {
                     console.log("ready state: ", this.status);
                     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        console.log(this.response)
                         //the entry was read
                         console.log("Success in posting entry");
-                        getFlights();
                     }
                 }
                 xmlHttp.send();
