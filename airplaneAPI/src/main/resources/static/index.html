@@ -10,7 +10,6 @@
                 height: 400px;
                 overflow: auto;
             }
-
         </style>
         <script type="text/javascript">
             // Variables
@@ -28,7 +27,7 @@
 
                 // XMLHttpRequest to send base64 encoded user login information and then stores it in authHeaderValue
                 let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('GET', '');
+                xmlHttp.open('GET', '/api/login');
                 xmlHttp.setRequestHeader('Authorization', authHeaderValue);
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
@@ -128,7 +127,11 @@
                         "fare": flight.fare,
                         "status": flight.flightStatus,
                         "reservedBy": user.username,
-                        "dateOfReservation": current_date
+                        "dateOfReservation": current_date,
+                        "origin": flight.origin,
+                        "destination": flight.destination,
+                        "arrivalTime": flight.arrTime,
+                        "departureTime": flight.depTime
                     }
 
                 console.log(ticket);
@@ -168,7 +171,7 @@
                         for (let ticket of tickets) {
                             let ticket_html = `
                                 <div>
-                                    Ticket Number: ${ticket.ticketNo} | Flight Number: ${ticket.fltNo} | Flight Date: ${ticket.dateOfJourney} | First Name: ${ticket.firstName} | Last Name: ${ticket.lastName} | Fare: ${ticket.fare} | Flight Status: ${ticket.status} | Date of Reservation: ${ticket.dateOfReservation}
+                                    Ticket Number: ${ticket.ticketNo} | Flight Number: ${ticket.fltNo} | Flight Date: ${ticket.dateOfJourney} | Departure Time: ${ticket.departureTime} | Arrival Time: ${ticket.arrivalTime} | From: ${ticket.origin} | To: ${ticket.destination} | First Name: ${ticket.firstName} | Last Name: ${ticket.lastName} | Fare: ${ticket.fare} | Flight Status: ${ticket.status} | Date of Reservation: ${ticket.dateOfReservation}
                                 </div>
                                 <br />
                                 `;
@@ -219,7 +222,6 @@
                 xmlHttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                         let flight = JSON.parse(this.responseText);
-
                         console.log("readFlightByFlightNumber()")
                         console.log(flight);
                         console.log("readFlightByFlightNumber()")
@@ -262,22 +264,6 @@
 
             // User CRUD functions
             // Find
-            function findUserByUsername() {
-                console.log("Called findUserByUsername()...")
-                let xmlHttp = new XMLHttpRequest();
-                xmlHttp.open('GET', '/api/user/' + username);
-                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
-                xmlHttp.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        console.log("findUserByUsername() was Successful!");
-                        console.log(JSON.parse(this.responseText));
-                        JSON.parse(this.responseText);
-                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
-                        console.log("findUserByUsername() was Unsuccessful!");
-                    }
-                }
-                xmlHttp.send();
-            }
 
             function updateUserIfEmptyField(user) {
                 console.log("Called updateUserIfEmptyField()...")
@@ -493,7 +479,7 @@
                         <a onclick="send_to_user_tickets()" href="#">Reserved Flights</a>
                     </nav>
                     <div id="user_dashboard">
-                        <form>
+                        <div>
                             <label for="email_field">Email: </label>
                             <input type="email" id="email_field" required>
                             <br />
@@ -510,7 +496,7 @@
                             <br />
                             <input type="submit" onclick="updateUser()">
                             <br />
-                        </form>
+                        </div>
                         <div id="response_message"></div>
                     </div>
                     `
@@ -575,12 +561,7 @@
                         `
                 }
             }
-
-            window.onload = function () {
-                loadAllUsersInMemory(); // Will load all the users in the databse into memory
-            }
         </script>
-        <title>Welcome Page</title>
     </head>
     <body>
         <nav id="navbar">

@@ -15,11 +15,15 @@ public class TicketModel {
     private String status;
     private String reservedBy;
     private String dateOfReservation;
+    private String origin;
+    private String destination;
+    private String arrivalTime;
+    private String destinationTime;
 
     public TicketModel() {
     }
 
-    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String userID, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation) {
+    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String userID, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, String origin, String destination, String arrivalTime, String destinationTime) {
         this.ticketNo = ticketNo;
         this.fltNo = fltNo;
         this.dateOfJourney = dateOfJourney;
@@ -31,6 +35,10 @@ public class TicketModel {
         this.status = status;
         this.reservedBy = reservedBy;
         this.dateOfReservation = dateOfReservation;
+        this.origin = origin;
+        this.destination = destination;
+        this.arrivalTime = arrivalTime;
+        this.destinationTime = destinationTime;
     }
 
     public int getTicketNo() {
@@ -119,5 +127,37 @@ public class TicketModel {
 
     public void setDateOfReservation(String dateOfReservation) {
         this.dateOfReservation = dateOfReservation;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public String getDestinationTime() {
+        return destinationTime;
+    }
+
+    public void setDestinationTime(String destinationTime) {
+        this.destinationTime = destinationTime;
     }
 }
