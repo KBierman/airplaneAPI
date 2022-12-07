@@ -32,11 +32,11 @@ public class ReportRestController {
         return ticketBll.getLastMonthCosts(flightBLL.getLastMonthsFlights());
     }
 
-    @GetMapping("/reports/{user}/{id}")
-    public void cancelFlight(String user, int flightId) {
+    @GetMapping("/reports/{flightId}")
+    public void cancelFlight(@PathVariable int flightId) {
         String fb = flightBLL.cancelFlight(flightId);
         if (fb == "Cancelled") {
-            ticketBll.cancelTickets(flightId, user);
+            ticketBll.cancelTickets(flightId);
         }
     }
 }
