@@ -81,6 +81,7 @@ public class SecurityConfig{
                 .httpBasic(Customizer.withDefaults())
                 .authorizeRequests()
                 .antMatchers("index.html").permitAll()
+                .antMatchers("/").hasRole("USER")
                 .antMatchers("/api/flight").permitAll()
                 .and().httpBasic()
                 .authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint())
