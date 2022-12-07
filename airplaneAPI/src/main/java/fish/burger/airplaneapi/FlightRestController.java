@@ -1,6 +1,7 @@
 package fish.burger.airplaneapi;
 
 import fish.burger.airplaneapi.model.FlightModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +42,7 @@ public class FlightRestController {
     }
 
     @GetMapping("/flight/**")
+    @PreAuthorize("permitAll()")
     @ResponseBody
     public List<FlightModel> readAllCorrespondingFlights(HttpServletRequest request) {
         String requestURL = request.getRequestURL().toString();
