@@ -59,4 +59,23 @@ public class UserBLL {
         }
         System.out.println("'" + username + "' doesn't exist!");
     }
+
+    public UserModel findUser(String username){
+        return userITF.findUserByUsername(username);
+    }
+
+    public void createAdmin(String id, String pass) {
+        UserModel userModel = new UserModel();
+
+        userModel.setAdmin(true);
+        userModel.setUserID(id);
+        userModel.setUserPassword(pass);
+        createUser(userModel);
+    }
+
+    public void updateUserToAdmin(String id){
+       UserModel userModel = findUserByUsername(id);
+       userModel.setAdmin(true);
+       updateUser(userModel);
+    }
 }

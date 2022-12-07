@@ -1,12 +1,9 @@
 package fish.burger.airplaneapi.model;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class TicketModel {
-
-    @Id
     private int ticketNo;
     private int fltNo;
     private String dateOfJourney;
@@ -17,17 +14,12 @@ public class TicketModel {
     private double fare;
     private String status;
     private String reservedBy;
-    private String DateOfReservation;
-    private boolean ticketConfirmed;
-    private boolean refund;
-    private String processedBy;
-    private String CancellationDate;
-
+    private String dateOfReservation;
 
     public TicketModel() {
     }
 
-    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String userID, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation, boolean ticketConfirmed, boolean refund, String processedBy, String cancellationDate) {
+    public TicketModel(int ticketNo, int fltNo, String dateOfJourney, String userID, String firstName, String lastName, String email, double fare, String status, String reservedBy, String dateOfReservation) {
         this.ticketNo = ticketNo;
         this.fltNo = fltNo;
         this.dateOfJourney = dateOfJourney;
@@ -38,11 +30,7 @@ public class TicketModel {
         this.fare = fare;
         this.status = status;
         this.reservedBy = reservedBy;
-        DateOfReservation = dateOfReservation;
-        this.ticketConfirmed = ticketConfirmed;
-        this.refund = refund;
-        this.processedBy = processedBy;
-        CancellationDate = cancellationDate;
+        this.dateOfReservation = dateOfReservation;
     }
 
     public int getTicketNo() {
@@ -126,42 +114,10 @@ public class TicketModel {
     }
 
     public String getDateOfReservation() {
-        return DateOfReservation;
+        return dateOfReservation;
     }
 
     public void setDateOfReservation(String dateOfReservation) {
-        DateOfReservation = dateOfReservation;
-    }
-
-    public boolean isTicketConfirmed() {
-        return ticketConfirmed;
-    }
-
-    public void setTicketConfirmed(boolean ticketConfirmed) {
-        this.ticketConfirmed = ticketConfirmed;
-    }
-
-    public boolean isRefund() {
-        return refund;
-    }
-
-    public void setRefund(boolean refund) {
-        this.refund = refund;
-    }
-
-    public String getProcessedBy() {
-        return processedBy;
-    }
-
-    public void setProcessedBy(String processedBy) {
-        this.processedBy = processedBy;
-    }
-
-    public String getCancellationDate() {
-        return CancellationDate;
-    }
-
-    public void setCancellationDate(String cancellationDate) {
-        CancellationDate = cancellationDate;
+        this.dateOfReservation = dateOfReservation;
     }
 }

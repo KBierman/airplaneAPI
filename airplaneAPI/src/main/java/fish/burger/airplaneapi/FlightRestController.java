@@ -12,16 +12,33 @@ import java.util.List;
 public class FlightRestController {
     private FlightBLL flightBLL = new FlightBLL();
 
-    @GetMapping("/flight")
+    @PostMapping("/flight")
     @ResponseBody
-    public void createFlight(@RequestBody FlightModel flight) {
+    public void createFlight(@RequestBody FlightModel flight, @PathVariable int fltno) {
+        flight.setFltNo(fltno);
         flightBLL.createFlight(flight);
     }
 
-//    @GetMapping("/flight/{flightFrom}/{flightTo}/{departureDate}")
-//    public List<FlightModel> readAllCorrespondingFlights(@PathVariable String flightFrom, @PathVariable String flightTo, @PathVariable String departureDate) {
-//        return flightBLL.readAllCorrespondingFlights(flightFrom, flightTo, departureDate);
-//    }
+    @PutMapping("/flight/{fltno}")
+    public void updateFlight(@RequestBody FlightModel flight, @PathVariable int fltno) {
+        flight.setFltNo(fltno);
+        flightBLL.updateFlight(flight);
+    }
+
+    @GetMapping("/flights/{user}")
+    public FlightModel readFlight(@PathVariable int user) {
+        return flightBLL.readFlightByFltNo(user);
+    }
+
+    @GetMapping("/flight")
+    public List<FlightModel> readAllFlights() {
+        return flightBLL.readAllFlights();
+    }
+
+    @DeleteMapping("/flight")
+    public void deleteByFlightId(int fltId) {
+        flightBLL.deleteFlightByFltNo(fltId);
+    }
 
     @GetMapping("/flight/**")
     @ResponseBody
@@ -40,5 +57,11 @@ public class FlightRestController {
 
 
         return flightBLL.readAllCorrespondingFlights(flightFrom, flightTo, departureDate);
+    }
+
+    @GetMapping("/flight/{fltNo}")
+    @ResponseBody
+    public FlightModel readFlightByFlightNumber(@PathVariable int fltNo) {
+        return flightBLL.readFlightByFltNo(fltNo);
     }
 }

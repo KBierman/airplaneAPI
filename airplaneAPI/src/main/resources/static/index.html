@@ -106,7 +106,82 @@
                 send_to_login();
             }
 
-            // Flight CRUD functions
+            // Ticket CRUD Functions
+            // Create
+            function createTicket(user, flight) {
+                console.log("Called createTicket()...");
+                let current_date = new Date();
+                let dd = String(current_date.getDate()).padStart(2, '0');
+                let mm = String(current_date.getMonth() + 1).padStart(2, '0'); //January is 0!
+                let yyyy = current_date.getFullYear();
+
+                current_date = mm + '/' + dd + '/' + yyyy;
+
+                let ticket =
+                    {
+                        "fltNo": flight.fltNo,
+                        "dateOfJourney": flight.flightDate,
+                        "userID": user.userID,
+                        "firstName": user.firstName,
+                        "lastName": user.lastName,
+                        "email": user.userEmail,
+                        "fare": flight.fare,
+                        "status": flight.flightStatus,
+                        "reservedBy": user.username,
+                        "dateOfReservation": current_date
+                    }
+
+                console.log(ticket);
+
+                // Sends JSON to API
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('POST', '/api/ticket');
+                xmlHttp.setRequestHeader("Content-Type", 'application/json');
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        document.getElementById("response_message").innerHTML = "Ticket bought successfully!";
+                        document.getElementById("container").innerHTML = `
+                            <div>
+                                Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
+                            </div>
+                            <div id="response_message"></div>
+                            <br />
+                            `;
+                        console.log("createTicket() was Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        document.getElementById("response_message").innerHTML = "Couldn't buy ticket! Please try again later...";
+                        console.log("createTicket() was Unsuccessful!");
+                    }
+                }
+                xmlHttp.send(JSON.stringify(ticket));
+            }
+
+            // Find
+            function readAllTicketsFromUser(userID) {
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '/api/ticket/' + userID);
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        let tickets = JSON.parse(this.responseText);
+                        for (let ticket of tickets) {
+                            let ticket_html = `
+                                <div>
+                                    Ticket Number: ${ticket.ticketNo} | Flight Number: ${ticket.fltNo} | Flight Date: ${ticket.dateOfJourney} | First Name: ${ticket.firstName} | Last Name: ${ticket.lastName} | Fare: ${ticket.fare} | Flight Status: ${ticket.status} | Date of Reservation: ${ticket.dateOfReservation}
+                                </div>
+                                <br />
+                                `;
+                            tickets_list.innerHTML += ticket_html;
+                        }
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+
+                    }
+                }
+                xmlHttp.send();
+            }
+
+            // Flight CRUD Functions
             // Find
             function readAllCorrespondingFlights() {
                 let origin = document.getElementById("flightorigin_field").value;
@@ -138,11 +213,48 @@
                 xmlHttp.send();
             }
 
+            function readFlightByFlightNumber(flightNumber, user) {
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("GET", "/api/flight/" + flightNumber, true);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        let flight = JSON.parse(this.responseText);
+
+                        console.log("readFlightByFlightNumber()")
+                        console.log(flight);
+                        console.log("readFlightByFlightNumber()")
+                        console.log(user);
+                        document.getElementById("response_message").innerHTML = "";
+                        document.getElementById("container").innerHTML = `
+                            <div>
+                                Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
+                                <button id='buy' onclick='createTicket(${JSON.stringify(user)}, ${JSON.stringify(flight)})'>Buy</button>
+                            </div>
+                            <div id="response_message"></div>
+                            <br />
+                            `;
+                        console.log("readAllCorrespondingFlights() was Successful!");
+                        console.log(flight);
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 500) {
+                        document.getElementById("response_message").innerHTML = "Flight not found!";
+                        document.getElementById("displayFlights").innerHTML = "";
+                        console.log("readAllCorrespondingFlights() was Unsuccessful!");
+                    }
+                }
+                xmlHttp.send();
+            }
+
             function renderFlights(flights) {
                 let flights_list = document.getElementById("displayFlights");
                 flights_list.innerHTML = "";
                 for (let flight of flights) {
-                    let flight_html = "<li>" + "Origin: &nbsp;" + flight.origin + " Destination: &nbsp;" + flight.destination + " Flight Date: &nbsp;" + flight.flightDate + " Departure Time: &nbsp;" + flight.depTime + " Seats Available: &nbsp;" + flight.seatsEmpty + " Fare: &nbsp;" + flight.fare + " <button id='reserve' onclick='send_to_flight_res()'>Reserve</button>" + "</li>" + "<br>";
+                    let flight_html = `
+                        <div>
+                            Origin: ${flight.origin} | Destination: ${flight.destination} | Flight Date: ${flight.flightDate} | Departure Time: ${flight.depTime} | Seats Available: ${flight.seatsEmpty} | Fare: ${flight.fare}
+                            <button id='reserve' onclick='send_to_flight_res("${flight.fltNo}")'>Reserve</button>
+                        </div>
+                        <br />
+                        `;
 
                     flights_list.innerHTML += flight_html;
                 }
@@ -351,47 +463,100 @@
                     `
             }
 
-            function send_to_flight_res() {
+            function send_to_flight_res(flightNumber) {
                 if (authHeaderValue == null) {
                     send_to_login();
                 } else {
-                    document.getElementById("container").innerHTML = `
-                      hello :)
-                      `
+                    console.log("Called send_to_flight_res()...")
+                    let xmlHttp = new XMLHttpRequest();
+                    xmlHttp.open('GET', '/api/user/' + username);
+                    xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                    xmlHttp.onreadystatechange = function () {
+                        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                            let user = JSON.parse(this.responseText);
+                            console.log(user);
+                            readFlightByFlightNumber(flightNumber, user);
+                            console.log("send_to_flight_res() was Successful!");
+                        } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                            console.log("send_to_flight_res() was Unsuccessful!");
+                        }
+                    }
+                    xmlHttp.send();
                 }
             }
 
             function send_to_user_profile() {
-                let user = findUserByUsername();
-                console.log(user)
-
                 document.getElementById("container").innerHTML = `
-                    <form>
-                        <h1 id="profile_header"></h1>
-                        <label for="email_field">Email: </label>
-                        <input type="email" id="email_field" required>
-                        <br />
-                        <label for="phonenumber_field">Phone Number: </label>
-                        <input type="tel" id="phonenumber_field"
-                               pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
-                        <br />
-                        <small>Format: (+0)-111-222-3333</small>
-                        <br />
-                        <label for="password_field">Password: </label>
-                        <input type="password" id="password_field" required>
-                        <br />
-                        <label for="confirmpassword_field">Confirm Password: </label>
-                        <input type="password" id="confirmpassword_field">
-                        <br />
-                        <input type="submit" onclick="updateUser()">
-                        <br />
-                    </form>
-                    <div id="response_message"></div>
-                    <p>Times Flown: </p>
-                    <p>"Miles" otherwise known as amount of money spent: </p>
+                    <h1 id="profile_header"></h1>
+                    <nav id="user_navbar">
+                        <a onclick="send_to_update_user()" href="#">Update Info</a>
+                        <a onclick="send_to_user_tickets()" href="#">Reserved Flights</a>
+                    </nav>
+                    <div id="user_dashboard">
+                        <form>
+                            <label for="email_field">Email: </label>
+                            <input type="email" id="email_field" required>
+                            <br />
+                            <label for="phonenumber_field">Phone Number: </label>
+                            <input type="tel" id="phonenumber_field" pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
+                            <br />
+                            <small>Format: (+0)-111-222-3333</small>
+                            <br />
+                            <label for="password_field">Password: </label>
+                            <input type="password" id="password_field" required>
+                            <br />
+                            <label for="confirmpassword_field">Confirm Password: </label>
+                            <input type="password" id="confirmpassword_field">
+                            <br />
+                            <input type="submit" onclick="updateUser()">
+                            <br />
+                        </form>
+                        <div id="response_message"></div>
+                    </div>
                     `
                 document.getElementById("profile_header").innerHTML = `${username}'s Profile`
-                // document.getElementById("email_field").value = user
+            }
+
+            function send_to_update_user() {
+                document.getElementById("user_dashboard").innerHTML = `
+                    <form>
+                            <h1 id="profile_header"></h1>
+                            <label for="email_field">Email: </label>
+                            <input type="email" id="email_field" required>
+                            <br />
+                            <label for="phonenumber_field">Phone Number: </label>
+                            <input type="tel" id="phonenumber_field" pattern="^(+\\d{1,2}\\s)?(?\\d{3})?[\\s.-]\\d{3}[\\s.-]\\d{4}$" required>
+                            <br />
+                            <small>Format: (+0)-111-222-3333</small>
+                            <br />
+                            <label for="password_field">Password: </label>
+                            <input type="password" id="password_field" required>
+                            <br />
+                            <label for="confirmpassword_field">Confirm Password: </label>
+                            <input type="password" id="confirmpassword_field">
+                            <br />
+                            <input type="submit" onclick="updateUser()">
+                            <br />
+                        </form>
+                        <div id="response_message"></div>
+                `
+            }
+
+            function send_to_user_tickets() {
+                let xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '/api/user/' + username);
+                xmlHttp.setRequestHeader('Authorization', authHeaderValue);
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        let user = JSON.parse(this.responseText);
+                        document.getElementById("user_dashboard").innerHTML = `<div id="tickets_list"></div>`;
+                        readAllTicketsFromUser(user.userID);
+                        console.log("send_to_user_tickets() was Successful!");
+                    } else if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+                        console.log("send_to_user_tickets() was Unsuccessful!");
+                    }
+                }
+                xmlHttp.send();
             }
 
             // Navbar functions
@@ -415,6 +580,7 @@
                 loadAllUsersInMemory(); // Will load all the users in the databse into memory
             }
         </script>
+        <title>Welcome Page</title>
     </head>
     <body>
         <nav id="navbar">
@@ -439,7 +605,7 @@
             <div id="response_message"></div>
 
             <div>
-                <ul id="displayFlights" style="list-style-type:none" class="scrollable"></ul>
+                <ul id="displayFlights" style="list-style-type:none"></ul>
             </div>
         </div>
     </body>

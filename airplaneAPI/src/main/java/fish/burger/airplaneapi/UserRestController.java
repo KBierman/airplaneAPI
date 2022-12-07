@@ -13,11 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class UserRestController {
-    @Autowired
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager;
-
-    @Autowired
-    public PasswordEncoder passwordEncoder;
 
     // UserBLL object
     private UserBLL userBLL = new UserBLL();
@@ -26,16 +21,17 @@ public class UserRestController {
     @PostMapping("/user/{isAdmin}")
     @ResponseBody
     public boolean createUser(@RequestBody UserModel newUser, @PathVariable boolean isAdmin) {
-        String[] roles = new String[1];
-        roles[0] = "USER";
+        String[] roles;
+
+        // Will give admin depending on parameter value in mapping (isAdmin)
+        if (isAdmin) {
+            roles = new String[]{"USER", "ADMIN"};
+        } else {
+            roles = new String[]{"USER"};
+        }
 
         newUser.setAdmin(isAdmin);
         newUser.setRoles(roles);
-        System.out.println(newUser);
-
-        inMemoryUserDetailsManager.createUser(User.withUsername(newUser.getUsername())
-                .password(passwordEncoder.encode(newUser.getUserPassword()))
-                .roles(roles[0]).build());
         return userBLL.createUser(newUser);
     }
 
@@ -50,17 +46,6 @@ public class UserRestController {
         return userBLL.findUserByUsername(username);
     }
 
-    // This function will grab all users from database and put them in memory
-    @GetMapping("/loadusers")
-    public void loadAllusersInMemory() {
-        List<UserModel> allUsers = findAllEntries();
-
-        for (UserModel user : allUsers){
-            inMemoryUserDetailsManager.createUser(User.withUsername(user.getUsername())
-                    .password(passwordEncoder.encode(user.getUserPassword()))
-                    .roles(user.getRoles()).build());
-        }
-    }
 
     // Update
     @PutMapping("/user/{username}")
@@ -74,4 +59,16 @@ public class UserRestController {
     public void delete(@PathVariable String username) {
         userBLL.deleteUser(username);
     }
+
+    @PutMapping("/users/{id}/{pass}")
+    public void createNewAdmin(@PathVariable String id,@PathVariable String pass){
+        userBLL.createAdmin(id, pass);
+    }
+
+    @PutMapping("/users/{id}")
+    public void updateUserToAdmin(@PathVariable String id){
+        userBLL.updateUserToAdmin(id);
+    }
+
 }
+//TODO: FIX AUTHORIZATION IN FILE
