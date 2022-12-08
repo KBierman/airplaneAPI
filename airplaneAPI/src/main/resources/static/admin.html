@@ -532,10 +532,10 @@
                 var entry_list = document.getElementById("flights_list");
                 entry_list.innerHTML = "";
                 for (var entry of entries) {
-                    var entry_html = "<ul><li>" + entry.fltNo + "</li>" +
-                        "<li>" + entry.origin + "</li>" +
-                        "<li>" + entry.destination + "</li>" +
-                        "<li>" + entry.flightStatus + "</li></ul>";
+                    var entry_html = "<li><ul><li>ID: " + entry.fltNo + "</li>" +
+                        "<li>ORIGIN: " + entry.origin + "</li>" +
+                        "<li>DESTINATION: " + entry.destination + "</li>" +
+                        "<li>STATUS: " + entry.flightStatus + "</li></ul></li>";
                     entry_list.innerHTML += entry_html;
                 }
             }
