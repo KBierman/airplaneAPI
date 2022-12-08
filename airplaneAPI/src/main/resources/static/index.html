@@ -533,6 +533,7 @@
                                         <p id="flight_info">Arrival Time: ${flight.arrTime}</p>
                                         <p id="flight_info">Available Seats: ${flight.seatsEmpty}</p>
                                         <p id="flight_info">Fare: ${flight.fare}</p>
+                                        <p id="flight_info">Flight Status: ${flight.flightStatus}</p>
                                     </div>
                                     <button id='buy' onclick='createTicket(${JSON.stringify(user)}, ${JSON.stringify(flight)})'>Buy Ticket</button>
                                 </div>
@@ -568,6 +569,7 @@
                                 <p id="flight_info">Arrival Time: ${flight.arrTime}</p>
                                 <p id="flight_info">Available Seats: ${flight.seatsEmpty}</p>
                                 <p id="flight_info">Fare: ${flight.fare}</p>
+                                <p id="flight_info">Flight Status: ${flight.flightStatus}</p>
                             </div>
                             <button id='reserve' onclick='send_to_flight_res("${flight.fltNo}")'>Reserve</button>
                         </div>

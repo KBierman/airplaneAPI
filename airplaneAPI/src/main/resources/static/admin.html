@@ -51,22 +51,6 @@
                 margin: 0;
             }
 
-            #link_donthaveaccount {
-                border-radius: 2px;
-                padding: 3px;
-                margin-top: 5px;
-                text-decoration: none;
-                color: #2F4562;
-            }
-
-            #link_donthaveaccount:visited {
-                color: #506680;
-            }
-
-            #link_donthaveaccount:hover {
-                color: #9abbf3;
-            }
-
             #response_message {
                 margin: 5px auto;
             }
@@ -103,28 +87,8 @@
                 margin-left: -5px;
             }
 
-            #user_navbar {
-                margin: -15px -15px 15px -15px;
-                width: auto;
-                height: 60px;
-                background-color: #2F4562;
-                padding: 15px;
-                border-radius: 5px 5px 0 0;
-            }
-
-            #user_navbar a {
-                border-radius: 2px;
-                padding: 5px;
-                background-color: #506680;
-                text-decoration: none;
-            }
-
-            #user_navbar a:visited {
-                color: #9abbf3;
-            }
-
-            #user_navbar a:hover {
-                color: #767D92;
+            #navbar #return_to_user_website {
+                background-color: #ddffb4;
             }
 
             #container {
@@ -139,7 +103,6 @@
 
             /* The text fields for searching flights */
             #flight_form {
-
                 width: 100%;
                 height: auto;
             }
@@ -180,7 +143,7 @@
             }
 
             /* The flight headers */
-            #flight_header, #ticket_header {
+            #flight_header {
                 margin-bottom: 10px;
                 padding: 7px;
                 background-color: #5b7ca7;
@@ -188,19 +151,19 @@
             }
 
             /* The container for a listed flight */
-            #listed_flight, #listed_ticket {
-                margin: 0;
+            #listed_flight {
+                margin: 20px 0;
                 padding: 0;
                 width: auto;
                 height: auto;
             }
 
             /* The element that wraps around the flight's information */
-            #flight_info_wrapper, #ticket_info_wrapper {
+            #flight_info_wrapper {
                 margin-left: 10px;
             }
 
-            .info {
+            #flight_info {
                 display: inline;
                 margin: 5px;
                 width: auto;
@@ -251,8 +214,21 @@
             }
 
             /* For the reports element */
+            #canvas-container {
+                text-align: center;
+                width: 33%;
+                height: 33vh;
+            }
+
+            #canvas_wrapper {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+            }
+
             canvas {
-                width: 100px;
+                color: white;
+                margin: 0 auto;
             }
 
             footer {
@@ -268,7 +244,7 @@
             }
         </style>
         <script Type="text/javascript">
-            // Admin CRUD Functions
+            // User CRUD Functions
             function makeUserAdmin() {
                 let id = document.getElementById("userN").value;
                 let pass = document.getElementById("userP").value;
@@ -309,84 +285,7 @@
                 xmlHttp.send();
             }
 
-            // Page Functions
-            function send_to_user_editing() {
-                document.getElementById("container").innerHTML = `
-                    <h1>Users</h1>
-                    <div>
-                        <!--Display Lists-->
-                        <label for="userN">Username: </label>
-                        <input type="text" id="userN"/>
-                        <br/>
-                        <label for="userP">Password: </label>
-                        <input type="text" id="userP"/>
-                        <br/>
-                        <button onclick="makeUserAdmin();">Make Admin</button>
-                        <button onclick="deleteUser();">Delete User</button>
-                    </div>
-                `;
-            }
-
-            function send_to_flight_editing() {
-                document.getElementById("container").innerHTML = `
-                    <h1>Flights</h1>
-                    <!--Flight information-->
-                    <div id="flight_form">
-                        <!--Display Lists-->
-                        <label for="flNumber">Flight Number: <input type="text" id="flNumber"/></label>
-                        <br/>
-                        <label for="flOrigin">Origin: <input id="flOrigin"/></label>
-                        <br/>
-                        <label for="flDestination">Destination: <input id="flDestination"/></label>
-                        <br/>
-                        <label for="flArrTime">Arrival Time: <input id="flArrTime"/></label>
-                        <br/>
-                        <label for="flDepTime">Departure Time: <input id="flDepTime"/></label>
-                        <br/>
-                        <label for="flAircraftType">Aircraft Type: <input id="flAircraftType"/></label>
-                        <br/>
-                        <label for="flSeatsEmpty">Seats Empty: <input id="flSeatsEmpty"/></label>
-                        <br/>
-                        <label for="flSeatsFull">Seats Full: <input id="flSeatsFull"/></label>
-                        <br/>
-                        <label for="flFare">Fare: <input id="flFare"/></label>
-                        <br/>
-                        <label for="flDate">Flight Date: <input id="flDate"/></label>
-                        <br/>
-                        <label for="flStatus">Flight Status: <input id="flStatus"/></label>
-                        <br/>
-                        <label for="flStatusDate">Status Date: <input id="flStatusDate"/></label>
-                        <br/>
-                        <button onclick="createFlight();">Add Flight</button>
-                        <button onclick="updateFlight();">Update Flight </button>
-                        <br/>
-                        <button onclick="findFlightById();">Find Flight by Flight Number</button>
-                        <button onclick="cancelFlight();">Cancel Flight</button>
-
-                    </div>
-
-                    <div id="flights_container" class="scrollable">
-                        <div id="flights_list"></div>
-                    </div>
-                `;
-                getFlights();
-            }
-
-            function send_to_reports() {
-                document.getElementById("container").innerHTML = `
-                    <h1>Reports</h1>
-  <canvas id="repo1"></canvas>
-                    <div id="MFR"></div>
-  <canvas id="repo2"></canvas>
-                    <div id="MPR"></div>
-  <canvas id="repo3"></canvas>
-                    <div id="CRR"></div>
-                `;
-                getReports1();
-                getReports2();
-                getReports3();
-            }
-
+            // Flight CRUD Functions
             function createFlight() {
                 let id = document.getElementById("flNumber").value;
                 console.log(id);
@@ -529,12 +428,26 @@
             }
 
             function renderEntries(entries) {
-                var entry_list = document.getElementById("flights_list");
-                entry_list.innerHTML = "";
-                for (var entry of entries) {
-                    var entry_html = "<li>" + entry.aircraftType + "</li>" +
-                        "<li>" + entry.destination + "</li>";
-                    entry_list.innerHTML += entry_html;
+                let entry_list = document.getElementById("flights_list");
+                entry_list.innerHTML = "<hr>";
+                for (let entry of entries) {
+                    let entry_html = `
+                        <div id="listed_flight">
+                            <h3 id="flight_header">From: ${entry.origin} -> To: ${entry.destination}</h3>
+                            <div id="flight_info_wrapper" class="flex_direction_row">
+                                <p id="flight_info">Flight Number: ${entry.fltNo}</p>
+                                <p id="flight_info">Aircraft Type: ${entry.aircraftType}</p>
+                                <p id="flight_info">Flight Date: ${entry.flightDate}</p>
+                                <p id="flight_info">Destination Time: ${entry.depTime}</p>
+                                <p id="flight_info">Arrival Time: ${entry.arrTime}</p>
+                                <p id="flight_info">Available Seats: ${entry.seatsEmpty}</p>
+                                <p id="flight_info">Fare: ${entry.fare}</p>
+                                <p id="flight_info">Flight Status: ${entry.flightStatus}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        `;
+                    entry_list.innerHTML += entry_html
                 }
             }
 
@@ -568,7 +481,8 @@
                                     y: {
                                         beginAtZero: true
                                     }
-                                }
+                                },
+                                maintainAspectRatio: false
                             }
                         });
                     }
@@ -651,17 +565,105 @@
                 }
                 xmlHttp.send();
             }
+
+            // Page Functions
+            function send_to_user_editing() {
+                document.getElementById("container").innerHTML = `
+                    <h1>Users</h1>
+                    <hr>
+                    <div>
+                        <!--Display Lists-->
+                        <label for="userN">Username: </label>
+                        <input type="text" id="userN"/>
+                        <br/>
+                        <label for="userP">Password: </label>
+                        <input type="text" id="userP"/>
+                        <br/>
+                        <button onclick="makeUserAdmin();">Make Admin</button>
+                        <button onclick="deleteUser();">Delete User</button>
+                    </div>
+                `;
+            }
+
+            function send_to_flight_editing() {
+                document.getElementById("container").innerHTML = `
+                    <h1>Flights</h1>
+                    <hr>
+                    <!--Flight information-->
+                    <div id="flight_form">
+                        <!--Display Lists-->
+                        <label for="flNumber">Flight Number: <input type="text" id="flNumber"/></label>
+                        <br/>
+                        <label for="flOrigin">Origin: <input id="flOrigin"/></label>
+                        <br/>
+                        <label for="flDestination">Destination: <input id="flDestination"/></label>
+                        <br/>
+                        <label for="flArrTime">Arrival Time: <input id="flArrTime"/></label>
+                        <br/>
+                        <label for="flDepTime">Departure Time: <input id="flDepTime"/></label>
+                        <br/>
+                        <label for="flAircraftType">Aircraft Type: <input id="flAircraftType"/></label>
+                        <br/>
+                        <label for="flSeatsEmpty">Seats Empty: <input id="flSeatsEmpty"/></label>
+                        <br/>
+                        <label for="flSeatsFull">Seats Full: <input id="flSeatsFull"/></label>
+                        <br/>
+                        <label for="flFare">Fare: <input id="flFare"/></label>
+                        <br/>
+                        <label for="flDate">Flight Date: <input id="flDate"/></label>
+                        <br/>
+                        <label for="flStatus">Flight Status: <input id="flStatus"/></label>
+                        <br/>
+                        <label for="flStatusDate">Status Date: <input id="flStatusDate"/></label>
+                        <br/>
+                        <button onclick="createFlight();">Add Flight</button>
+                        <button onclick="updateFlight();">Update Flight </button>
+                        <br/>
+                        <button onclick="findFlightById();">Find Flight by Flight Number</button>
+                        <button onclick="cancelFlight();">Cancel Flight</button>
+
+                    </div>
+
+                    <div id="flights_container" class="scrollable">
+                        <div id="flights_list"></div>
+                    </div>
+                `;
+                getFlights();
+            }
+
+            function send_to_reports() {
+                document.getElementById("container").innerHTML = `
+                    <h1>Reports</h1>
+                    <hr>
+                    <div id="canvas_wrapper">
+                        <div id="canvas-container">
+                            <canvas id="repo1"></canvas>
+                        </div>
+                        <div id="canvas-container">
+                            <canvas id="repo2"></canvas>
+                        </div>
+                        <div id="canvas-container">
+                            <canvas id="repo3"></canvas>
+                        </div>
+                    </div>
+                `;
+                getReports1();
+                getReports2();
+                getReports3();
+            }
         </script>
     </head>
     <body>
         <nav id="navbar">
-            <a href="index.html">Go to User Website</a>
+            <a id="false_logo">Skyhappy Airlines</a>
             <a onclick="send_to_user_editing()" href="#">Users</a>
             <a onclick="send_to_flight_editing()" href="#">Flights</a>
             <a onclick="send_to_reports()" href="#">Reports</a>
+            <a href="index.html" id="return_to_user_website">Return to User Website</a>
         </nav>
         <div id="container">
             <h1>Users</h1>
+            <hr>
             <div>
                 <!--Display Lists-->
                 <label for="userN">Username: <input type="text" id="userN"/></label>
@@ -672,6 +674,10 @@
                 <button onclick="deleteUser();">Delete User</button>
             </div>
         </div>
+
+        <footer>
+            Skyhappy Airlines &copy;
+        </footer>
     </body>
 </html>
 
